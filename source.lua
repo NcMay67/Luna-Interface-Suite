@@ -44,13 +44,18 @@ by Nebula Softworks
 
 ]]
 
-local Release = "Prerelease Beta 6.1"
+local Release = "NC HUB Luna Base 1.0"
 
 local Luna = { 
-	Folder = "Luna", 
-	Options = {}, 
-	ThemeGradient = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(117, 164, 206)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(123, 201, 201)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(224, 138, 175))} 
+    Folder = "NCHUB_Luna", 
+    Options = {}, 
+    ThemeGradient = ColorSequence.new{
+        ColorSequenceKeypoint.new(0.00, Color3.fromRGB(67, 47, 88)),
+        ColorSequenceKeypoint.new(0.52, Color3.fromRGB(174, 113, 255)),
+        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(152, 235, 255))
+    }
 }
+
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
