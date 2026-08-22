@@ -24,12 +24,6 @@ local Window = Luna:CreateWindow({
 })
 
 local Tabs = {
-    Inicio = Window:CreateTab({
-        Name = "Inicio",
-        Icon = "home",
-        ImageSource = "Material",
-        ShowTitle = true
-    }),
     Jugador = Window:CreateTab({
         Name = "Jugador",
         Icon = "accessibility_new",
@@ -78,32 +72,18 @@ end
 -- =========================================================
 -- INICIO
 -- =========================================================
-Tabs.Inicio:CreateSection("NC HUB")
-Tabs.Inicio:CreateLabel({
-    Text = "NC HUB",
-    Style = 1
-})
-Tabs.Inicio:CreateLabel({
-    Text = "Usuario: " .. LocalPlayer.DisplayName,
-    Style = 2
-})
-
-local GameName = "Juego desconocido"
-pcall(function()
-    GameName = MarketplaceService:GetProductInfo(game.PlaceId).Name
-end)
-
-Tabs.Inicio:CreateParagraph({
-    Title = "Sesión actual",
-    Text = "Juego: " .. GameName .. "\nPlace ID: " .. tostring(game.PlaceId) .. "\nBy hidjcjgg"
-})
-
-Tabs.Inicio:CreateButton({
-    Name = "Probar notificación",
-    Description = "Comprueba la notificación de la nueva base",
-    Callback = function()
-        notify("NC HUB", "La interfaz Luna adaptada está funcionando.", "check_circle")
-    end
+-- =========================================================
+-- INICIO ESPECIAL DE LUNA
+-- Perfil, Server, Executor y Friends.
+-- =========================================================
+Window:CreateHomeTab({
+    Icon = 1,
+    SupportedExecutors = {
+        "Delta",
+        "Delta Android",
+        "Delta Executor"
+    },
+    DiscordInvite = "noinvitelink"
 })
 
 -- =========================================================
