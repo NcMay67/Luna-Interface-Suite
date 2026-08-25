@@ -9,7 +9,7 @@ local BaseURL = "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/
 -- Por ahora, Factory Tycoon es el único módulo específico activo.
 local Games = {
     [15197136141] = "FactoryTycoon.lua",
-    [96033388567901] = "LootEvo.lua"
+    
 }
 
 
