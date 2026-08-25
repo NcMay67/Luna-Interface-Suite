@@ -2,7 +2,7 @@
 -- Uses a Luna-derived source that retains its BSD-3-Clause notice in source.lua and LICENSE.
 
 local Luna = loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/refs/heads/master/source.lua"
+    "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua"
 ))()
 
 local Players = game:GetService("Players")
