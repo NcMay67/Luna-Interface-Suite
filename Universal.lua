@@ -1,5 +1,4 @@
--- NC HUB | Universal Luna Test
--- Uses a Luna-derived source that retains its BSD-3-Clause notice in source.lua and LICENSE.
+-- NC HUB | Universal
 
 local Luna = loadstring(game:HttpGet(
     "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua"
@@ -8,74 +7,41 @@ local Luna = loadstring(game:HttpGet(
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
-local MarketplaceService = game:GetService("MarketplaceService")
 local VirtualUser = game:GetService("VirtualUser")
+local TeleportService = game:GetService("TeleportService")
 
 local LocalPlayer = Players.LocalPlayer
-local StartedAt = os.time()
 
 local Window = Luna:CreateWindow({
     Name = "NC HUB",
-    Subtitle = "By hidjcjgg",
+    Subtitle = "Universal",
     LoadingEnabled = true,
     LoadingTitle = "NC HUB",
-    LoadingSubtitle = "Preparando módulo universal",
+    LoadingSubtitle = "Universal",
     KeySystem = false
 })
 
-local Tabs = {
-    Jugador = Window:CreateTab({
-        Name = "Jugador",
-        Icon = "accessibility_new",
-        ImageSource = "Material",
-        ShowTitle = true
-    }),
-    Visuales = Window:CreateTab({
-        Name = "Visuales",
-        Icon = "visibility",
-        ImageSource = "Material",
-        ShowTitle = true
-    }),
-    Sistema = Window:CreateTab({
-        Name = "Sistema",
-        Icon = "settings",
-        ImageSource = "Material",
-        ShowTitle = true
-    })
-}
+local PlayerTab = Window:CreateTab({
+    Name = "Jugador",
+    Icon = "accessibility_new",
+    ImageSource = "Material",
+    ShowTitle = true
+})
 
-local function getCharacter()
-    return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-end
+local VisualTab = Window:CreateTab({
+    Name = "Visual",
+    Icon = "visibility",
+    ImageSource = "Material",
+    ShowTitle = true
+})
 
-local function getHumanoid()
-    local Character = getCharacter()
-    return Character:FindFirstChildOfClass("Humanoid")
-        or Character:WaitForChild("Humanoid")
-end
+local SystemTab = Window:CreateTab({
+    Name = "Sistema",
+    Icon = "settings",
+    ImageSource = "Material",
+    ShowTitle = true
+})
 
-local function getRoot()
-    local Character = getCharacter()
-    return Character:FindFirstChild("HumanoidRootPart")
-        or Character:WaitForChild("HumanoidRootPart")
-end
-
-local function notify(Title, Content, Icon)
-    Luna:Notification({
-        Title = Title,
-        Icon = Icon or "info",
-        ImageSource = "Material",
-        Content = Content
-    })
-end
-
--- =========================================================
--- INICIO
--- =========================================================
--- =========================================================
--- INICIO ESPECIAL DE LUNA
--- Perfil, Server, Executor y Friends.
--- =========================================================
 Window:CreateHomeTab({
     Icon = 1,
     SupportedExecutors = {
@@ -86,60 +52,74 @@ Window:CreateHomeTab({
     DiscordInvite = "noinvitelink"
 })
 
--- =========================================================
+local function notify(Title, Content, Icon)
+    Luna:Notification({
+        Title = Title,
+        Content = Content,
+        Icon = Icon or "info",
+        ImageSource = "Material"
+    })
+end
+
+local function getCharacter()
+    return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+end
+
+local function getHumanoid()
+    return getCharacter():FindFirstChildOfClass("Humanoid")
+        or getCharacter():WaitForChild("Humanoid")
+end
+
+local function getRoot()
+    return getCharacter():FindFirstChild("HumanoidRootPart")
+        or getCharacter():WaitForChild("HumanoidRootPart")
+end
+
+local Speed = 16
+local Jump = 50
+local InfiniteJump = false
+local Noclip = false
+local Fly = false
+local FlySpeed = 60
+local AntiAFK = false
+local ESP = false
+
 -- JUGADOR
--- =========================================================
-Tabs.Jugador:CreateSection("VELOCIDAD Y SALTO")
 
-local SpeedValue = 16
-local JumpValue = 50
+PlayerTab:CreateSection("MOVIMIENTO")
 
-Tabs.Jugador:CreateSlider({
+PlayerTab:CreateSlider({
     Name = "Velocidad",
     Range = {16, 120},
     Increment = 1,
-    CurrentValue = 16,
-    Flag = "NC_Luna_Speed",
+    CurrentValue = Speed,
+    Flag = "NC_UniversalSpeed",
     Callback = function(Value)
-        SpeedValue = Value
-        getHumanoid().WalkSpeed = SpeedValue
+        Speed = Value
+        getHumanoid().WalkSpeed = Value
     end
 })
 
-Tabs.Jugador:CreateSlider({
+PlayerTab:CreateSlider({
     Name = "Salto",
     Range = {50, 200},
     Increment = 1,
-    CurrentValue = 50,
-    Flag = "NC_Luna_Jump",
+    CurrentValue = Jump,
+    Flag = "NC_UniversalJump",
     Callback = function(Value)
-        JumpValue = Value
+        Jump = Value
         local Humanoid = getHumanoid()
         Humanoid.UseJumpPower = true
-        Humanoid.JumpPower = JumpValue
+        Humanoid.JumpPower = Value
     end
 })
 
-local InfiniteJump = false
-local Noclip = false
-
-Tabs.Jugador:CreateToggle({
+PlayerTab:CreateToggle({
     Name = "Salto infinito",
-    Description = "Permite saltar mientras estás en el aire",
     CurrentValue = false,
-    Flag = "NC_Luna_InfiniteJump",
-    Callback = function(State)
-        InfiniteJump = State
-    end
-})
-
-Tabs.Jugador:CreateToggle({
-    Name = "Noclip",
-    Description = "Restaura las colisiones al apagarlo",
-    CurrentValue = false,
-    Flag = "NC_Luna_Noclip",
-    Callback = function(State)
-        Noclip = State
+    Flag = "NC_UniversalInfiniteJump",
+    Callback = function(Value)
+        InfiniteJump = Value == true
     end
 })
 
@@ -151,62 +131,57 @@ end)
 
 local OriginalCollision = {}
 
-local function restoreCollision()
-    for Part, OriginalState in pairs(OriginalCollision) do
-        if Part and Part.Parent then
-            Part.CanCollide = OriginalState
-        end
+PlayerTab:CreateToggle({
+    Name = "Noclip",
+    CurrentValue = false,
+    Flag = "NC_UniversalNoclip",
+    Callback = function(Value)
+        Noclip = Value == true
     end
-    table.clear(OriginalCollision)
-end
+})
 
 RunService.Stepped:Connect(function()
     if Noclip then
-        local Character = LocalPlayer.Character
-        if Character then
-            for _, Object in ipairs(Character:GetDescendants()) do
-                if Object:IsA("BasePart") then
-                    if OriginalCollision[Object] == nil then
-                        OriginalCollision[Object] = Object.CanCollide
-                    end
-                    Object.CanCollide = false
+        for _, Object in ipairs(getCharacter():GetDescendants()) do
+            if Object:IsA("BasePart") then
+                if OriginalCollision[Object] == nil then
+                    OriginalCollision[Object] = Object.CanCollide
                 end
+                Object.CanCollide = false
             end
         end
     elseif next(OriginalCollision) then
-        restoreCollision()
+        for Part, State in pairs(OriginalCollision) do
+            if Part and Part.Parent then
+                Part.CanCollide = State
+            end
+        end
+        table.clear(OriginalCollision)
     end
 end)
 
--- =========================================================
--- FLY CLÁSICO MÓVIL
--- =========================================================
-Tabs.Jugador:CreateSection("FLY")
+PlayerTab:CreateSection("FLY")
 
-local FlyEnabled = false
-local FlySpeed = 60
 local FlyVelocity
 local FlyGyro
 local FlyConnection
-local FlyControls
-local LiftUntil = 0
+local Controls
 
-local function getFlyControls()
-    if FlyControls then
-        return FlyControls
+local function getControls()
+    if Controls then
+        return Controls
     end
 
     pcall(function()
-        local PlayerModule = LocalPlayer:WaitForChild("PlayerScripts")
-            :WaitForChild("PlayerModule")
-        FlyControls = require(PlayerModule):GetControls()
+        Controls = require(LocalPlayer:WaitForChild("PlayerScripts")
+            :WaitForChild("PlayerModule")):GetControls()
     end)
 
-    return FlyControls
+    return Controls
 end
 
 local function stopFly()
-    FlyEnabled = false
+    Fly = false
 
     if FlyConnection then
         FlyConnection:Disconnect()
@@ -223,9 +198,7 @@ local function stopFly()
         FlyGyro = nil
     end
 
-    local Humanoid = LocalPlayer.Character
-        and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-
+    local Humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
     if Humanoid then
         Humanoid.AutoRotate = true
         Humanoid.PlatformStand = false
@@ -235,34 +208,28 @@ end
 
 local function startFly()
     stopFly()
-    FlyEnabled = true
+    Fly = true
 
     local Humanoid = getHumanoid()
     local Root = getRoot()
-    local Controls = getFlyControls()
+    local PlayerControls = getControls()
 
     Humanoid.AutoRotate = false
     Humanoid.PlatformStand = true
 
     FlyVelocity = Instance.new("BodyVelocity")
-    FlyVelocity.Name = "NC_Luna_FlyVelocity"
     FlyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
     FlyVelocity.P = 18000
-    FlyVelocity.Velocity = Vector3.new(0, 0, 0)
     FlyVelocity.Parent = Root
 
     FlyGyro = Instance.new("BodyGyro")
-    FlyGyro.Name = "NC_Luna_FlyGyro"
     FlyGyro.MaxTorque = Vector3.new(100000, 100000, 100000)
     FlyGyro.P = 35000
     FlyGyro.D = 900
-    FlyGyro.CFrame = Root.CFrame
     FlyGyro.Parent = Root
 
-    LiftUntil = os.clock() + 0.18
-
     FlyConnection = RunService.RenderStepped:Connect(function()
-        if not FlyEnabled or not Root.Parent or not Humanoid.Parent then
+        if not Fly or not Root.Parent then
             return
         end
 
@@ -271,42 +238,27 @@ local function startFly()
             return
         end
 
-        Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
-
-        local MoveVector = Vector3.new(0, 0, 0)
-        if Controls then
-            MoveVector = Controls:GetMoveVector()
-        else
-            local MoveDirection = Humanoid.MoveDirection
-            MoveVector = Vector3.new(MoveDirection.X, 0, -MoveDirection.Z)
-        end
-
-        local CameraFrame = Camera.CFrame
-        local Direction = CameraFrame.RightVector * MoveVector.X
-            + CameraFrame.LookVector * -MoveVector.Z
+        local Move = PlayerControls and PlayerControls:GetMoveVector() or Humanoid.MoveDirection
+        local Direction = Camera.CFrame.RightVector * Move.X + Camera.CFrame.LookVector * -Move.Z
 
         if Direction.Magnitude > 0.05 then
             Direction = Direction.Unit * FlySpeed
         else
-            Direction = Vector3.new(0, 0, 0)
+            Direction = Vector3.zero
         end
 
-        if os.clock() < LiftUntil then
-            Direction = Direction + Vector3.new(0, math.max(35, FlySpeed * 0.70), 0)
-        end
-
+        Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
         FlyVelocity.Velocity = Direction
-        FlyGyro.CFrame = CameraFrame
+        FlyGyro.CFrame = Camera.CFrame
     end)
 end
 
-Tabs.Jugador:CreateToggle({
-    Name = "Activar Fly",
-    Description = "Mira arriba y avanza para subir; mira abajo y avanza para bajar",
+PlayerTab:CreateToggle({
+    Name = "Fly",
     CurrentValue = false,
-    Flag = "NC_Luna_Fly",
-    Callback = function(State)
-        if State then
+    Flag = "NC_UniversalFly",
+    Callback = function(Value)
+        if Value then
             startFly()
         else
             stopFly()
@@ -314,89 +266,74 @@ Tabs.Jugador:CreateToggle({
     end
 })
 
-Tabs.Jugador:CreateSlider({
-    Name = "Velocidad de vuelo",
+PlayerTab:CreateSlider({
+    Name = "Velocidad Fly",
     Range = {20, 180},
     Increment = 1,
-    CurrentValue = 60,
-    Flag = "NC_Luna_FlySpeed",
+    CurrentValue = FlySpeed,
+    Flag = "NC_UniversalFlySpeed",
     Callback = function(Value)
         FlySpeed = Value
     end
 })
 
--- =========================================================
--- VISUALES
--- =========================================================
-Tabs.Visuales:CreateSection("ESP")
+-- VISUAL
 
-local ESPEnabled = false
+VisualTab:CreateSection("ESP")
 
 local function removeESP(Player)
     local Character = Player.Character
-    if Character then
-        local Highlight = Character:FindFirstChild("NC_Luna_ESP")
-        if Highlight then
-            Highlight:Destroy()
-        end
+    local Highlight = Character and Character:FindFirstChild("NC_ESP")
+
+    if Highlight then
+        Highlight:Destroy()
     end
 end
 
 local function applyESP(Player)
-    if Player == LocalPlayer or not ESPEnabled then
+    if Player == LocalPlayer or not ESP or not Player.Character then
         return
     end
 
-    local Character = Player.Character
-    if not Character then
-        return
-    end
-
-    local Highlight = Character:FindFirstChild("NC_Luna_ESP")
+    local Highlight = Player.Character:FindFirstChild("NC_ESP")
     if not Highlight then
         Highlight = Instance.new("Highlight")
-        Highlight.Name = "NC_Luna_ESP"
+        Highlight.Name = "NC_ESP"
         Highlight.FillColor = Color3.fromRGB(174, 113, 255)
         Highlight.FillTransparency = 0.55
         Highlight.OutlineColor = Color3.fromRGB(152, 235, 255)
-        Highlight.OutlineTransparency = 0
         Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-        Highlight.Parent = Character
+        Highlight.Parent = Player.Character
     end
-
-    Highlight.Enabled = true
 end
 
-local function preparePlayerESP(Player)
+local function prepareESP(Player)
     if Player == LocalPlayer then
         return
     end
 
     Player.CharacterAdded:Connect(function()
-        task.wait(0.35)
-        if ESPEnabled then
-            applyESP(Player)
-        end
+        task.wait(0.3)
+        applyESP(Player)
     end)
 end
 
 for _, Player in ipairs(Players:GetPlayers()) do
-    preparePlayerESP(Player)
+    prepareESP(Player)
 end
 
-Players.PlayerAdded:Connect(preparePlayerESP)
+Players.PlayerAdded:Connect(prepareESP)
 Players.PlayerRemoving:Connect(removeESP)
 
-Tabs.Visuales:CreateToggle({
-    Name = "ESP de jugadores",
-    Description = "Incluye jugadores que entren después",
+VisualTab:CreateToggle({
+    Name = "ESP Jugadores",
     CurrentValue = false,
-    Flag = "NC_Luna_ESP",
-    Callback = function(State)
-        ESPEnabled = State
+    Flag = "NC_UniversalESP",
+    Callback = function(Value)
+        ESP = Value == true
 
         for _, Player in ipairs(Players:GetPlayers()) do
-            if State then
+            if ESP then
                 applyESP(Player)
             else
                 removeESP(Player)
@@ -405,67 +342,52 @@ Tabs.Visuales:CreateToggle({
     end
 })
 
--- =========================================================
 -- SISTEMA
--- =========================================================
-Tabs.Sistema:CreateSection("SISTEMA")
 
-local AntiAFK = false
+SystemTab:CreateSection("SISTEMA")
 
-Tabs.Sistema:CreateToggle({
-    Name = "Anti-AFK",
-    Description = "Evita la inactividad",
+SystemTab:CreateToggle({
+    Name = "Anti AFK",
     CurrentValue = false,
-    Flag = "NC_Luna_AntiAFK",
-    Callback = function(State)
-        AntiAFK = State
+    Flag = "NC_UniversalAntiAFK",
+    Callback = function(Value)
+        AntiAFK = Value == true
     end
 })
 
 LocalPlayer.Idled:Connect(function()
     if AntiAFK then
         VirtualUser:CaptureController()
-        VirtualUser:ClickButton2(Vector2.new(0, 0))
+        VirtualUser:ClickButton2(Vector2.new())
     end
 end)
 
-Tabs.Sistema:CreateButton({
-    Name = "Abrir Dark Dex",
-    Description = "Explorador de instancias",
+SystemTab:CreateButton({
+    Name = "Rejoin",
     Callback = function()
-        loadstring(game:HttpGet(
-            "https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"
-        ))()
+        TeleportService:Teleport(game.PlaceId, LocalPlayer)
     end
 })
 
-Tabs.Sistema:CreateButton({
-    Name = "Abrir SimpleSpy",
-    Description = "Monitor de remotes",
+SystemTab:CreateButton({
+    Name = "Cerrar NC HUB",
     Callback = function()
-        loadstring(game:HttpGet(
-            "https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpySource.lua"
-        ))()
+        stopFly()
+        Luna:Destroy()
     end
 })
 
-Tabs.Sistema:CreateSection("PERFILES Y TEMA")
-Tabs.Sistema:BuildConfigSection()
-Tabs.Sistema:BuildThemeSection()
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.7)
 
-LocalPlayer.CharacterAdded:Connect(function(Character)
-    task.wait(0.8)
+    local Humanoid = getHumanoid()
+    Humanoid.WalkSpeed = Speed
+    Humanoid.UseJumpPower = true
+    Humanoid.JumpPower = Jump
 
-    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-    if Humanoid then
-        Humanoid.WalkSpeed = SpeedValue
-        Humanoid.UseJumpPower = true
-        Humanoid.JumpPower = JumpValue
-    end
-
-    if FlyEnabled then
+    if Fly then
         startFly()
     end
 end)
 
-notify("NC HUB", "Universal Luna cargado", "check_circle")
+notify("NC HUB", "Universal cargado", "check_circle")
