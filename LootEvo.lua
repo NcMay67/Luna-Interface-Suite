@@ -1,5 +1,5 @@
 -- NC HUB | Loot Evo
--- PlaceId: 96033388567901
+-- Stage farm + teleport + rebirth
 
 local Luna = loadstring(game:HttpGet(
     "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua"
@@ -15,12 +15,12 @@ local Window = Luna:CreateWindow({
     Subtitle = "Loot Evo",
     LoadingEnabled = true,
     LoadingTitle = "NC HUB",
-    LoadingSubtitle = "Loot Evo",
+    LoadingSubtitle = "Stage Farm",
     KeySystem = false
 })
 
-local CombatTab = Window:CreateTab({
-    Name = "Combate",
+local FarmTab = Window:CreateTab({
+    Name = "Farm",
     Icon = "military_tech",
     ImageSource = "Material",
     ShowTitle = true
@@ -29,13 +29,6 @@ local CombatTab = Window:CreateTab({
 local ProgressTab = Window:CreateTab({
     Name = "Progreso",
     Icon = "trending_up",
-    ImageSource = "Material",
-    ShowTitle = true
-})
-
-local TravelTab = Window:CreateTab({
-    Name = "Viaje",
-    Icon = "map",
     ImageSource = "Material",
     ShowTitle = true
 })
@@ -51,7 +44,7 @@ local function notify(Title, Content, Icon)
     Luna:Notification({
         Title = Title,
         Content = Content,
-        Icon = Icon or "info",
+        Icon = Icon or "warning",
         ImageSource = "Material"
     })
 end
@@ -77,145 +70,135 @@ local function callRemote(Name, ...)
     end)
 end
 
-local function makeOptions(ConfigName)
-    local Module = Config:FindFirstChild(ConfigName, true)
-    local Options = {}
-    local Lookup = {}
+local function formatNumber(Value)
+    Value = tonumber(Value) or 0
 
-    if Module and Module:IsA("ModuleScript") then
-        local Success, Data = pcall(require, Module)
-
-        if Success and type(Data) == "table" then
-            for _, Entry in pairs(Data) do
-                if type(Entry) == "table" then
-                    local Id = Entry.ID or Entry.Id or Entry.id or Entry.Name
-                    local Name = Entry.Name or Id
-
-                    if Id and Name then
-                        local Label = tostring(Name)
-                        Lookup[Label] = Id
-                        table.insert(Options, Label)
-                    end
-                end
-            end
-        end
+    if Value >= 1000000000 then
+        return string.format("%.1fB", Value / 1000000000)
+    elseif Value >= 1000000 then
+        return string.format("%.1fM", Value / 1000000)
+    elseif Value >= 1000 then
+        return string.format("%.1fK", Value / 1000)
     end
 
-    table.sort(Options)
-
-    if #Options == 0 then
-        Options = {"Sin datos"}
-    end
-
-    return Options, Lookup
+    return tostring(math.floor(Value))
 end
 
-local Mobs, MobIds = makeOptions("MobConfig")
-local Destinations, DestinationIds = makeOptions("TeleportConfig")
+local StageConfig = require(Config:WaitForChild("StageConfig"))
+local TeleportConfig = require(Config:WaitForChild("TeleportConfig"))
 
-local SelectedMob = Mobs[1]
-local SelectedDestination = Destinations[1]
-local AutoAttack = false
-local AttackDelay = 0.35
+local Checkpoints = {}
+for _, Data in ipairs(TeleportConfig) do
+    Checkpoints[Data.ID] = Data
+end
 
--- COMBATE
+local Options = {}
+local Stages = {}
 
-CombatTab:CreateSection("COMBATE")
+for _, Data in ipairs(StageConfig) do
+    local Number = tonumber(tostring(Data.ID):match("%d+")) or 0
+    local CheckpointId = Number > 1 and ("CheckPoint" .. (Number - 1)) or nil
+    local Checkpoint = CheckpointId and Checkpoints[CheckpointId] or nil
+    local Requirement = Checkpoint and (formatNumber(Checkpoint.NeedVictoryPoints) .. " trofeos") or "Inicio"
+    local Label = string.format("Etapa %d · %s", Number, Requirement)
 
-CombatTab:CreateDropdown({
-    Name = "Objetivo",
-    Options = Mobs,
-    CurrentOption = {SelectedMob},
+    Stages[Label] = {
+        StageId = Data.ID,
+        CheckpointId = CheckpointId,
+        TargetId = Data.SpawnMonster and Data.SpawnMonster[1] or nil,
+        Number = Number
+    }
+
+    table.insert(Options, Label)
+end
+
+table.sort(Options, function(A, B)
+    return Stages[A].Number < Stages[B].Number
+end)
+
+local SelectedStage = Options[1]
+local AutoFarm = false
+local FarmDelay = 0.35
+
+FarmTab:CreateSection("STAGE FARM")
+
+FarmTab:CreateDropdown({
+    Name = "Etapa",
+    Options = Options,
+    CurrentOption = {SelectedStage},
     MultipleOptions = false,
-    Flag = "LootEvo_Target",
+    Flag = "LootEvo_Stage",
     Callback = function(Value)
-        SelectedMob = Value
+        SelectedStage = Value
     end
 })
 
-CombatTab:CreateSlider({
+FarmTab:CreateSlider({
     Name = "Velocidad",
     Range = {0.15, 1},
     Increment = 0.05,
-    CurrentValue = AttackDelay,
-    Flag = "LootEvo_AttackDelay",
+    CurrentValue = FarmDelay,
+    Flag = "LootEvo_FarmDelay",
     Callback = function(Value)
-        AttackDelay = Value
+        FarmDelay = Value
     end
 })
 
-CombatTab:CreateToggle({
-    Name = "Auto Atacar",
+FarmTab:CreateToggle({
+    Name = "Auto Farm",
     CurrentValue = false,
-    Flag = "LootEvo_AutoAttack",
+    Flag = "LootEvo_AutoFarm",
     Callback = function(Value)
-        AutoAttack = Value == true
+        AutoFarm = Value == true
     end
 })
 
-CombatTab:CreateButton({
+FarmTab:CreateButton({
     Name = "Atacar una vez",
     Callback = function()
-        local Success, ErrorMessage = callRemote("AttackMob", MobIds[SelectedMob] or SelectedMob)
+        local Data = Stages[SelectedStage]
+        local Success, ErrorMessage = callRemote("AttackMob", Data.TargetId)
+
         if not Success then
-            notify("Combate", tostring(ErrorMessage), "warning")
+            notify("Farm", tostring(ErrorMessage))
         end
     end
 })
 
-CombatTab:CreateButton({
-    Name = "Evento Dinosaurio",
+ProgressTab:CreateSection("ETAPAS")
+
+ProgressTab:CreateButton({
+    Name = "Ir a etapa",
+    Description = "El juego validará tus trofeos antes de viajar",
     Callback = function()
-        local Success, ErrorMessage = callRemote("DinoActionEvent", MobIds[SelectedMob] or SelectedMob)
+        local Data = Stages[SelectedStage]
+
+        if not Data.CheckpointId then
+            notify("Teleport", "La Etapa 1 es el inicio.", "info")
+            return
+        end
+
+        local Success, ErrorMessage = callRemote("TeleportRequest", Data.CheckpointId)
+
         if not Success then
-            notify("Dinosaurio", tostring(ErrorMessage), "warning")
+            notify("Teleport", tostring(ErrorMessage))
         end
     end
 })
-
--- PROGRESO
 
 ProgressTab:CreateSection("REBIRTH")
 
 ProgressTab:CreateButton({
     Name = "Hacer Rebirth",
-    Description = "Solo se completa si el juego confirma que cumples el requisito",
+    Description = "Solo funciona al cumplir el nivel requerido",
     Callback = function()
         local Success, ErrorMessage = callRemote("RebirthRequest")
+
         if not Success then
-            notify("Rebirth", tostring(ErrorMessage), "warning")
+            notify("Rebirth", tostring(ErrorMessage))
         end
     end
 })
-
--- VIAJE
-
-TravelTab:CreateSection("TELEPORT")
-
-TravelTab:CreateDropdown({
-    Name = "Destino",
-    Options = Destinations,
-    CurrentOption = {SelectedDestination},
-    MultipleOptions = false,
-    Flag = "LootEvo_Destination",
-    Callback = function(Value)
-        SelectedDestination = Value
-    end
-})
-
-TravelTab:CreateButton({
-    Name = "Teletransportar",
-    Callback = function()
-        local Success, ErrorMessage = callRemote("TeleportRequest", DestinationIds[SelectedDestination] or SelectedDestination)
-        if not Success then
-            notify("Teleport", tostring(ErrorMessage), "warning")
-        end
-    end
-})
-
--- SISTEMA
-
-SystemTab:CreateSection("SISTEMA")
 
 SystemTab:CreateButton({
     Name = "Cerrar NC HUB",
@@ -224,16 +207,15 @@ SystemTab:CreateButton({
     end
 })
 
-SystemTab:BuildThemeSection()
-
 task.spawn(function()
-    while task.wait(AttackDelay) do
-        if AutoAttack then
-            local Success, ErrorMessage = callRemote("AttackMob", MobIds[SelectedMob] or SelectedMob)
+    while task.wait(FarmDelay) do
+        if AutoFarm then
+            local Data = Stages[SelectedStage]
+            local Success, ErrorMessage = callRemote("AttackMob", Data.TargetId)
 
             if not Success then
-                AutoAttack = false
-                notify("Combate", tostring(ErrorMessage), "warning")
+                AutoFarm = false
+                notify("Auto Farm detenido", tostring(ErrorMessage))
             end
         end
     end
