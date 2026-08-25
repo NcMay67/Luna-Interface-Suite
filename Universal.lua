@@ -363,6 +363,24 @@ LocalPlayer.Idled:Connect(function()
 end)
 
 SystemTab:CreateButton({
+    Name = "Abrir Dark Dex",
+    Callback = function()
+        loadstring(game:HttpGet(
+            "https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"
+        ))()
+    end
+})
+
+SystemTab:CreateButton({
+    Name = "Abrir Remote Spy",
+    Callback = function()
+        loadstring(game:HttpGet(
+            "https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpySource.lua"
+        ))()
+    end
+})
+
+SystemTab:CreateButton({
     Name = "Rejoin",
     Callback = function()
         TeleportService:Teleport(game.PlaceId, LocalPlayer)
