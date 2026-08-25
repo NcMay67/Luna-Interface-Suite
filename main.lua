@@ -3,7 +3,7 @@
 -- ==========================================
 
 local PlaceId = game.PlaceId
-local BaseURL = "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/refs/heads/master/"
+local BaseURL = "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/"
 
 -- Diccionario de juegos (ID = nombre del archivo en este repositorio).
 -- Por ahora, Factory Tycoon es el único módulo específico activo.
