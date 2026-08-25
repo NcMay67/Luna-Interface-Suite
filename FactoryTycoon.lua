@@ -4,7 +4,7 @@
 -- =========================================================
 
 local Luna = loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/refs/heads/master/source.lua"
+    "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua"
 ))()
 
 local Players = game:GetService("Players")
