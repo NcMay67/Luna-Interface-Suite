@@ -8,8 +8,10 @@ local BaseURL = "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/
 -- Diccionario de juegos (ID = nombre del archivo en este repositorio).
 -- Por ahora, Factory Tycoon es el único módulo específico activo.
 local Games = {
-    [15197136141] = "FactoryTycoon.lua"
+    [15197136141] = "FactoryTycoon.lua",
+    [96033388567901] = "LootEvo.lua"
 }
+
 
 -- Carga FactoryTycoon.lua en ese juego y Universal.lua en cualquier otro.
 local scriptToLoad = Games[PlaceId] or "Universal.lua"
