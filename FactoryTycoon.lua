@@ -25,7 +25,7 @@ local Window = Luna:CreateWindow({
 local Tabs = {
     Inicio = Window:CreateTab({
         Name = "Inicio",
-        Icon = "home_filled",
+        Icon = "dashboard",
         ImageSource = "Material",
         ShowTitle = true
     }),
