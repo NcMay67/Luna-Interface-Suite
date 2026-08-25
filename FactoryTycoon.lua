@@ -31,7 +31,7 @@ local Tabs = {
     }),
     Automatizacion = Window:CreateTab({
         Name = "Automatización",
-        Icon = "settings",
+        Icon = "build_circle",
         ImageSource = "Material",
         ShowTitle = true
     }),
