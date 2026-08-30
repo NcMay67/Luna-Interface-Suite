@@ -2547,19 +2547,6 @@ function Luna:CreateWindow(WindowSettings)
 		end
 
 		local HomeTabPage = Elements.Home
-		local Dashboard = HomeTabPage.detailsholder.dashboard
-
-Dashboard.Server.Title.Text = "Servidor"
-Dashboard.Server.Subtitle.Text = "Información de la sesión actual"
-Dashboard.Server.Players.Title.Text = "Jugadores"
-Dashboard.Server.MaxPlayers.Title.Text = "Máximo de jugadores"
-Dashboard.Server.Latency.Title.Text = "Latencia"
-Dashboard.Server.Region.Title.Text = "Región del servidor"
-Dashboard.Server.Time.Title.Text = "Tiempo"
-
-Dashboard.Friends.Title.Text = "Amigos"
-Dashboard.Friends.Subtitle.Text = "Mira qué hacen tus amigos"
-
 		HomeTabPage.Visible = true
 
 		function HomeTab:Activate()
