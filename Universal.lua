@@ -132,7 +132,7 @@ end)
 local OriginalCollision = {}
 
 PlayerTab:CreateToggle({
-    Name = "Noclip",
+    Name = "No colisión",
     CurrentValue = false,
     Flag = "NC_UniversalNoclip",
     Callback = function(Value)
@@ -160,7 +160,7 @@ RunService.Stepped:Connect(function()
     end
 end)
 
-PlayerTab:CreateSection("FLY")
+PlayerTab:CreateSection("Vuelo")
 
 local FlyVelocity
 local FlyGyro
@@ -254,7 +254,7 @@ local function startFly()
 end
 
 PlayerTab:CreateToggle({
-    Name = "Fly",
+    Name = "Volar",
     CurrentValue = false,
     Flag = "NC_UniversalFly",
     Callback = function(Value)
@@ -267,7 +267,7 @@ PlayerTab:CreateToggle({
 })
 
 PlayerTab:CreateSlider({
-    Name = "Velocidad Fly",
+    Name = "Velocidad Vuelo",
     Range = {20, 180},
     Increment = 1,
     CurrentValue = FlySpeed,
@@ -381,7 +381,7 @@ SystemTab:CreateButton({
 })
 
 SystemTab:CreateButton({
-    Name = "Rejoin",
+    Name = "Reconectar",
     Callback = function()
         TeleportService:Teleport(game.PlaceId, LocalPlayer)
     end
