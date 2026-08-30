@@ -75,7 +75,7 @@ local function getRoot()
         or getCharacter():WaitForChild("HumanoidRootPart")
 end
 
-local Speed = 16
+local Speed = 24
 local Jump = 50
 local InfiniteJump = false
 local Noclip = false
