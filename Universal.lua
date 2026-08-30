@@ -372,7 +372,7 @@ SystemTab:CreateButton({
 })
 
 SystemTab:CreateButton({
-    Name = "Abrir Remote Spy",
+    Name = "Abrir SimpleSpy",
     Callback = function()
         loadstring(game:HttpGet(
             "https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpySource.lua"
