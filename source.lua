@@ -2574,7 +2574,7 @@ if Dashboard:FindFirstChild("Discord") then
     for _, Objeto in ipairs(Discord:GetDescendants()) do
         if Objeto:IsA("TextLabel") or Objeto:IsA("TextButton") then
             if Objeto.Text == "Join Script" then
-                Objeto.Text = "Copiar Script"
+                Objeto.Text = "Discord Link"
             end
         end
     end
