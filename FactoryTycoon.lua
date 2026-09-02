@@ -154,7 +154,6 @@ local GemsStatus = Tabs.Inicio:CreateLabel({
     Text = "Gemas: 0"
 })
 
-
 local SessionStatus = Tabs.Inicio:CreateLabel({
     Text = "Sesión: 0h 0m 0s"
 })
