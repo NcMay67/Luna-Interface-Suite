@@ -2584,7 +2584,7 @@ end
 local Traducciones = {
     ["In server for"] = "En el servidor durante",
     ["Join Script"] = "Copiar Discord Link",
-    ["Tap to copy join script"] = "Toca Discord para copiar el link"
+    ["Tap to copy join script"] = "Toca Discord para copiar el link",
     ["Information on the session you're currently in"] = "Información de la sesión actual",
     ["Find out what your friends are currently doing"] = "Descubre qué están haciendo tus amigos",
     ["Server"] = "Servidor",
@@ -2697,7 +2697,7 @@ end
 				local list = Players:GetFriendsAsync(Player.UserId)
 				while true do -- loop through all the pages
 					for _, data in list:GetCurrentPage() do
-						friendsInTotal +=1
+						friendsInTotal = friendsInTotal + 1
 						table.insert(playersFriends, data)
 					end
 
@@ -2710,7 +2710,7 @@ end
 					end
 				end
 				for i, v in pairs(Player:GetFriendsOnline()) do
-					onlineFriends += 1
+					onlineFriends = onlineFriends + 1
 				end
 
 				for i,v in pairs(playersFriends) do
@@ -2725,7 +2725,7 @@ end
 				HomeTabPage.detailsholder.dashboard.Friends.InGame.Value.Text = tostring(friendsInGame).." amigos"
 
 			else
-				friendsCooldown -= 1
+				friendsCooldown = friendsCooldown - 1
 			end
 		end
 
@@ -2841,7 +2841,7 @@ end
 		FirstTab = false
 
 		-- Section
-		function Tab:CreateSection(name : string)
+		function Tab:CreateSection(name)
 
 			local Section = {}
 
