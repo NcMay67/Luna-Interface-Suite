@@ -395,6 +395,9 @@ SystemTab:CreateButton({
     end
 })
 
+SystemTab:CreateSection("PERFILES")
+SystemTab:BuildConfigSection()
+
 LocalPlayer.CharacterAdded:Connect(function()
     task.wait(0.7)
 
@@ -409,6 +412,3 @@ LocalPlayer.CharacterAdded:Connect(function()
 end)
 
 notify("NC HUB", "Universal cargado", "check_circle")
-
-SystemTab:CreateSection("PERFILES")
-SystemTab:BuildConfigSection()
