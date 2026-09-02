@@ -2583,7 +2583,7 @@ end
 -- Traduce textos fijos que Luna dejó dentro de la plantilla
 local Traducciones = {
     ["In server for"] = "En el servidor durante",
-    ["Join Script"] = "Copiar Discord Link",
+    ["Join Script"] = "Discord Link",
     ["Tap to copy join script"] = "Toca Discord para copiar el link",
     ["Information on the session you're currently in"] = "Información de la sesión actual",
     ["Find out what your friends are currently doing"] = "Descubre qué están haciendo tus amigos",
