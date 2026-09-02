@@ -395,9 +395,6 @@ SystemTab:CreateButton({
     end
 })
 
-SystemTab:CreateSection("PERFILES")
-SystemTab:BuildConfigSection()
-
 LocalPlayer.CharacterAdded:Connect(function()
     task.wait(0.7)
 
