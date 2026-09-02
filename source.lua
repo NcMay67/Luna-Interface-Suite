@@ -2563,7 +2563,7 @@ if Dashboard:FindFirstChild("Discord") then
     local Discord = Dashboard.Discord
 
     if Discord:FindFirstChild("Title") then
-        Discord.Title.Text = "Unirse al script"
+        Discord.Title.Text = "Discord"
     end
 
     if Discord:FindFirstChild("Subtitle") then
