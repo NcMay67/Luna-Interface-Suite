@@ -193,7 +193,7 @@ local function updateAutomationStatus()
     end
 
     if #Active == 0 then
-        AutomationStatus:Set("Estado: ninguna automatización activa")
+        AutomationStatus:Set("Estado: desactivadas")
     else
         AutomationStatus:Set("Activas: " .. table.concat(Active, " · "))
     end
