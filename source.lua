@@ -2555,7 +2555,6 @@ function Luna:CreateWindow(WindowSettings)
     ["Maximum Players"] = "Máximo de jugadores",
     ["Latency"] = "Latencia",
     ["Server Region"] = "Región del servidor",
-    ["In server for"] = "Tiempo en el Servidor"
     ["Time"] = "Tiempo",
     ["All"] = "Todos",
     ["Offline"] = "Desconectados",
