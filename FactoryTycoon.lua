@@ -250,7 +250,7 @@ Tabs.Automatizacion:CreateToggle({
         AutoRebirthEnabled = State == true
 
         if AutoRebirthEnabled then
-            RebirthStatus:Set("Estado: comprobando requisitos cada 2 segundos")
+            RebirthStatus:Set("Estado: Activo")
         else
             RebirthStatus:Set("Estado: desactivado")
         end
