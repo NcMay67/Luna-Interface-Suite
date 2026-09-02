@@ -1587,7 +1587,7 @@ local function GetIcon(icon, source)
 		local iconData = not isStudio and game:HttpGet("https://raw.githubusercontent.com/latte-soft/lucide-roblox/refs/heads/master/lib/Icons.luau")
 		local icons = isStudio and IconModule.Lucide or loadstring(iconData)()
 		if not isStudio then
-			icon = string.match(string.lower(icon), "^%s*(.*)%s*$") :: string
+			icon = string.match(string.lower(icon), "^%s*(.*)%s*$")
 			local sizedicons = icons['48px']
 
 			local r = sizedicons[icon]
@@ -1847,14 +1847,14 @@ local function BlurModule(Frame)
 	RunService:BindToRenderStep(uid, 2000, UpdateOrientation)
 end
 
-local function unpackt(array : table)
+local function unpackt(array)
 
 	local val = ""
 	local i = 0
 	for _,v in pairs(array) do
 		if i < 3 then
 			val = val .. v .. ", "
-			i += 1
+			i = i + 1
 		else
 			val = "Various"
 			break
@@ -1949,7 +1949,7 @@ LunaUI.SmartWindow.Visible = false
 LunaUI.Notifications.Template.Visible = false
 LunaUI.DisplayOrder = 1000000000
 
-local Main : Frame = LunaUI.SmartWindow
+local Main = LunaUI.SmartWindow
 local Dragger = Main.Drag
 local dragBar = LunaUI.Drag
 local dragInteract = dragBar and dragBar.Interact or nil
@@ -1959,7 +1959,7 @@ local LoadingFrame = Main.LoadingFrame
 local Navigation = Main.Navigation
 local Tabs = Navigation.Tabs
 local Notifications = LunaUI.Notifications
-local KeySystem : Frame = Main.KeySystem
+local KeySystem = Main.KeySystem
 
 -- local function LoadConfiguration(Configuration, autoload)
 -- 	local Data = HttpService:JSONDecode(Configuration)
