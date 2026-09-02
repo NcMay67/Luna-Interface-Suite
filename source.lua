@@ -2559,7 +2559,7 @@ function Luna:CreateWindow(WindowSettings)
     ["All"] = "Todos",
     ["Offline"] = "Desconectados",
     ["Online"] = "Conectados",
-    ["In Game"] = "En el juego"
+    ["In Server"] = "En el juego"
 }
 
 for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
@@ -2677,10 +2677,10 @@ end
 					end
 				end
 
-				HomeTabPage.detailsholder.dashboard.Friends.All.Value.Text = tostring(friendsInTotal).." friends"
-				HomeTabPage.detailsholder.dashboard.Friends.Offline.Value.Text = tostring(friendsInTotal - onlineFriends).." friends"
-				HomeTabPage.detailsholder.dashboard.Friends.Online.Value.Text = tostring(onlineFriends).." friends"
-				HomeTabPage.detailsholder.dashboard.Friends.InGame.Value.Text = tostring(friendsInGame).." friends"
+				HomeTabPage.detailsholder.dashboard.Friends.All.Value.Text = tostring(friendsInTotal).." amigos"
+				HomeTabPage.detailsholder.dashboard.Friends.Offline.Value.Text = tostring(friendsInTotal - onlineFriends).." amigos"
+				HomeTabPage.detailsholder.dashboard.Friends.Online.Value.Text = tostring(onlineFriends).." amigos"
+				HomeTabPage.detailsholder.dashboard.Friends.InGame.Value.Text = tostring(friendsInGame).." amigos"
 
 			else
 				friendsCooldown -= 1
@@ -2704,8 +2704,8 @@ end
 
 
 				-- Players
-				HomeTabPage.detailsholder.dashboard.Server.Players.Value.Text = #Players:GetPlayers().." playing"
-				HomeTabPage.detailsholder.dashboard.Server.MaxPlayers.Value.Text = Players.MaxPlayers.." players can join this server"
+				HomeTabPage.detailsholder.dashboard.Server.Players.Value.Text = #Players:GetPlayers().." Jugando"
+				HomeTabPage.detailsholder.dashboard.Server.MaxPlayers.Value.Text = Players.MaxPlayers.." Jugadores pueden unirse a este servidor."
 
 				-- Ping
 				HomeTabPage.detailsholder.dashboard.Server.Latency.Value.Text = isStudio and tostring(math.round((Players.LocalPlayer:GetNetworkPing() * 2 ) / 0.01)) .."ms" or tostring(math.floor(getPing()) .."ms")
