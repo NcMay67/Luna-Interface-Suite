@@ -6623,11 +6623,16 @@ end
 			}
 
 			for flag, option in next, Luna.Options do
-				if not ClassParser[option.Class] then continue end
-				if option.IgnoreConfig then continue end
+    local Parser = ClassParser[option.Class]
 
-				table.insert(data.objects, ClassParser[option.Class].Save(flag, option))
-			end	
+    if Parser and not option.IgnoreConfig then
+        table.insert(
+            data.objects,
+            Parser.Save(flag, option)
+        )
+    end
+end
+	
 
 			local success, encoded = pcall(HttpService.JSONEncode, HttpService, data)
 			if not success then
