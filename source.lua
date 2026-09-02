@@ -2611,6 +2611,51 @@ for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
     end
 end
 
+local function CopiarDiscord()
+    local Invitacion = tostring(HomeTabSettings.DiscordInvite or "")
+
+    if Invitacion == "" or Invitacion == "noinvitelink" then
+        return
+    end
+
+    local Enlace
+
+    if Invitacion:find("discord.gg/", 1, true) then
+        Enlace = Invitacion
+    else
+        Enlace = "https://discord.gg/" .. Invitacion
+    end
+
+    if setclipboard then
+        setclipboard(Enlace)
+        Luna:Notification({
+            Title = "Discord",
+            Content = "Enlace copiado al portapapeles",
+            Icon = "link",
+            ImageSource = "Material"
+        })
+    end
+end
+
+local JoinScriptConectado = false
+
+for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
+    if (Objeto:IsA("TextLabel") or Objeto:IsA("TextButton"))
+        and Objeto.Text:gsub("%s+", " "):match("^%s*(.-)%s*$") == "Join Script" then
+
+        local Contenedor = Objeto.Parent
+        local Boton = Contenedor and Contenedor:FindFirstChild("Interact", true)
+
+        if not Boton and Contenedor and Contenedor.Parent then
+            Boton = Contenedor.Parent:FindFirstChild("Interact", true)
+        end
+
+        if Boton and Boton:IsA("GuiButton") and not JoinScriptConectado then
+            JoinScriptConectado = true
+            Boton.MouseButton1Click:Connect(CopiarDiscord)
+        end
+    end
+end
 
 		
 		HomeTabPage.Visible = true
