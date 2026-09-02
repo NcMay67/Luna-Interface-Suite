@@ -2615,7 +2615,7 @@ for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
     if Objeto:IsA("TextButton") or Objeto:IsA("TextLabel") then
         local Texto = Objeto.Text:gsub("%s+", " "):match("^%s*(.-)%s*$")
 
-        if Texto == "Copiar Discord Link" then
+        if Texto == "Join Script" then
             if Objeto:IsA("TextButton") then
                 Objeto.Visible = false
             else
