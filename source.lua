@@ -2583,7 +2583,7 @@ end
 -- Traduce textos fijos que Luna dejó dentro de la plantilla
 local Traducciones = {
     ["In server for"] = "En el servidor durante",
-    ["Join Script"] = "Copiar Script",
+    ["Join Script"] = "Copiar Discord Link",
     ["Information on the session you're currently in"] = "Información de la sesión actual",
     ["Find out what your friends are currently doing"] = "Descubre qué están haciendo tus amigos",
     ["Server"] = "Servidor",
@@ -2610,6 +2610,21 @@ for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
         end
     end
 end
+
+for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
+    if Objeto:IsA("TextButton") or Objeto:IsA("TextLabel") then
+        local Texto = Objeto.Text:gsub("%s+", " "):match("^%s*(.-)%s*$")
+
+        if Texto == "Copiar Script" then
+            if Objeto:IsA("TextButton") then
+                Objeto.Visible = false
+            else
+                Objeto.Text = ""
+            end
+        end
+    end
+end
+
 
 		
 		HomeTabPage.Visible = true
