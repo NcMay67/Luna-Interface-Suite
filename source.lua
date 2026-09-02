@@ -2548,7 +2548,44 @@ function Luna:CreateWindow(WindowSettings)
 
 		local HomeTabPage = Elements.Home
 		
-		local Traducciones = {
+		local Dashboard = HomeTabPage.detailsholder.dashboard
+
+-- Títulos y descripciones principales
+Dashboard.Server.Title.Text = "Servidor"
+Dashboard.Server.Subtitle.Text = "Información de la sesión actual"
+Dashboard.Server.Time.Title.Text = "En el servidor durante"
+
+Dashboard.Friends.Title.Text = "Amigos"
+Dashboard.Friends.Subtitle.Text = "Descubre qué están haciendo tus amigos"
+
+-- Discord / Join Script
+if Dashboard:FindFirstChild("Discord") then
+    local Discord = Dashboard.Discord
+
+    if Discord:FindFirstChild("Title") then
+        Discord.Title.Text = "Unirse al script"
+    end
+
+    if Discord:FindFirstChild("Subtitle") then
+        Discord.Subtitle.Text = "Únete a nuestro Discord para recibir novedades del script"
+    end
+
+    -- Por si el texto está dentro del botón Interact
+    for _, Objeto in ipairs(Discord:GetDescendants()) do
+        if Objeto:IsA("TextLabel") or Objeto:IsA("TextButton") then
+            if Objeto.Text == "Join Script" then
+                Objeto.Text = "Unirse al script"
+            end
+        end
+    end
+end
+
+-- Traduce textos fijos que Luna dejó dentro de la plantilla
+local Traducciones = {
+    ["In server for"] = "En el servidor durante",
+    ["Join Script"] = "Unirse al script",
+    ["Information on the session you're currently in"] = "Información de la sesión actual",
+    ["Find out what your friends are currently doing"] = "Descubre qué están haciendo tus amigos",
     ["Server"] = "Servidor",
     ["Friends"] = "Amigos",
     ["Players"] = "Jugadores",
@@ -2556,15 +2593,14 @@ function Luna:CreateWindow(WindowSettings)
     ["Latency"] = "Latencia",
     ["Server Region"] = "Región del servidor",
     ["Time"] = "Tiempo",
-    ["All"] = "Todos",
-    ["Offline"] = "Desconectados",
-    ["Online"] = "Conectados",
-    ["In Server"] = "En el juego"
+    ["Discord"] = "Discord"
 }
 
 for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
-    if Objeto:IsA("TextLabel") or Objeto:IsA("TextButton") then
-        local Traduccion = Traducciones[Objeto.Text]
+    if Objeto:IsA("TextLabel") or Objeto:IsA("TextButton") or Objeto:IsA("TextBox") then
+        local Texto = Objeto.Text:gsub("%s+", " "):match("^%s*(.-)%s*$")
+        local Traduccion = Traducciones[Texto]
+
         if Traduccion then
             Objeto.Text = Traduccion
         end
