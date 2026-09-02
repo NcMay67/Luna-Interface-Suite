@@ -170,7 +170,7 @@ local SessionStatus = Tabs.Inicio:CreateLabel({
 Tabs.Automatizacion:CreateSection("AUTO-FARM")
 
 local AutomationStatus = Tabs.Automatizacion:CreateLabel({
-    Text = "Estado: ninguna automatización activa"
+    Text = "Estado: desactivadas"
 })
 
 local AutoCollectEnabled = false
