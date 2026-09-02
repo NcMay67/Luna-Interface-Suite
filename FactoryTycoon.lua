@@ -162,10 +162,6 @@ local SessionStatus = Tabs.Inicio:CreateLabel({
     Text = "Sesión: 0h 0m 0s"
 })
 
-Tabs.Inicio:CreateParagraph({
-    Title = "Información",
-    Text = "Los valores se leen desde DataFolder. Las automatizaciones solo actúan sobre la fábrica asignada a tu jugador."
-})
 
 -- =========================================================
 -- AUTOMATIZACIÓN
@@ -214,21 +210,6 @@ Tabs.Automatizacion:CreateToggle({
     end
 })
 
-Tabs.Automatizacion:CreateToggle({
-    Name = "Auto-Comprar mejoras",
-    Description = "Compra una mejora normal disponible por ciclo",
-    CurrentValue = false,
-    Flag = "Factory_AutoBuy",
-    Callback = function(State)
-        AutoBuyEnabled = State == true
-        updateAutomationStatus()
-    end
-})
-
-Tabs.Automatizacion:CreateParagraph({
-    Title = "Compra protegida",
-    Text = "Auto-Comprar ignora botones con GamepassID, ProductID y DevProductID. Solo intenta compras normales con el dinero disponible."
-})
 
 Tabs.Automatizacion:CreateSection("X5 BOOST")
 
@@ -238,7 +219,7 @@ local BoostStatus = Tabs.Automatizacion:CreateLabel({
 
 Tabs.Automatizacion:CreateButton({
     Name = "Activar X5 Boost",
-    Description = "Intenta activar el valor local Money5xBoost",
+    Description = "X5 Dinero Boost",
     Callback = function()
         local Data = getDataFolder()
         local Boost = Data and Data:FindFirstChild("Money5xBoost")
@@ -254,10 +235,6 @@ Tabs.Automatizacion:CreateButton({
     end
 })
 
-Tabs.Automatizacion:CreateParagraph({
-    Title = "Boost recuperado",
-    Text = "Usa el valor local Money5xBoost recuperado de tu código original."
-})
 
 Tabs.Automatizacion:CreateSection("REBIRTH")
 
@@ -267,7 +244,6 @@ local RebirthStatus = Tabs.Automatizacion:CreateLabel({
 
 Tabs.Automatizacion:CreateToggle({
     Name = "Auto-Rebirth",
-    Description = "Comprueba el rebirth cada 2 segundos",
     CurrentValue = false,
     Flag = "Factory_AutoRebirth",
     Callback = function(State)
@@ -325,10 +301,6 @@ Tabs.Jugador:CreateSlider({
     end
 })
 
-Tabs.Jugador:CreateParagraph({
-    Title = "Persistencia",
-    Text = "La velocidad y el salto seleccionados se vuelven a aplicar cuando tu personaje reaparece."
-})
 
 -- =========================================================
 -- SISTEMA
@@ -360,9 +332,8 @@ Tabs.Sistema:CreateButton({
     end
 })
 
-Tabs.Sistema:CreateSection("PERFILES Y TEMA")
+Tabs.Sistema:CreateSection("PERFILES ")
 Tabs.Sistema:BuildConfigSection()
-Tabs.Sistema:BuildThemeSection()
 
 -- =========================================================
 -- CICLOS DEL MÓDULO
