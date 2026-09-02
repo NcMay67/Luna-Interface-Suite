@@ -2553,7 +2553,7 @@ function Luna:CreateWindow(WindowSettings)
 -- Títulos y descripciones principales
 Dashboard.Server.Title.Text = "Servidor"
 Dashboard.Server.Subtitle.Text = "Información de la sesión actual"
-Dashboard.Server.Time.Title.Text = "En el servidor durante"
+Dashboard.Server.Time.Title.Text = "En el servidor"
 
 Dashboard.Friends.Title.Text = "Amigos"
 Dashboard.Friends.Subtitle.Text = "Descubre qué están haciendo tus amigos"
