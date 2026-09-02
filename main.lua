@@ -13,7 +13,7 @@ local Games = {
 }
 
 
--- Carga FactoryTycoon.lua en ese juego y Universal.lua en cualquier otro.
+-- Universal.lua.
 local scriptToLoad = Games[PlaceId] or "Universal.lua"
 
 print("------------------------------------------")
