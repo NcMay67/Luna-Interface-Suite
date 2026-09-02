@@ -2547,6 +2547,31 @@ function Luna:CreateWindow(WindowSettings)
 		end
 
 		local HomeTabPage = Elements.Home
+		
+		local Traducciones = {
+    ["Server"] = "Servidor",
+    ["Friends"] = "Amigos",
+    ["Players"] = "Jugadores",
+    ["Maximum Players"] = "Máximo de jugadores",
+    ["Latency"] = "Latencia",
+    ["Server Region"] = "Región del servidor",
+    ["Time"] = "Tiempo",
+    ["All"] = "Todos",
+    ["Offline"] = "Desconectados",
+    ["Online"] = "Conectados",
+    ["In Game"] = "En el juego"
+}
+
+for _, Objeto in ipairs(HomeTabPage:GetDescendants()) do
+    if Objeto:IsA("TextLabel") or Objeto:IsA("TextButton") then
+        local Traduccion = Traducciones[Objeto.Text]
+        if Traduccion then
+            Objeto.Text = Traduccion
+        end
+    end
+end
+
+		
 		HomeTabPage.Visible = true
 
 		function HomeTab:Activate()
