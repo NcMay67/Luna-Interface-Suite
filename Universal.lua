@@ -410,5 +410,5 @@ end)
 
 notify("NC HUB", "Universal cargado", "check_circle")
 
-Tabs.Sistema:CreateSection("PERFILES ")
-Tabs.Sistema:BuildConfigSection()
+SystemTab:CreateSection("PERFILES ")
+SystemTab:BuildConfigSection()
