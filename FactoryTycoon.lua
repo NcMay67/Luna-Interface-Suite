@@ -154,9 +154,6 @@ local GemsStatus = Tabs.Inicio:CreateLabel({
     Text = "Gemas: 0"
 })
 
-local FactoryStatus = Tabs.Inicio:CreateLabel({
-    Text = "Fábrica: Buscando..."
-})
 
 local SessionStatus = Tabs.Inicio:CreateLabel({
     Text = "Sesión: 0h 0m 0s"
