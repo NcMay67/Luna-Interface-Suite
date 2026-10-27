@@ -29,7 +29,8 @@ El loader detecta el `PlaceId` actual. Cuando existe un módulo específico, lo 
 ├── LICENSE
 ├── assets/
 ├── docs/
-└── dev/
+├── dev/
+└── website/       # Página estática de NC HUB
 ```
 
 Los módulos listos para cargar se guardan en la raíz. Los borradores y pruebas se guardan en `dev/` y no se añaden al loader hasta que estén comprobados.
@@ -37,6 +38,14 @@ Los módulos listos para cargar se guardan en la raíz. Los borradores y pruebas
 ## Biblioteca
 
 `source.lua` contiene la biblioteca Luna UI adaptada para NC HUB. Su licencia BSD-3-Clause se conserva en `LICENSE`.
+
+## Página web
+
+El sitio estático de presentación está en `website/`. Consulta [`website/README.md`](website/README.md) para ejecutarlo localmente; no necesita dependencias:
+
+```sh
+python3 -m http.server 8000 --directory website
+```
 
 ## Nuevo juego
 

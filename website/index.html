@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b13">
+  <meta name="description" content="NC HUB reúne módulos para Roblox en una interfaz basada en Luna UI. Copia el loader oficial, explora los módulos y consulta la guía de instalación.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="NC HUB — Luna Interface Suite">
+  <meta property="og:description" content="Un solo loader. La interfaz NC HUB, donde la necesites.">
+  <title>NC HUB — Luna Interface Suite</title>
+  <link rel="icon" href="assets/moon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="assets/luna-cover.webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="NC HUB, inicio">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M22.7 4.5a12 12 0 1 0 4.8 21.8A13.2 13.2 0 0 1 22.7 4.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m24 7 .8 2.2 2.2.8-2.2.8L24 13l-.8-2.2-2.2-.8 2.2-.8L24 7Z" fill="currentColor"/></svg></span>
+        <span class="brand-name">NC<span>HUB</span></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Abrir navegación" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
+        <a href="#modulos">Módulos</a>
+        <a href="#instalacion">Instalación</a>
+        <a href="#recursos">Recursos</a>
+        <a class="nav-github" href="https://github.com/NcMay67/Luna-Interface-Suite" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.5 21.6c.55.1.75-.24.75-.53v-2c-3.08.67-3.73-1.3-3.73-1.3-.5-1.28-1.24-1.62-1.24-1.62-1.01-.7.08-.69.08-.69 1.12.08 1.72 1.15 1.72 1.15 1 .1 1.5-.28 1.84-.64.1-.7.4-1.17.7-1.44-2.46-.28-5.05-1.23-5.05-5.48 0-1.21.43-2.2 1.15-2.97-.12-.28-.5-1.4.11-2.92 0 0 .94-.3 3.06 1.14a10.6 10.6 0 0 1 5.57 0c2.12-1.44 3.06-1.14 3.06-1.14.6 1.52.23 2.64.11 2.92.72.77 1.15 1.76 1.15 2.97 0 4.26-2.6 5.2-5.08 5.47.4.35.75 1.03.75 2.08v3.09c0 .3.2.64.76.53A11.1 11.1 0 0 0 12 .9Z"/></svg><span>GitHub</span><span class="external-mark" aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-glow hero-glow-one" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow-two" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <a class="eyebrow" href="https://github.com/NcMay67/Luna-Interface-Suite" target="_blank" rel="noopener noreferrer"><span class="status-dot"></span>Una interfaz · múltiples juegos <span aria-hidden="true">↗</span></a>
+          <h1 id="hero-title">Un solo loader.<br>La interfaz <span>NC HUB</span>,<br>donde la necesites.</h1>
+          <p class="hero-description">Una colección de módulos para Roblox, con la interfaz de Luna UI y un loader que selecciona el módulo adecuado automáticamente.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#instalacion"><span>Ver cómo instalar</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a class="button button-quiet" href="#modulos">Explorar módulos</a>
+          </div>
+          <div class="hero-note"><span class="note-line" aria-hidden="true"></span><span>Factory Tycoon detectado. Universal para los demás.</span></div>
+        </div>
+        <div class="hero-visual">
+          <div class="visual-backdrop" aria-hidden="true"></div>
+          <div class="cover-frame"><img src="assets/luna-cover.webp" alt="Portada Luna Interface Suite en azul noche" width="1600" height="900" fetchpriority="high"><span class="cover-corner cover-corner-tl" aria-hidden="true"></span><span class="cover-corner cover-corner-br" aria-hidden="true"></span></div>
+          <div class="floating-chip chip-top"><span class="chip-icon chip-icon-moon" aria-hidden="true">☾</span><span><strong>Luna UI</strong><small>Interfaz base</small></span></div>
+          <div class="floating-chip chip-bottom"><span class="chip-pulse" aria-hidden="true"></span><span><strong>Loader inteligente</strong><small>Detecta el juego al iniciar</small></span></div>
+          <div class="visual-index" aria-hidden="true">NC—01 <span></span> LUNA INTERFACE SUITE</div>
+        </div>
+      </div>
+      <div class="hero-bottom-line" aria-hidden="true"><span>INTERFAZ MODULAR</span><i></i><span>DISEÑADA PARA ROBLOX</span><i></i><span>ALIMENTADA POR LUNA UI</span></div>
+    </section>
+
+    <section class="modules section-wrap" id="modulos" aria-labelledby="modules-title">
+      <div class="section-heading">
+        <div><span class="section-kicker">01 / EL CATÁLOGO</span><h2 id="modules-title">Tu juego.<br><span>Tu módulo.</span></h2></div>
+        <p>El loader comprueba el PlaceId y carga el módulo específico cuando está disponible. Si no, recurre a Universal.</p>
+      </div>
+      <div class="module-list">
+        <article class="module-card module-card-featured">
+          <div class="module-card-top"><span class="module-index">MÓDULO 01</span><span class="module-badge"><span></span>ESPECÍFICO</span></div>
+          <div class="module-main"><div class="game-symbol factory-symbol" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M8 40V18l10 6v-8l10 8V10l12-5v35H8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M28 10V5m6 20h3m-18 6h2m8 6h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14 31h4v9h-4zm19 0h4v9h-4z" fill="currentColor" opacity=".35"/></svg></div><div><h3>Factory Tycoon</h3><p>Un módulo creado para una experiencia concreta. El loader lo selecciona cuando detecta el PlaceId de Factory Tycoon.</p></div></div>
+          <div class="module-meta"><span>PLACE ID <strong>15197136141</strong></span><a href="https://github.com/NcMay67/Luna-Interface-Suite/blob/master/FactoryTycoon.lua" target="_blank" rel="noopener noreferrer">Ver código <span aria-hidden="true">↗</span></a></div>
+        </article>
+        <article class="module-card module-card-universal">
+          <div class="module-card-top"><span class="module-index">MÓDULO 02</span><span class="module-badge badge-universal"><span></span>UNIVERSAL</span></div>
+          <div class="module-main"><div class="game-symbol universal-symbol" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="1.6"/><path d="M8.7 19h30.6M8.7 29h30.6M24 8c4 4.4 6 9.7 6 16s-2 11.6-6 16c-4-4.4-6-9.7-6-16s2-11.6 6-16Z" stroke="currentColor" stroke-width="1.5"/><path d="m34.5 8.8 1.3 3.4 3.4 1.3-3.4 1.3-1.3 3.4-1.3-3.4-3.4-1.3 3.4-1.3 1.3-3.4Z" fill="currentColor"/></svg></div><div><h3>Universal</h3><p>La alternativa predeterminada del loader: se carga en los juegos que todavía no tienen un módulo dedicado.</p></div></div>
+          <div class="module-meta"><span>FALLBACK <strong>Cualquier otro juego</strong></span><a href="https://github.com/NcMay67/Luna-Interface-Suite/blob/master/Universal.lua" target="_blank" rel="noopener noreferrer">Ver código <span aria-hidden="true">↗</span></a></div>
+        </article>
+      </div>
+      <div class="dispatch-strip"><span class="dispatch-label"><span class="dispatch-dot"></span>RUTA DEL LOADER</span><code>PlaceId <strong>15197136141</strong> <i>→</i> Factory Tycoon <i>·</i> otros <i>→</i> Universal</code></div>
+    </section>
+
+    <section class="install section-wrap" id="instalacion" aria-labelledby="install-title">
+      <div class="install-orbit orbit-one" aria-hidden="true"></div><div class="install-orbit orbit-two" aria-hidden="true"></div>
+      <div class="install-content">
+        <div class="section-heading install-heading"><div><span class="section-kicker">02 / PUESTA EN MARCHA</span><h2 id="install-title">Tres pasos.<br><span>Y a jugar.</span></h2></div><p>El loader oficial ya está en el repositorio. Cópialo desde aquí y pégalo en tu entorno compatible con scripts Lua remotos.</p></div>
+        <div class="steps">
+          <article class="step"><span class="step-number">01</span><div><h3>Copia el loader</h3><p>Usa el botón para copiar el código oficial al portapapeles.</p></div></article>
+          <article class="step"><span class="step-number">02</span><div><h3>Abre el entorno compatible</h3><p>Inicia Roblox junto con un entorno de ejecución compatible con scripts Lua remotos.</p></div></article>
+          <article class="step"><span class="step-number">03</span><div><h3>Pega y ejecuta</h3><p>Al cargar, el loader lee el PlaceId y elige Factory Tycoon o Universal.</p></div></article>
+        </div>
+        <div class="loader-card">
+          <div class="loader-card-top"><div class="terminal-label"><span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>LOADER OFICIAL <b>· LUA</b></span></div><span class="source-label">main.lua</span></div>
+          <pre class="code-block"><code id="loader-code">loadstring(game:HttpGet("https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/main.lua"))()</code></pre>
+          <div class="loader-card-bottom"><span>Fuente oficial · <a href="https://github.com/NcMay67/Luna-Interface-Suite/blob/master/main.lua" target="_blank" rel="noopener noreferrer">main.lua <span aria-hidden="true">↗</span></a></span><button class="copy-button" type="button" data-copy-loader><svg class="copy-icon" viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="7" width="9" height="10" rx="1.6"/><path d="M12.5 7V5.4A1.4 1.4 0 0 0 11.1 4h-6A1.1 1.1 0 0 0 4 5.1v9a1.1 1.1 0 0 0 1.1 1.1H7"/></svg><svg class="check-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 4.1 4 8-9"/></svg><span>Copiar loader</span></button></div>
+        </div>
+        <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="resources section-wrap" id="recursos" aria-labelledby="resources-title">
+      <div class="resources-left"><span class="section-kicker">03 / PARA CACHARREAR</span><h2 id="resources-title">El código,<br>sin <span>misterios.</span></h2><p>El código fuente y la documentación de Luna están a un clic. Consulta los archivos originales y descubre cómo está organizado el repo.</p><a class="all-files-link" href="https://github.com/NcMay67/Luna-Interface-Suite" target="_blank" rel="noopener noreferrer">Explorar el repositorio <span aria-hidden="true">↗</span></a></div>
+      <div class="resource-links">
+        <a class="resource-link" href="https://github.com/NcMay67/Luna-Interface-Suite/blob/master/main.lua" target="_blank" rel="noopener noreferrer"><span class="resource-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3.8h7l5 5V20a1.2 1.2 0 0 1-1.2 1.2H7A1.2 1.2 0 0 1 5.8 20V5A1.2 1.2 0 0 1 7 3.8Z" stroke="currentColor" stroke-width="1.5"/><path d="M14 4v5h5M9 13h6m-6 3h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="resource-copy"><strong>Loader oficial</strong><small>Consulta main.lua en GitHub</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+        <a class="resource-link" href="https://github.com/NcMay67/Luna-Interface-Suite/blob/master/source.lua" target="_blank" rel="noopener noreferrer"><span class="resource-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H20v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M5 6v15m4-13h7m-7 4h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="resource-copy"><strong>Biblioteca Luna UI</strong><small>Consulta source.lua en GitHub</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+        <a class="resource-link" href="https://docs.nebulasoftworks.xyz/" target="_blank" rel="noopener noreferrer"><span class="resource-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M9.6 9.3a2.5 2.5 0 1 1 4.1 1.9c-1 .8-1.7 1.1-1.7 2.5m0 3.1h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="resource-copy"><strong>Documentación Luna</strong><small>Docs de Nebula Softworks</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+        <a class="resource-link" href="https://github.com/NcMay67/Luna-Interface-Suite/blob/master/README.md" target="_blank" rel="noopener noreferrer"><span class="resource-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h16v13H8l-4 3V5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 9h8m-8 4h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="resource-copy"><strong>README del proyecto</strong><small>Ver la guía original</small></span><span class="resource-arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section class="closing section-wrap" aria-labelledby="closing-title"><div class="closing-inner"><span class="closing-sparkle" aria-hidden="true">✳</span><div><span class="section-kicker">UN PROYECTO ABIERTO</span><h2 id="closing-title">El universo <span>se amplía.</span></h2><p>¿Tienes curiosidad por cómo está construido? Todo el código vive en el repositorio de NC HUB.</p></div><a class="button button-light" href="https://github.com/NcMay67/Luna-Interface-Suite" target="_blank" rel="noopener noreferrer">Ver en GitHub <span aria-hidden="true">↗</span></a></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="footer-inner"><a class="brand footer-brand" href="#inicio" aria-label="NC HUB, volver al inicio"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M22.7 4.5a12 12 0 1 0 4.8 21.8A13.2 13.2 0 0 1 22.7 4.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m24 7 .8 2.2 2.2.8-2.2.8L24 13l-.8-2.2-2.2-.8 2.2-.8L24 7Z" fill="currentColor"/></svg></span><span class="brand-name">NC<span>HUB</span></span></a><span class="footer-caption">Luna Interface Suite <span>·</span> NC HUB</span><a class="back-top" href="#inicio">Volver arriba <span aria-hidden="true">↑</span></a><span class="footer-copy">© <span data-current-year>2026</span> NC HUB</span></div></footer>
+</body>
+</html>
