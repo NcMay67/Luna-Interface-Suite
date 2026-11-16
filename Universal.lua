@@ -150,11 +150,10 @@ local OriginalCollision = {}
 PlayerTab:CreateToggle({
     Name = "No colisión",
     CurrentValue = false,
-    Flag = "NC_UniversalNoclip",
     Callback = function(Value)
         Noclip = Value == true
     end
-})
+}, "NC_UniversalNoclip")
 
 trackConnection(RunService.Stepped:Connect(function()
     if not IsDestroyed and Noclip then
