@@ -367,10 +367,10 @@ local function prepareESP(Player)
         return
     end
 
-    Player.CharacterAdded:Connect(function()
+    trackConnection(Player.CharacterAdded:Connect(function()
         task.wait(0.3)
         applyESP(Player)
-    end)
+    end))
 end
 
 for _, Player in ipairs(Players:GetPlayers()) do
