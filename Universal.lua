@@ -141,11 +141,11 @@ PlayerTab:CreateToggle({
     end
 })
 
-UserInputService.JumpRequest:Connect(function()
+trackConnection(UserInputService.JumpRequest:Connect(function()
     if InfiniteJump then
         getHumanoid():ChangeState(Enum.HumanoidStateType.Jumping)
     end
-end)
+end))
 
 local OriginalCollision = {}
 
