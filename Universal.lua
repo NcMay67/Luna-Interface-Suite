@@ -158,7 +158,7 @@ PlayerTab:CreateToggle({
     end
 })
 
-RunService.Stepped:Connect(function()
+trackConnection(RunService.Stepped:Connect(function()
     if Noclip then
         for _, Object in ipairs(getCharacter():GetDescendants()) do
             if Object:IsA("BasePart") then
@@ -176,7 +176,7 @@ RunService.Stepped:Connect(function()
         end
         table.clear(OriginalCollision)
     end
-end)
+end))
 
 PlayerTab:CreateSection("Vuelo")
 
