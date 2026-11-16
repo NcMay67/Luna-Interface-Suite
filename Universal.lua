@@ -397,6 +397,14 @@ VisualTab:CreateToggle({
 
 SystemTab:CreateSection("SISTEMA")
 
+SystemTab:CreateButton({
+    Name = "Restaurar personaje",
+    Description = "Desactiva vuelo, noclip, salto infinito y restaura los valores normales.",
+    Callback = function()
+        restoreCharacter()
+    end
+})
+
 SystemTab:CreateToggle({
     Name = "Anti AFK",
     CurrentValue = false,
