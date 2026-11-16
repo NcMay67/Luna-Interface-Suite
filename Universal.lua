@@ -453,11 +453,25 @@ SystemTab:BuildConfigSection()
 
 SystemTab:CreateButton({
     Name = "Cerrar NC HUB",
+    Description = "Desactiva las funciones y cierra completamente la interfaz.",
     Callback = function()
-        stopFly()
+        if IsDestroyed then
+            return
+        end
+
+        IsDestroyed = true
+
+        restoreCharacter()
+        disconnectAll()
+
+        for _, Player in ipairs(Players:GetPlayers()) do
+            removeESP(Player)
+        end
+
         Luna:Destroy()
     end
 })
+
 
 trackConnection(LocalPlayer.CharacterAdded:Connect(function()
     task.wait(0.7)
