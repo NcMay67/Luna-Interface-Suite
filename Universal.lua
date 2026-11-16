@@ -159,7 +159,7 @@ PlayerTab:CreateToggle({
 })
 
 trackConnection(RunService.Stepped:Connect(function()
-    if Noclip then
+    if not IsDestroyed and Noclip then
         for _, Object in ipairs(getCharacter():GetDescendants()) do
             if Object:IsA("BasePart") then
                 if OriginalCollision[Object] == nil then
