@@ -12,6 +12,24 @@ local TeleportService = game:GetService("TeleportService")
 
 local LocalPlayer = Players.LocalPlayer
 
+local Connections = {}
+local IsDestroyed = false
+
+local function trackConnection(Connection)
+    table.insert(Connections, Connection)
+    return Connection
+end
+
+local function disconnectAll()
+    for _, Connection in ipairs(Connections) do
+        if Connection and Connection.Connected then
+            Connection:Disconnect()
+        end
+    end
+
+    table.clear(Connections)
+end
+
 local Window = Luna:CreateWindow({
     Name = "NC HUB",
     Subtitle = "Universal",
