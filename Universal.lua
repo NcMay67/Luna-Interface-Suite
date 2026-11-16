@@ -413,7 +413,7 @@ SystemTab:CreateButton({
     end
 })
 
-LocalPlayer.CharacterAdded:Connect(function()
+trackConnection(LocalPlayer.CharacterAdded:Connect(function()
     task.wait(0.7)
 
     local Humanoid = getHumanoid()
@@ -424,6 +424,6 @@ LocalPlayer.CharacterAdded:Connect(function()
     if Fly then
         startFly()
     end
-end)
+end))
 
 notify("NC HUB", "Universal cargado", "check_circle")
