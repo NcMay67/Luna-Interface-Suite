@@ -295,6 +295,11 @@ if FlyOption and FlyOption.UpdateState then
     FlyOption:UpdateState(false)
 end
 
+print("=== NC HUB RESET ===")
+print("SpeedOption:", Luna.Options["NC_UniversalSpeed"])
+print("JumpOption:", Luna.Options["NC_UniversalJump"])
+print("FlySpeedOption:", Luna.Options["NC_UniversalFlySpeed"])
+
     notify(
         "NC HUB",
         "El personaje fue restaurado.",
