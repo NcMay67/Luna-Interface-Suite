@@ -224,6 +224,39 @@ local function stopFly()
     end
 end
 
+local function restoreCharacter()
+    Noclip = false
+    InfiniteJump = false
+
+    stopFly()
+
+    for Part, OriginalState in pairs(OriginalCollision) do
+        if Part and Part.Parent then
+            Part.CanCollide = OriginalState
+        end
+    end
+
+    table.clear(OriginalCollision)
+
+    local Character = LocalPlayer.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+
+    if Humanoid then
+        Humanoid.WalkSpeed = 16
+        Humanoid.UseJumpPower = true
+        Humanoid.JumpPower = 50
+        Humanoid.AutoRotate = true
+        Humanoid.PlatformStand = false
+        Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+    end
+
+    notify(
+        "NC HUB",
+        "El personaje fue restaurado.",
+        "restore"
+    )
+end
+
 local function startFly()
     stopFly()
     Fly = true
