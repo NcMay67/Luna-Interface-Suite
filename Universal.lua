@@ -280,6 +280,9 @@ local function startFly()
     FlyGyro.Parent = Root
 
     FlyConnection = RunService.RenderStepped:Connect(function()
+        if IsDestroyed then
+    return
+end
         if not Fly or not Root.Parent then
             return
         end
