@@ -415,7 +415,7 @@ SystemTab:CreateToggle({
 })
 
 trackConnection(LocalPlayer.Idled:Connect(function()
-    if AntiAFK then
+    if not IsDestroyed and AntiAFK then
         VirtualUser:CaptureController()
         VirtualUser:ClickButton2(Vector2.new())
     end
