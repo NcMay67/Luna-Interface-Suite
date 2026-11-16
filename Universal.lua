@@ -249,6 +249,37 @@ local function restoreCharacter()
         Humanoid.PlatformStand = false
         Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
     end
+    
+    -- Sincronizar visualmente los controles de Luna UI
+local SpeedOption = Luna.Options["NC_UniversalSpeed"]
+if SpeedOption and SpeedOption.UpdateValue then
+    SpeedOption:UpdateValue(16)
+end
+
+local JumpOption = Luna.Options["NC_UniversalJump"]
+if JumpOption and JumpOption.UpdateValue then
+    JumpOption:UpdateValue(50)
+end
+
+local FlySpeedOption = Luna.Options["NC_UniversalFlySpeed"]
+if FlySpeedOption and FlySpeedOption.UpdateValue then
+    FlySpeedOption:UpdateValue(60)
+end
+
+local InfiniteJumpOption = Luna.Options["NC_UniversalInfiniteJump"]
+if InfiniteJumpOption and InfiniteJumpOption.UpdateState then
+    InfiniteJumpOption:UpdateState(false)
+end
+
+local NoclipOption = Luna.Options["NC_UniversalNoclip"]
+if NoclipOption and NoclipOption.UpdateState then
+    NoclipOption:UpdateState(false)
+end
+
+local FlyOption = Luna.Options["NC_UniversalFly"]
+if FlyOption and FlyOption.UpdateState then
+    FlyOption:UpdateState(false)
+end
 
     notify(
         "NC HUB",
