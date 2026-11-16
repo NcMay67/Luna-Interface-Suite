@@ -395,10 +395,19 @@ VisualTab:CreateSection("ESP")
 
 local function removeESP(Player)
     local Character = Player.Character
-    local Highlight = Character and Character:FindFirstChild("NC_ESP")
 
+    if not Character then
+        return
+    end
+
+    local Highlight = Character:FindFirstChild("NC_ESP", true)
     if Highlight then
         Highlight:Destroy()
+    end
+
+    local ESPInfo = Character:FindFirstChild("NC_ESP_Info", true)
+    if ESPInfo then
+        ESPInfo:Destroy()
     end
 end
 
@@ -407,16 +416,97 @@ local function applyESP(Player)
         return
     end
 
-    local Highlight = Player.Character:FindFirstChild("NC_ESP")
+    local Character = Player.Character
+    local Head = Character:FindFirstChild("Head")
+        or Character:FindFirstChild("HumanoidRootPart")
+
+    if not Head then
+        return
+    end
+
+    local Highlight = Character:FindFirstChild("NC_ESP")
+
     if not Highlight then
         Highlight = Instance.new("Highlight")
         Highlight.Name = "NC_ESP"
         Highlight.FillColor = Color3.fromRGB(174, 113, 255)
         Highlight.FillTransparency = 0.55
         Highlight.OutlineColor = Color3.fromRGB(152, 235, 255)
+        Highlight.OutlineTransparency = 0
         Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-        Highlight.Parent = Player.Character
+        Highlight.Parent = Character
     end
+
+    local ESPInfo = Head:FindFirstChild("NC_ESP_Info")
+
+    if not ESPInfo then
+        ESPInfo = Instance.new("BillboardGui")
+        ESPInfo.Name = "NC_ESP_Info"
+        ESPInfo.Adornee = Head
+        ESPInfo.AlwaysOnTop = true
+        ESPInfo.LightInfluence = 0
+        ESPInfo.MaxDistance = 1000
+        ESPInfo.Size = UDim2.fromOffset(190, 42)
+        ESPInfo.StudsOffset = Vector3.new(0, 3, 0)
+        ESPInfo.Parent = Head
+
+        local Label = Instance.new("TextLabel")
+        Label.Name = "Info"
+        Label.BackgroundTransparency = 1
+        Label.Size = UDim2.fromScale(1, 1)
+        Label.Font = Enum.Font.GothamSemibold
+        Label.TextSize = 13
+        Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        Label.TextStrokeTransparency = 0.25
+        Label.TextWrapped = true
+        Label.TextYAlignment = Enum.TextYAlignment.Center
+        Label.Parent = ESPInfo
+    end
+
+    local Label = ESPInfo:FindFirstChild("Info")
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    local LocalCharacter = LocalPlayer.Character
+    local LocalRoot = LocalCharacter
+        and LocalCharacter:FindFirstChild("HumanoidRootPart")
+    local PlayerRoot = Character:FindFirstChild("HumanoidRootPart")
+
+    local Distance = 0
+
+    if LocalRoot and PlayerRoot then
+        Distance = math.floor((LocalRoot.Position - PlayerRoot.Position).Magnitude)
+    end
+
+    local HealthText = "HP: ?"
+
+    if Humanoid then
+        HealthText = string.format(
+            "HP: %d/%d",
+            math.floor(Humanoid.Health),
+            math.floor(Humanoid.MaxHealth)
+        )
+
+        local HealthPercent = 0
+
+        if Humanoid.MaxHealth > 0 then
+            HealthPercent = Humanoid.Health / Humanoid.MaxHealth
+        end
+
+        if HealthPercent > 0.6 then
+            Label.TextColor3 = Color3.fromRGB(120, 255, 140)
+        elseif HealthPercent > 0.3 then
+            Label.TextColor3 = Color3.fromRGB(255, 220, 100)
+        else
+            Label.TextColor3 = Color3.fromRGB(255, 100, 100)
+        end
+    end
+
+    Label.Text = string.format(
+        "%s\n%d studs | %s",
+        Player.DisplayName,
+        Distance,
+        HealthText
+    )
 end
 
 local function prepareESP(Player)
