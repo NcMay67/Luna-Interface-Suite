@@ -283,6 +283,7 @@ local function startFly()
         if IsDestroyed then
     return
 end
+
         if not Fly or not Root.Parent then
             return
         end
