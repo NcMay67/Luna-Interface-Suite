@@ -446,6 +446,11 @@ SystemTab:CreateButton({
     end
 })
 
+SystemTab:CreateSection("PERFILES")
+
+SystemTab:BuildConfigSection()
+
+
 SystemTab:CreateButton({
     Name = "Cerrar NC HUB",
     Callback = function()
