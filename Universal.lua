@@ -370,16 +370,16 @@ PlayerTab:CreateToggle({
     end
 })
 
-PlayerTab:CreateSlider({
+local FlySpeedSlider = PlayerTab:CreateSlider({
     Name = "Velocidad Vuelo",
     Range = {20, 180},
     Increment = 1,
     CurrentValue = FlySpeed,
-    Flag = "NC_UniversalFlySpeed",
     Callback = function(Value)
         FlySpeed = Value
     end
-})
+}, "NC_UniversalFlySpeed")
+
 
 -- VISUAL
 
