@@ -142,7 +142,7 @@ PlayerTab:CreateToggle({
 })
 
 trackConnection(UserInputService.JumpRequest:Connect(function()
-    if InfiniteJump then
+    if not IsDestroyed and InfiniteJump then
         getHumanoid():ChangeState(Enum.HumanoidStateType.Jumping)
     end
 end))
