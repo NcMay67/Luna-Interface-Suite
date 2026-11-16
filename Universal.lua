@@ -428,7 +428,6 @@ trackConnection(Players.PlayerRemoving:Connect(removeESP))
 VisualTab:CreateToggle({
     Name = "ESP Jugadores",
     CurrentValue = false,
-    Flag = "NC_UniversalESP",
     Callback = function(Value)
         ESP = Value == true
 
@@ -440,7 +439,7 @@ VisualTab:CreateToggle({
             end
         end
     end
-})
+}, "NC_UniversalESP")
 
 -- SISTEMA
 
