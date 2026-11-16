@@ -106,17 +106,16 @@ local ESP = false
 
 PlayerTab:CreateSection("MOVIMIENTO")
 
-PlayerTab:CreateSlider({
+local SpeedSlider = PlayerTab:CreateSlider({
     Name = "Velocidad",
     Range = {16, 120},
     Increment = 1,
     CurrentValue = Speed,
-    Flag = "NC_UniversalSpeed",
     Callback = function(Value)
         Speed = Value
         getHumanoid().WalkSpeed = Value
     end
-})
+}, "NC_UniversalSpeed")
 
 PlayerTab:CreateSlider({
     Name = "Salto",
