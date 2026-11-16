@@ -340,8 +340,8 @@ for _, Player in ipairs(Players:GetPlayers()) do
     prepareESP(Player)
 end
 
-Players.PlayerAdded:Connect(prepareESP)
-Players.PlayerRemoving:Connect(removeESP)
+trackConnection(Players.PlayerAdded:Connect(prepareESP))
+trackConnection(Players.PlayerRemoving:Connect(removeESP))
 
 VisualTab:CreateToggle({
     Name = "ESP Jugadores",
