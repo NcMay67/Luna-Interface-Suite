@@ -117,19 +117,19 @@ local SpeedSlider = PlayerTab:CreateSlider({
     end
 }, "NC_UniversalSpeed")
 
-PlayerTab:CreateSlider({
+local JumpSlider = PlayerTab:CreateSlider({
     Name = "Salto",
     Range = {50, 200},
     Increment = 1,
     CurrentValue = Jump,
-    Flag = "NC_UniversalJump",
     Callback = function(Value)
         Jump = Value
+
         local Humanoid = getHumanoid()
         Humanoid.UseJumpPower = true
         Humanoid.JumpPower = Value
     end
-})
+}, "NC_UniversalJump")
 
 PlayerTab:CreateToggle({
     Name = "Salto infinito",
