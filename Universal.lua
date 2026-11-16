@@ -509,6 +509,27 @@ local function applyESP(Player)
     )
 end
 
+local ESPUpdateTimer = 0
+
+trackConnection(RunService.Heartbeat:Connect(function(DeltaTime)
+    if IsDestroyed or not ESP then
+        return
+    end
+
+    ESPUpdateTimer = ESPUpdateTimer + DeltaTime
+
+    -- Actualiza el texto cinco veces por segundo
+    if ESPUpdateTimer < 0.2 then
+        return
+    end
+
+    ESPUpdateTimer = 0
+
+    for _, Player in ipairs(Players:GetPlayers()) do
+        applyESP(Player)
+    end
+end))
+
 local function prepareESP(Player)
     if Player == LocalPlayer then
         return
