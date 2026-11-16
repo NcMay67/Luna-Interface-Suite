@@ -373,12 +373,12 @@ SystemTab:CreateToggle({
     end
 })
 
-LocalPlayer.Idled:Connect(function()
+trackConnection(LocalPlayer.Idled:Connect(function()
     if AntiAFK then
         VirtualUser:CaptureController()
         VirtualUser:ClickButton2(Vector2.new())
     end
-end)
+end))
 
 SystemTab:CreateButton({
     Name = "Abrir Dark Dex",
