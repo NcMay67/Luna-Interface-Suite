@@ -456,11 +456,10 @@ SystemTab:CreateButton({
 SystemTab:CreateToggle({
     Name = "Anti AFK",
     CurrentValue = false,
-    Flag = "NC_UniversalAntiAFK",
     Callback = function(Value)
         AntiAFK = Value == true
     end
-})
+}, "NC_UniversalAntiAFK")
 
 trackConnection(LocalPlayer.Idled:Connect(function()
     if not IsDestroyed and AntiAFK then
