@@ -224,6 +224,8 @@ end
 local function restoreCharacter()
     Noclip = false
     InfiniteJump = false
+    ESP = false
+    AntiAFK = false
 
     stopFly()
 
