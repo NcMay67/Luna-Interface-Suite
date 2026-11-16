@@ -380,7 +380,6 @@ local FlySpeedSlider = PlayerTab:CreateSlider({
     end
 }, "NC_UniversalFlySpeed")
 
-
 -- VISUAL
 
 VisualTab:CreateSection("ESP")
