@@ -294,6 +294,16 @@ if FlyOption and FlyOption.UpdateState then
     FlyOption:UpdateState(false)
 end
 
+local ESPOption = Luna.Options["NC_UniversalESP"]
+if ESPOption and ESPOption.UpdateState then
+    ESPOption:UpdateState(false)
+end
+
+local AntiAFKOption = Luna.Options["NC_UniversalAntiAFK"]
+if AntiAFKOption and AntiAFKOption.UpdateState then
+    AntiAFKOption:UpdateState(false)
+end
+
 print("=== NC HUB RESET ===")
 print("SpeedOption:", Luna.Options["NC_UniversalSpeed"])
 print("JumpOption:", Luna.Options["NC_UniversalJump"])
