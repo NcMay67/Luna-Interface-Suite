@@ -134,11 +134,10 @@ local JumpSlider = PlayerTab:CreateSlider({
 PlayerTab:CreateToggle({
     Name = "Salto infinito",
     CurrentValue = false,
-    Flag = "NC_UniversalInfiniteJump",
     Callback = function(Value)
         InfiniteJump = Value == true
     end
-})
+}, "NC_UniversalInfiniteJump")
 
 trackConnection(UserInputService.JumpRequest:Connect(function()
     if not IsDestroyed and InfiniteJump then
