@@ -358,7 +358,6 @@ end
 PlayerTab:CreateToggle({
     Name = "Volar",
     CurrentValue = false,
-    Flag = "NC_UniversalFly",
     Callback = function(Value)
         if Value then
             startFly()
@@ -366,7 +365,7 @@ PlayerTab:CreateToggle({
             stopFly()
         end
     end
-})
+}, "NC_UniversalFly")
 
 local FlySpeedSlider = PlayerTab:CreateSlider({
     Name = "Velocidad Vuelo",
