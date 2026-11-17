@@ -515,12 +515,27 @@ local function applyESP(Player)
         end
     end
 
-    Label.Text = string.format(
-        "%s\n%d studs | %s",
-        Player.DisplayName,
-        Distance,
-        HealthText
-    )
+    local ESPText = {}
+
+if ESPShowName then
+    table.insert(ESPText, Player.DisplayName)
+end
+
+local Details = {}
+
+if ESPShowDistance then
+    table.insert(Details, tostring(Distance) .. " studs")
+end
+
+if ESPShowHealth then
+    table.insert(Details, HealthText)
+end
+
+if #Details > 0 then
+    table.insert(ESPText, table.concat(Details, " | "))
+end
+
+Label.Text = table.concat(ESPText, "\n")
 end
 
 local ESPUpdateTimer = 0
