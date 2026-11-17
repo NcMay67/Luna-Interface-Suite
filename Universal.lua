@@ -321,6 +321,85 @@ print("FlySpeedOption:", Luna.Options["NC_UniversalFlySpeed"])
     )
 end
 
+local function createFlyObjects(Root)
+    if FlyVelocity then
+        FlyVelocity:Destroy()
+        FlyVelocity = nil
+    end
+
+    if FlyGyro then
+        FlyGyro:Destroy()
+        FlyGyro = nil
+    end
+
+    FlyVelocity = Instance.new("BodyVelocity")
+    FlyVelocity.Name = "NC_HUB_FlyVelocity"
+    FlyVelocity.MaxForce = Vector3.new(1000000, 1000000, 1000000)
+    FlyVelocity.P = 25000
+    FlyVelocity.Velocity = Vector3.new(0, 0, 0)
+    FlyVelocity.Parent = Root
+
+    FlyGyro = Instance.new("BodyGyro")
+    FlyGyro.Name = "NC_HUB_FlyGyro"
+    FlyGyro.MaxTorque = Vector3.new(1000000, 1000000, 1000000)
+    FlyGyro.P = 50000
+    FlyGyro.D = 1000
+    FlyGyro.CFrame = Root.CFrame
+    FlyGyro.Parent = Root
+end
+
+local function getFlyDirection(Humanoid, Camera)
+    local Move = Vector3.new(0, 0, 0)
+
+    if Controls then
+        local Success, Result = pcall(function()
+            return Controls:GetMoveVector()
+        end)
+
+        if Success and Result then
+            Move = Result
+        end
+    end
+
+    if Move.Magnitude <= 0.05 then
+        Move = Humanoid.MoveDirection
+    end
+
+    local CameraLook = Camera.CFrame.LookVector
+    local CameraRight = Camera.CFrame.RightVector
+
+    local FlatLook = Vector3.new(CameraLook.X, 0, CameraLook.Z)
+    local FlatRight = Vector3.new(CameraRight.X, 0, CameraRight.Z)
+
+    if FlatLook.Magnitude > 0 then
+        FlatLook = FlatLook.Unit
+    end
+
+    if FlatRight.Magnitude > 0 then
+        FlatRight = FlatRight.Unit
+    end
+
+    local Direction = FlatRight * Move.X + FlatLook * -Move.Z
+    local Vertical = 0
+
+    if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+        Vertical = Vertical + 1
+    end
+
+    if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl)
+        or UserInputService:IsKeyDown(Enum.KeyCode.RightControl) then
+        Vertical = Vertical - 1
+    end
+
+    Direction = Direction + Vector3.new(0, Vertical, 0)
+
+    if Direction.Magnitude > 0.05 then
+        return Direction.Unit * FlySpeed
+    end
+
+    return Vector3.new(0, 0, 0)
+end
+
 local function startFly()
     stopFly()
     Fly = true
