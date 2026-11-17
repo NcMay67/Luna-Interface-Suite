@@ -221,7 +221,6 @@ local function stopFly()
         Humanoid.PlatformStand = false
         Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
     end
-end
 
 local function restoreCharacter()
     Noclip = false
@@ -318,147 +317,61 @@ print("FlySpeedOption:", Luna.Options["NC_UniversalFlySpeed"])
     )
 end
 
-local function createFlyObjects(Root)
-    if FlyVelocity then
-        FlyVelocity:Destroy()
-        FlyVelocity = nil
-    end
+local function startFly()
+    stopFly()
+    Fly = true
 
-    if FlyGyro then
-        FlyGyro:Destroy()
-        FlyGyro = nil
-    end
+    local Humanoid = getHumanoid()
+    local Root = getRoot()
+    local PlayerControls = getControls()
+
+    Humanoid.AutoRotate = false
+    Humanoid.PlatformStand = true
 
     FlyVelocity = Instance.new("BodyVelocity")
-    FlyVelocity.Name = "NC_HUB_FlyVelocity"
-    FlyVelocity.MaxForce = Vector3.new(1000000, 1000000, 1000000)
-    FlyVelocity.P = 25000
+    FlyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+    FlyVelocity.P = 18000
     FlyVelocity.Velocity = Vector3.new(0, 0, 0)
     FlyVelocity.Parent = Root
 
     FlyGyro = Instance.new("BodyGyro")
-    FlyGyro.Name = "NC_HUB_FlyGyro"
-    FlyGyro.MaxTorque = Vector3.new(1000000, 1000000, 1000000)
-    FlyGyro.P = 50000
-    FlyGyro.D = 1000
-    FlyGyro.CFrame = Root.CFrame
+    FlyGyro.MaxTorque = Vector3.new(100000, 100000, 100000)
+    FlyGyro.P = 35000
+    FlyGyro.D = 900
     FlyGyro.Parent = Root
-end
 
-local function getFlyDirection(Humanoid, Camera)
-    local Move = Vector3.new(0, 0, 0)
-
-    if Controls then
-        local Success, Result = pcall(function()
-            return Controls:GetMoveVector()
-        end)
-
-        if Success and Result then
-            Move = Result
-        end
-    end
-
-    if Move.Magnitude <= 0.05 then
-        Move = Humanoid.MoveDirection
-    end
-
-    local CameraLook = Camera.CFrame.LookVector
-    local CameraRight = Camera.CFrame.RightVector
-
-    local FlatLook = Vector3.new(CameraLook.X, 0, CameraLook.Z)
-    local FlatRight = Vector3.new(CameraRight.X, 0, CameraRight.Z)
-
-    if FlatLook.Magnitude > 0 then
-        FlatLook = FlatLook.Unit
-    end
-
-    if FlatRight.Magnitude > 0 then
-        FlatRight = FlatRight.Unit
-    end
-
-    local Direction = FlatRight * Move.X + FlatLook * -Move.Z
-    local Vertical = 0
-
-    if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-        Vertical = Vertical + 1
-    end
-
-    if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl)
-        or UserInputService:IsKeyDown(Enum.KeyCode.RightControl) then
-        Vertical = Vertical - 1
-    end
-
-    Direction = Direction + Vector3.new(0, Vertical, 0)
-
-    if Direction.Magnitude > 0.05 then
-        return Direction.Unit * FlySpeed
-    end
-
-    return Vector3.new(0, 0, 0)
-end
-
-local function startFly()
-    stopFly()
-
-    local Humanoid = getHumanoid()
-    local Root = getRoot()
-
-    if not Humanoid or not Root then
-        notify(
-            "NC HUB",
-            "No se pudo iniciar el vuelo.",
-            "error"
-        )
-        return
-    end
-
-    OriginalAutoRotate = Humanoid.AutoRotate
-    OriginalPlatformStand = Humanoid.PlatformStand
-
-    Fly = true
-
-    Humanoid.AutoRotate = false
-    Humanoid.PlatformStand = true
-    Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
-
-    createFlyObjects(Root)
-
-    FlyConnection = RunService.Heartbeat:Connect(function()
-        if IsDestroyed or not Fly then
+    FlyConnection = RunService.RenderStepped:Connect(function()
+        if IsDestroyed then
             return
         end
 
-        local Character = LocalPlayer.Character
-        local CurrentHumanoid = Character
-            and Character:FindFirstChildOfClass("Humanoid")
-        local CurrentRoot = Character
-            and Character:FindFirstChild("HumanoidRootPart")
+        if not Fly or not Root.Parent then
+            return
+        end
+
         local Camera = workspace.CurrentCamera
 
-        if not CurrentHumanoid or not CurrentRoot or not Camera then
+        if not Camera then
             return
         end
 
-        if not FlyVelocity
-            or not FlyVelocity.Parent
-            or not FlyGyro
-            or not FlyGyro.Parent then
-            createFlyObjects(CurrentRoot)
+        local Move = PlayerControls
+            and PlayerControls:GetMoveVector()
+            or Humanoid.MoveDirection
+
+        local Direction =
+            Camera.CFrame.RightVector * Move.X
+            + Camera.CFrame.LookVector * -Move.Z
+
+        if Direction.Magnitude > 0.05 then
+            Direction = Direction.Unit * FlySpeed
+        else
+            Direction = Vector3.new(0, 0, 0)
         end
 
-        if FlyVelocity.Parent ~= CurrentRoot then
-            FlyVelocity.Parent = CurrentRoot
-        end
+        Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
 
-        if FlyGyro.Parent ~= CurrentRoot then
-            FlyGyro.Parent = CurrentRoot
-        end
-
-        CurrentHumanoid.AutoRotate = false
-        CurrentHumanoid.PlatformStand = true
-        CurrentHumanoid:ChangeState(Enum.HumanoidStateType.Physics)
-
-        FlyVelocity.Velocity = getFlyDirection(CurrentHumanoid, Camera)
+        FlyVelocity.Velocity = Direction
         FlyGyro.CFrame = Camera.CFrame
     end)
 end
