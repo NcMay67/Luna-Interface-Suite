@@ -195,9 +195,6 @@ local function getControls()
     return Controls
 end
 
-local OriginalAutoRotate = true
-local OriginalPlatformStand = false
-
 local function stopFly()
     Fly = false
 
