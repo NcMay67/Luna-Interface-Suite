@@ -30,9 +30,9 @@ if not success then
     warn("[NC HUB] Error crítico al cargar: " .. tostring(err))
 
     -- Respaldo: intenta el universal solo si falló Factory Tycoon.
-    if scriptToLoad ~= "Universal.lua" then
+    if scriptToLoad ~= "Universa.lua" then
         pcall(function()
-            loadstring(game:HttpGet(BaseURL .. "Universal.lua"))()
+            loadstring(game:HttpGet(BaseURL .. "Universa.lua"))()
         end)
     end
 end
