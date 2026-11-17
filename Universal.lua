@@ -233,7 +233,22 @@ local function restoreCharacter()
     ESP = false
     AntiAFK = false
 
+    -- Eliminar directamente todos los objetos del ESP
+    for _, Player in ipairs(Players:GetPlayers()) do
+        local Character = Player.Character
+
+        if Character then
+            for _, Object in ipairs(Character:GetDescendants()) do
+                if Object.Name == "NC_ESP"
+                    or Object.Name == "NC_ESP_Info" then
+                    Object:Destroy()
+                end
+            end
+        end
+    end
+
     stopFly()
+
 
     for Part, OriginalState in pairs(OriginalCollision) do
         if Part and Part.Parent then
