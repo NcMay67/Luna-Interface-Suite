@@ -195,6 +195,9 @@ local function getControls()
     return Controls
 end
 
+local OriginalAutoRotate = true
+local OriginalPlatformStand = false
+
 local function stopFly()
     Fly = false
 
@@ -213,10 +216,12 @@ local function stopFly()
         FlyGyro = nil
     end
 
-    local Humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    local Character = LocalPlayer.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+
     if Humanoid then
-        Humanoid.AutoRotate = true
-        Humanoid.PlatformStand = false
+        Humanoid.AutoRotate = OriginalAutoRotate
+        Humanoid.PlatformStand = OriginalPlatformStand
         Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
     end
 end
