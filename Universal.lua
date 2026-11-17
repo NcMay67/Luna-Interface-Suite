@@ -101,6 +101,10 @@ local Fly = false
 local FlySpeed = 60
 local AntiAFK = false
 local ESP = false
+local ESPShowName = true
+local ESPShowDistance = true
+local ESPShowHealth = true
+
 
 -- JUGADOR
 
