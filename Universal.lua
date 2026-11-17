@@ -221,6 +221,7 @@ local function stopFly()
         Humanoid.PlatformStand = false
         Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
     end
+end
 
 local function restoreCharacter()
     Noclip = false
