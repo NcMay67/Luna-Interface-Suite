@@ -320,6 +320,21 @@ if ESPOption and ESPOption.UpdateState then
     ESPOption:UpdateState(false)
 end
 
+local ESPNameOption = Luna.Options["NC_UniversalESPShowName"]
+if ESPNameOption and ESPNameOption.UpdateState then
+    ESPNameOption:UpdateState(false)
+end
+
+local ESPDistanceOption = Luna.Options["NC_UniversalESPShowDistance"]
+if ESPDistanceOption and ESPDistanceOption.UpdateState then
+    ESPDistanceOption:UpdateState(false)
+end
+
+local ESPHealthOption = Luna.Options["NC_UniversalESPShowHealth"]
+if ESPHealthOption and ESPHealthOption.UpdateState then
+    ESPHealthOption:UpdateState(false)
+end
+
 local AntiAFKOption = Luna.Options["NC_UniversalAntiAFK"]
 if AntiAFKOption and AntiAFKOption.UpdateState then
     AntiAFKOption:UpdateState(false)
