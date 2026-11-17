@@ -198,6 +198,9 @@ end
 local OriginalAutoRotate = true
 local OriginalPlatformStand = false
 
+local OriginalAutoRotate = true
+local OriginalPlatformStand = false
+
 local function stopFly()
     Fly = false
 
