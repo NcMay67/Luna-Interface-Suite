@@ -14,7 +14,7 @@ local Games = {
 
 
 -- Universal.lua.
-local scriptToLoad = Games[PlaceId] or "Universal.lua"
+local scriptToLoad = Games[PlaceId] or "Universa.lua"
 
 print("------------------------------------------")
 print("[NC HUB] Cargando sistema modular...")
