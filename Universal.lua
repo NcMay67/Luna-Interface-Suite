@@ -15,6 +15,10 @@ local LocalPlayer = Players.LocalPlayer
 local Connections = {}
 local IsDestroyed = false
 
+-- Estado global del módulo
+
+-- Gestión del ciclo de vida
+
 local function trackConnection(Connection)
     table.insert(Connections, Connection)
     return Connection
@@ -107,6 +111,7 @@ local ESPShowHealth = true
 
 
 -- JUGADOR
+-- Movimiento, salto, noclip y vuelo
 
 PlayerTab:CreateSection("MOVIMIENTO")
 
@@ -283,63 +288,62 @@ local function restoreCharacter()
         end
     end
 
+    local JumpOption = Luna.Options["NC_UniversalJump"]
 
-local JumpOption = Luna.Options["NC_UniversalJump"]
-
-if JumpOption then
-    if JumpOption.Set then
-        JumpOption:Set({
-            CurrentValue = 50
-        })
-    elseif JumpOption.UpdateValue then
-        JumpOption:UpdateValue(50)
+    if JumpOption then
+        if JumpOption.Set then
+            JumpOption:Set({
+                CurrentValue = 50
+            })
+        elseif JumpOption.UpdateValue then
+            JumpOption:UpdateValue(50)
+        end
     end
-end
 
-local FlySpeedOption = Luna.Options["NC_UniversalFlySpeed"]
-if FlySpeedOption and FlySpeedOption.UpdateValue then
-    FlySpeedOption:UpdateValue(60)
-end
+    local FlySpeedOption = Luna.Options["NC_UniversalFlySpeed"]
+    if FlySpeedOption and FlySpeedOption.UpdateValue then
+        FlySpeedOption:UpdateValue(60)
+    end
 
-local InfiniteJumpOption = Luna.Options["NC_UniversalInfiniteJump"]
-if InfiniteJumpOption and InfiniteJumpOption.UpdateState then
-    InfiniteJumpOption:UpdateState(false)
-end
+    local InfiniteJumpOption = Luna.Options["NC_UniversalInfiniteJump"]
+    if InfiniteJumpOption and InfiniteJumpOption.UpdateState then
+        InfiniteJumpOption:UpdateState(false)
+    end
 
-local NoclipOption = Luna.Options["NC_UniversalNoclip"]
-if NoclipOption and NoclipOption.UpdateState then
-    NoclipOption:UpdateState(false)
-end
+    local NoclipOption = Luna.Options["NC_UniversalNoclip"]
+    if NoclipOption and NoclipOption.UpdateState then
+        NoclipOption:UpdateState(false)
+    end
 
-local FlyOption = Luna.Options["NC_UniversalFly"]
-if FlyOption and FlyOption.UpdateState then
-    FlyOption:UpdateState(false)
-end
+    local FlyOption = Luna.Options["NC_UniversalFly"]
+    if FlyOption and FlyOption.UpdateState then
+        FlyOption:UpdateState(false)
+    end
 
-local ESPOption = Luna.Options["NC_UniversalESP"]
-if ESPOption and ESPOption.UpdateState then
-    ESPOption:UpdateState(false)
-end
+    local ESPOption = Luna.Options["NC_UniversalESP"]
+    if ESPOption and ESPOption.UpdateState then
+        ESPOption:UpdateState(false)
+    end
 
-local ESPNameOption = Luna.Options["NC_UniversalESPShowName"]
-if ESPNameOption and ESPNameOption.UpdateState then
-    ESPNameOption:UpdateState(false)
-end
+    local ESPNameOption = Luna.Options["NC_UniversalESPShowName"]
+    if ESPNameOption and ESPNameOption.UpdateState then
+        ESPNameOption:UpdateState(false)
+    end
 
-local ESPDistanceOption = Luna.Options["NC_UniversalESPShowDistance"]
-if ESPDistanceOption and ESPDistanceOption.UpdateState then
-    ESPDistanceOption:UpdateState(false)
-end
+    local ESPDistanceOption = Luna.Options["NC_UniversalESPShowDistance"]
+    if ESPDistanceOption and ESPDistanceOption.UpdateState then
+        ESPDistanceOption:UpdateState(false)
+    end
 
-local ESPHealthOption = Luna.Options["NC_UniversalESPShowHealth"]
-if ESPHealthOption and ESPHealthOption.UpdateState then
-    ESPHealthOption:UpdateState(false)
-end
+    local ESPHealthOption = Luna.Options["NC_UniversalESPShowHealth"]
+    if ESPHealthOption and ESPHealthOption.UpdateState then
+        ESPHealthOption:UpdateState(false)
+    end
 
-local AntiAFKOption = Luna.Options["NC_UniversalAntiAFK"]
-if AntiAFKOption and AntiAFKOption.UpdateState then
-    AntiAFKOption:UpdateState(false)
-end
+    local AntiAFKOption = Luna.Options["NC_UniversalAntiAFK"]
+    if AntiAFKOption and AntiAFKOption.UpdateState then
+        AntiAFKOption:UpdateState(false)
+    end
 
     notify(
         "NC HUB",
@@ -430,6 +434,7 @@ local FlySpeedSlider = PlayerTab:CreateSlider({
 }, "NC_UniversalFlySpeed")
 
 -- VISUAL
+-- ESP, etiquetas y actualización visual
 
 VisualTab:CreateSection("ESP")
 
@@ -541,25 +546,25 @@ local function applyESP(Player)
 
     local ESPText = {}
 
-if ESPShowName then
-    table.insert(ESPText, Player.DisplayName)
-end
+    if ESPShowName then
+        table.insert(ESPText, Player.DisplayName)
+    end
 
-local Details = {}
+    local Details = {}
 
-if ESPShowDistance then
-    table.insert(Details, tostring(Distance) .. " studs")
-end
+    if ESPShowDistance then
+        table.insert(Details, tostring(Distance) .. " studs")
+    end
 
-if ESPShowHealth then
-    table.insert(Details, HealthText)
-end
+    if ESPShowHealth then
+        table.insert(Details, HealthText)
+    end
 
-if #Details > 0 then
-    table.insert(ESPText, table.concat(Details, " | "))
-end
+    if #Details > 0 then
+        table.insert(ESPText, table.concat(Details, " | "))
+    end
 
-Label.Text = table.concat(ESPText, "\n")
+    Label.Text = table.concat(ESPText, "\n")
 end
 
 local ESPUpdateTimer = 0
@@ -664,6 +669,7 @@ VisualTab:CreateToggle({
 
 
 -- SISTEMA
+-- Anti-AFK, herramientas, perfiles y cierre
 
 SystemTab:CreateSection("SISTEMA")
 
