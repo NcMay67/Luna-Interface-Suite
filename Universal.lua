@@ -213,12 +213,12 @@ local function stopFly()
         FlyGyro = nil
     end
 
-    local Character = LocalPlayer.Character
-    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+    local Humanoid = LocalPlayer.Character
+        and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 
     if Humanoid then
-        Humanoid.AutoRotate = OriginalAutoRotate
-        Humanoid.PlatformStand = OriginalPlatformStand
+        Humanoid.AutoRotate = true
+        Humanoid.PlatformStand = false
         Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
     end
 end
