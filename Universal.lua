@@ -439,16 +439,14 @@ local function removeESP(Player)
         return
     end
 
-    local Highlight = Character:FindFirstChild("NC_ESP", true)
-    if Highlight then
-        Highlight:Destroy()
-    end
-
-    local ESPInfo = Character:FindFirstChild("NC_ESP_Info", true)
-    if ESPInfo then
-        ESPInfo:Destroy()
+    for _, Object in ipairs(Character:GetDescendants()) do
+        if Object.Name == "NC_ESP"
+            or Object.Name == "NC_ESP_Info" then
+            Object:Destroy()
+        end
     end
 end
+
 
 local function applyESP(Player)
     if Player == LocalPlayer or not ESP or not Player.Character then
