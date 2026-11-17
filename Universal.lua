@@ -593,6 +593,52 @@ VisualTab:CreateToggle({
     end
 }, "NC_UniversalESP")
 
+VisualTab:CreateToggle({
+    Name = "ESP: nombres",
+    Description = "Muestra el nombre de cada jugador.",
+    CurrentValue = true,
+    Callback = function(Value)
+        ESPShowName = Value == true
+
+        if ESP then
+            for _, Player in ipairs(Players:GetPlayers()) do
+                applyESP(Player)
+            end
+        end
+    end
+}, "NC_UniversalESPShowName")
+
+VisualTab:CreateToggle({
+    Name = "ESP: distancia",
+    Description = "Muestra la distancia hasta cada jugador.",
+    CurrentValue = true,
+    Callback = function(Value)
+        ESPShowDistance = Value == true
+
+        if ESP then
+            for _, Player in ipairs(Players:GetPlayers()) do
+                applyESP(Player)
+            end
+        end
+    end
+}, "NC_UniversalESPShowDistance")
+
+VisualTab:CreateToggle({
+    Name = "ESP: vida",
+    Description = "Muestra la vida actual y máxima.",
+    CurrentValue = true,
+    Callback = function(Value)
+        ESPShowHealth = Value == true
+
+        if ESP then
+            for _, Player in ipairs(Players:GetPlayers()) do
+                applyESP(Player)
+            end
+        end
+    end
+}, "NC_UniversalESPShowHealth")
+
+
 -- SISTEMA
 
 SystemTab:CreateSection("SISTEMA")
