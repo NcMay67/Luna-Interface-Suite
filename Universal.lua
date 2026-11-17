@@ -271,17 +271,18 @@ local function restoreCharacter()
     end
     
     -- Sincronizar visualmente los controles de Luna UI
-local SpeedOption = Luna.Options["NC_UniversalSpeed"]
+    local SpeedOption = Luna.Options["NC_UniversalSpeed"]
 
-if SpeedOption then
-    if SpeedOption.Set then
-        SpeedOption:Set({
-            CurrentValue = 16
-        })
-    elseif SpeedOption.UpdateValue then
-        SpeedOption:UpdateValue(16)
+    if SpeedOption then
+        if SpeedOption.Set then
+            SpeedOption:Set({
+                CurrentValue = 16
+            })
+        elseif SpeedOption.UpdateValue then
+            SpeedOption:UpdateValue(16)
+        end
     end
-end
+
 
 local JumpOption = Luna.Options["NC_UniversalJump"]
 
