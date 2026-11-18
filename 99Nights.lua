@@ -1,3 +1,52 @@
+-- 99 Nights in the Forest: Luna UI first, real gameplay logic second.
+local function loadRemote(url)
+    return assert(loadstring(game:HttpGet(url), "@" .. url))()
+end
+local Luna = loadRemote("https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua")
+local Window = Luna:CreateWindow({
+    Name = "Synvextia Hub - 99 Nights",
+    Subtitle = "Luna Interface Suite",
+    LogoID = "6031097225",
+    LoadingEnabled = true,
+    LoadingTitle = "Synvextia Hub - 99 Nights",
+    LoadingSubtitle = "Luna Interface Suite",
+    ConfigSettings = {ConfigFolder = "Synvextia_99_Nights"},
+})
+local LunaTabs, LunaSections = {}, {}
+local function createLunaTab(name, icon)
+    LunaTabs[name] = Window:CreateTab({Name = name, Icon = icon, ImageSource = "Material", ShowTitle = true})
+    return LunaTabs[name]
+end
+local function createLunaSection(tabName, sectionName)
+    local key = tabName .. "\0" .. sectionName
+    if not LunaSections[key] then
+        LunaSections[key] = LunaTabs[tabName]:CreateSection(sectionName)
+    end
+    return LunaSections[key]
+end
+local LunaSkeleton = {
+    {"Introduction", "home", {"Welcome to Synvextia Hub", "Information", "Features", "Refresh"}},
+    {"Main", "home", {"Infinite Dupe Saplings", "Auto Plant", "Auto Fuel Campfire", "Auto Compress", "Auto Consume", "Landmarks", "Send to Volcano", "Auto Tree Chop"}},
+    {"Combat", "gavel", {"Godmode", "Kill Aura", "Auto Escape", "Auto Bandage", "Hitbox Settings", "Select Mobs", "Silent Aim", "Revive Players", "Auto Stun"}},
+    {"Teleport", "launch", {"Teleport Locations", "TP to Caves", "TP to Lost Children", "Teleport to Chest"}},
+    {"Bring Items", "perm_media", {"Quick Actions", "Bring Items", "Armor", "Weapons", "Equipment", "Food", "Vegetables", "Mob Drops", "Others", "Containers"}},
+    {"Auto Farm", "wb_sunny", {"Day Auto Farm", "Auto Cook Food"}},
+    {"Scanner", "find_in_page", {"Auto Scanner"}},
+    {"Misc", "card_giftcard", {"Remove Fog", "Anti Void", "Fly", "Movement", "Performance Monitor", "Visual", "Universal Scripts", "Tools", "Anti AFK", "Server Hop"}},
+    {"ESP", "visibility", {"Global ESP Settings", "Player ESP", "World Item ESP", "Chest ESP", "Mob ESP"}},
+    {"Stats", "assessment", {"Game Stats", "Environment", "Campfire", "Player", "Session & System", "Controls"}},
+    {"Settings", "settings", {"Config", "Discord Webhook", "PC Keybinds"}},
+    {"Credits", "badge", {"Credits"}},
+}
+for _, definition in ipairs(LunaSkeleton) do
+    local tabName, icon, sectionNames = definition[1], definition[2], definition[3]
+    createLunaTab(tabName, icon)
+    for _, sectionName in ipairs(sectionNames) do
+        createLunaSection(tabName, sectionName)
+    end
+end
+
+-- The complete real logic and callback registry from Script_clean.lua follows.
 -- 99 Nights in the Forest: gameplay/callback module extracted from Script_clean.lua.
 -- This file contains gameplay logic only; it does not load or render a UI.
 local Functions = {
@@ -10350,96 +10399,41 @@ Functions.Result = result
 Functions.State = genv
 Functions.Remotes = remoteEvents
 
--- Luna renderer and complete UI skeleton integrated into this single 99Nights module.
-local function loadRemote(url)
-    return assert(loadstring(game:HttpGet(url), "@" .. url))()
-end
 
-local Luna = loadRemote("https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua")
-
-local Window = Luna:CreateWindow({
-    Name = "Synvextia Hub - 99 Nights",
-    Subtitle = "Luna Interface Suite",
-    LogoID = "6031097225",
-    LoadingEnabled = true,
-    LoadingTitle = "Synvextia Hub - 99 Nights",
-    LoadingSubtitle = "Luna Interface Suite",
-    ConfigSettings = {ConfigFolder = "Synvextia_99_Nights"},
-})
-
-local tabs, sections = {}, {}
-local function getTab(name)
-    if not tabs[name] then
-        tabs[name] = Window:CreateTab({Name = name, Icon = "home", ImageSource = "Material", ShowTitle = true})
-    end
-    return tabs[name]
-end
-local function getSection(tabName, sectionName)
-    local key = tabName .. "\0" .. sectionName
-    if not sections[key] then
-        sections[key] = getTab(tabName):CreateSection(sectionName)
-    end
-    return sections[key]
-end
-
-
--- Skeleton completo de Luna: se crea antes de registrar los controles funcionales.
-local skeleton = {
-    {"Introduction", "home", {"Welcome to Synvextia Hub", "Information", "Features", "Refresh"}},
-    {"Main", "home", {"Infinite Dupe Saplings", "Auto Plant", "Auto Fuel Campfire", "Auto Compress", "Auto Consume", "Landmarks", "Send to Volcano", "Auto Tree Chop"}},
-    {"Combat", "gavel", {"Godmode", "Kill Aura", "Auto Escape", "Auto Bandage", "Hitbox Settings", "Select Mobs", "Silent Aim", "Revive Players", "Auto Stun"}},
-    {"Teleport", "launch", {"Teleport Locations", "TP to Caves", "TP to Lost Children", "Teleport to Chest"}},
-    {"Bring Items", "perm_media", {"Quick Actions", "Bring Items", "Armor", "Weapons", "Equipment", "Food", "Vegetables", "Mob Drops", "Others", "Containers"}},
-    {"Auto Farm", "wb_sunny", {"Day Auto Farm", "Auto Cook Food"}},
-    {"Scanner", "find_in_page", {"Auto Scanner"}},
-    {"Misc", "card_giftcard", {"Remove Fog", "Anti Void", "Fly", "Movement", "Performance Monitor", "Visual", "Universal Scripts", "Tools", "Anti AFK", "Server Hop"}},
-    {"ESP", "visibility", {"Global ESP Settings", "Player ESP", "World Item ESP", "Chest ESP", "Mob ESP"}},
-    {"Stats", "assessment", {"Game Stats", "Environment", "Campfire", "Player", "Session & System", "Controls"}},
-    {"Settings", "settings", {"Config", "Discord Webhook", "PC Keybinds"}},
-    {"Credits", "badge", {"Credits"}},
-}
-for _, definition in ipairs(skeleton) do
-    local tabName, icon, sectionNames = definition[1], definition[2], definition[3]
-    if not tabs[tabName] then
-        tabs[tabName] = Window:CreateTab({Name = tabName, Icon = icon, ImageSource = "Material", ShowTitle = true})
-    end
-    for _, sectionName in ipairs(sectionNames) do
-        getSection(tabName, sectionName)
-    end
-end
-
+-- Bind every callback recorded by the real logic to the already-created skeleton.
 for _, control in ipairs(Functions.Controls) do
-    local section = getSection(control.Tab or "Main", control.Section or "Controls")
-    local common = {Name = control.Title, Description = control.Description}
-    if control.Type == "Button" then
-        common.Callback = control.Callback
-        section:CreateButton(common)
-    elseif control.Type == "Toggle" then
-        common.CurrentValue = control.Default == true
-        common.Callback = control.Callback
-        section:CreateToggle(common)
-    elseif control.Type == "Slider" then
-        local range = control.Range or {0, 100}
-        common.Range = {range[1] or 0, range[2] or 100}
-        common.Increment = control.Increment or 1
-        common.CurrentValue = control.Default or common.Range[1]
-        common.Callback = control.Callback
-        section:CreateSlider(common)
-    elseif control.Type == "Dropdown" then
-        common.Options = control.Values or {}
-        common.CurrentOption = control.Value or {}
-        common.MultipleOptions = control.Multi == true
-        common.Callback = control.Callback
-        section:CreateDropdown(common)
-    elseif control.Type == "Input" then
-        common.PlaceholderText = control.Placeholder or ""
-        common.CurrentValue = control.Value or ""
-        common.Enter = true
-        common.Callback = control.Callback
-        section:CreateInput(common)
-    elseif control.Type == "Paragraph" then
-        section:CreateParagraph({Title = control.Title, Text = control.Description})
+    local section = LunaSections[(control.Tab or "Main") .. "\0" .. (control.Section or "Controls")]
+    if section then
+        local common = {Name = control.Title, Description = control.Description}
+        if control.Type == "Button" then
+            common.Callback = control.Callback
+            section:CreateButton(common)
+        elseif control.Type == "Toggle" then
+            common.CurrentValue = control.Default == true
+            common.Callback = control.Callback
+            section:CreateToggle(common)
+        elseif control.Type == "Slider" then
+            local range = control.Range or {0, 100}
+            common.Range = {range[1] or 0, range[2] or 100}
+            common.Increment = control.Increment or 1
+            common.CurrentValue = control.Default or common.Range[1]
+            common.Callback = control.Callback
+            section:CreateSlider(common)
+        elseif control.Type == "Dropdown" then
+            common.Options = control.Values or {}
+            common.CurrentOption = control.Value or {}
+            common.MultipleOptions = control.Multi == true
+            common.Callback = control.Callback
+            section:CreateDropdown(common)
+        elseif control.Type == "Input" then
+            common.PlaceholderText = control.Placeholder or ""
+            common.CurrentValue = control.Value or ""
+            common.Enter = true
+            common.Callback = control.Callback
+            section:CreateInput(common)
+        elseif control.Type == "Paragraph" then
+            section:CreateParagraph({Title = control.Title, Text = control.Description})
+        end
     end
 end
-
-return {Window = Window, Functions = Functions, Tabs = tabs, Sections = sections}
+return {Window = Window, Functions = Functions, Tabs = LunaTabs, Sections = LunaSections}
