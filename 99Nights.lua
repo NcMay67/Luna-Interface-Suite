@@ -10350,7 +10350,7 @@ Functions.Result = result
 Functions.State = genv
 Functions.Remotes = remoteEvents
 
--- Luna renderer integrated into this single 99Nights module.
+-- Luna renderer and complete UI skeleton integrated into this single 99Nights module.
 local function loadRemote(url)
     return assert(loadstring(game:HttpGet(url), "@" .. url))()
 end
@@ -10380,6 +10380,32 @@ local function getSection(tabName, sectionName)
         sections[key] = getTab(tabName):CreateSection(sectionName)
     end
     return sections[key]
+end
+
+
+-- Skeleton completo de Luna: se crea antes de registrar los controles funcionales.
+local skeleton = {
+    {"Introduction", "home", {"Welcome to Synvextia Hub", "Information", "Features", "Refresh"}},
+    {"Main", "home", {"Infinite Dupe Saplings", "Auto Plant", "Auto Fuel Campfire", "Auto Compress", "Auto Consume", "Landmarks", "Send to Volcano", "Auto Tree Chop"}},
+    {"Combat", "gavel", {"Godmode", "Kill Aura", "Auto Escape", "Auto Bandage", "Hitbox Settings", "Select Mobs", "Silent Aim", "Revive Players", "Auto Stun"}},
+    {"Teleport", "launch", {"Teleport Locations", "TP to Caves", "TP to Lost Children", "Teleport to Chest"}},
+    {"Bring Items", "perm_media", {"Quick Actions", "Bring Items", "Armor", "Weapons", "Equipment", "Food", "Vegetables", "Mob Drops", "Others", "Containers"}},
+    {"Auto Farm", "wb_sunny", {"Day Auto Farm", "Auto Cook Food"}},
+    {"Scanner", "find_in_page", {"Auto Scanner"}},
+    {"Misc", "card_giftcard", {"Remove Fog", "Anti Void", "Fly", "Movement", "Performance Monitor", "Visual", "Universal Scripts", "Tools", "Anti AFK", "Server Hop"}},
+    {"ESP", "visibility", {"Global ESP Settings", "Player ESP", "World Item ESP", "Chest ESP", "Mob ESP"}},
+    {"Stats", "assessment", {"Game Stats", "Environment", "Campfire", "Player", "Session & System", "Controls"}},
+    {"Settings", "settings", {"Config", "Discord Webhook", "PC Keybinds"}},
+    {"Credits", "badge", {"Credits"}},
+}
+for _, definition in ipairs(skeleton) do
+    local tabName, icon, sectionNames = definition[1], definition[2], definition[3]
+    if not tabs[tabName] then
+        tabs[tabName] = Window:CreateTab({Name = tabName, Icon = icon, ImageSource = "Material", ShowTitle = true})
+    end
+    for _, sectionName in ipairs(sectionNames) do
+        getSection(tabName, sectionName)
+    end
 end
 
 for _, control in ipairs(Functions.Controls) do
