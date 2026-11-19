@@ -35,10 +35,10 @@ local function disconnectAll()
 end
 
 local Window = Luna:CreateWindow({
-    Name = "NC HUB",
+    Name = "MayOs",
     Subtitle = "Universal",
     LoadingEnabled = true,
-    LoadingTitle = "NC HUB",
+    LoadingTitle = "MayOs",
     LoadingSubtitle = "Universal",
     KeySystem = false
 })
