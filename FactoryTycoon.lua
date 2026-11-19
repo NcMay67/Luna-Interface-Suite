@@ -14,8 +14,8 @@ local LocalPlayer = Players.LocalPlayer
 local StartedAt = os.time()
 
 local Window = Luna:CreateWindow({
-    Name = "NC HUB",
-    Subtitle = "Factory Tycoon · By hidjcjgg",
+    Name = "MayOs",
+    Subtitle = "Factory Tycoon",
     LoadingEnabled = true,
     LoadingTitle = "NC HUB",
     LoadingSubtitle = "Cargando Factory Tycoon",

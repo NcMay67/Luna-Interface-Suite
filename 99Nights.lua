@@ -12,7 +12,7 @@ do
     end)
 
     if not okLuna or type(Luna) ~= "table" then
-        warn("[NC HUB] No se pudo cargar Luna: " .. tostring(Luna))
+        warn("[MayOs] No se pudo cargar Luna: " .. tostring(Luna))
         return
     end
 
