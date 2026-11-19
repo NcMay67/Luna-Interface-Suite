@@ -17,9 +17,9 @@ local Games = {
 local scriptToLoad = Games[PlaceId] or "Universal.lua"
 
 print("------------------------------------------")
-print("[NC HUB] Cargando sistema modular...")
-print("[NC HUB] Juego detectado (ID): " .. PlaceId)
-print("[NC HUB] Archivo a cargar: " .. scriptToLoad)
+print("[MayOs] Cargando sistema modular...")
+print("[MayOs] Juego detectado (ID): " .. PlaceId)
+print("[MayOs] Archivo a cargar: " .. scriptToLoad)
 print("------------------------------------------")
 
 local success, err = pcall(function()
@@ -27,7 +27,7 @@ local success, err = pcall(function()
 end)
 
 if not success then
-    warn("[NC HUB] Error crítico al cargar: " .. tostring(err))
+    warn("[MayOs] Error crítico al cargar: " .. tostring(err))
 
     -- Respaldo: intenta el universal solo si falló Factory Tycoon.
     if scriptToLoad ~= "Universal.lua" then
