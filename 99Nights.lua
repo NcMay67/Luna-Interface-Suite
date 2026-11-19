@@ -423,22 +423,17 @@ do
         self.Current = value
         if self.Real then
             pcall(function()
-                self.Real:Set(value)
+                if self.Real.UpdateState then
+                    self.Real:UpdateState(value)
+                else
+                    self.Real:Set({CurrentValue = value})
+                end
             end)
         end
     end
 
     function HandleMethods.SetValues(self, values)
-        self.Values = values
-        if self.Real then
-            pcall(function()
-                if self.Real.Refresh then
-                    self.Real:Refresh(values)
-                elseif self.Real.SetOptions then
-                    self.Real:SetOptions(values)
-                end
-            end)
-        end
+        self.Values = values -- Luna no permite cambiar las opciones de un dropdown ya creado
     end
 
     -- Métodos de elementos WindUI que el script original podría llamar: los desconocidos no hacen nada.
@@ -529,8 +524,9 @@ do
             Luna:Notification({
                 Title = tostring(o.Title or "NC HUB"),
                 Icon = "notifications_active",
-                ImportanceLevel = "Normal",
+                ImageSource = "Material",
                 Content = tostring(o.Content or ""),
+                Duration = tonumber(o.Duration),
             })
         end)
     end
@@ -634,10 +630,11 @@ do
             if multi then
                 current = toList(firstDefined(spec.Default, spec.Value))
             else
-                current = toSingle(firstDefined(spec.Default, spec.Value))
-                if current == nil then
-                    current = values[1] or "None"
+                local single = toSingle(firstDefined(spec.Default, spec.Value))
+                if single == nil then
+                    single = values[1] or "None"
                 end
+                current = {single}
             end
             real = host:CreateDropdown({
                 Name = ctrl.Title,
@@ -10166,7 +10163,7 @@ tbl.Settings:Section({Title = fn("PC Keybinds"), Icon = "keyboard"})
 
 tbl.Settings:Paragraph({
     Title = "PC Keyboard Shortcuts",
-    Desc = "Keybinds are handled by the Luna interface: use the window controls to minimize, hide or close the hub.",
+    Desc = "Press K to open or close the hub (Luna default key). Use the window controls to minimize or close it.",
 })
 
 
