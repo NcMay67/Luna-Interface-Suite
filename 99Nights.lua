@@ -1,6 +1,6 @@
--- NC HUB - 99 Nights in the Forest
--- Interfaz Luna (estructura de 99Nights-Structure) + lógica original conectada.
--- Solo se conectan las funciones que existen en la estructura; el resto se descarta.
+-- MayOs - 99 Noches en el Bosque
+-- Interfaz Luna + lógica conectada, traducida al español.
+-- Script e interfaz creados por MayOs.
 
 local NC_UI, NC_BUILD
 
@@ -19,10 +19,11 @@ do
     --==================== ESTRUCTURA (tabs / apartados / controles) ====================--
     local Layout = {
         {Name = "Introduction", Icon = "home", Sections = {
-            {Name = "Welcome to NC HUB", Controls = {
+            {Name = "Welcome to MayOs", Controls = {
+                {Type = "Paragraph", Title = "MayOs", Text = "Bienvenido a MayOs: tu script para 99 Noches en el Bosque. Auto farmeo, combate, teletransportes, ESP y mucho más. Pulsa K para abrir o cerrar el menú."},
             }},
             {Name = "Information", Controls = {
-                {Type = "Paragraph", Title = "About Synvextia Hub"},
+                {Type = "Paragraph", Title = "About MayOs"},
             }},
             {Name = "Features", Controls = {
                 {Type = "Paragraph", Title = "What is Included"},
@@ -143,6 +144,7 @@ do
             }},
             {Name = "Teleport to Chest", Controls = {
                 {Type = "Paragraph", Title = "Teleport to Chest"},
+                {Type = "Dropdown", Title = "Select Chest"},
                 {Type = "Button", Title = "⚡ Teleport to Chest"},
             }},
         }},
@@ -343,6 +345,10 @@ do
         }},
         {Name = "Credits", Icon = "badge", Sections = {
             {Name = "Credits", Controls = {
+                {Type = "Paragraph", Title = "MayOs", Text = "Script e interfaz creados por MayOs. Todos los derechos reservados."},
+            }},
+            {Name = "Games", Controls = {
+                {Type = "Paragraph", Title = "99 Nights in the Forest", Text = "Disponible: auto farmeo, combate, teletransportes, traer objetos, escáner, ESP y estadísticas."},
             }},
         }},
     }
@@ -356,6 +362,557 @@ do
     local registry = {}
     local allHandles = {}
     local noop = function() end
+
+    local ES = {
+        ["Introduction"] = "Introducción",
+        ["Welcome to MayOs"] = "Bienvenido a MayOs",
+        ["Information"] = "Información",
+        ["About MayOs"] = "Sobre MayOs",
+        ["Features"] = "Características",
+        ["What is Included"] = "Qué incluye",
+        ["Refresh"] = "Actualizar",
+        ["Refresh Server Info"] = "Actualizar info del servidor",
+        ["Main"] = "Principal",
+        ["Infinite Dupe Saplings"] = "Duplicar retoños infinito",
+        ["INFINITE Saplings Dupe & Circle Plant"] = "Duplicación INFINITA de retoños y plantado en círculo",
+        ["Auto Dupe Saplings (Plant @ your position)"] = "Auto duplicar retoños (plantar en tu posición)",
+        ["Auto Plant Delay (seconds)"] = "Retraso de auto plantado (segundos)",
+        ["Plant Skybase Dupe Saplings"] = "Plantar retoños duplicados en base aérea",
+        ["Skybase: Total Saplings"] = "Base aérea: total de retoños",
+        ["Skybase: Spiral Height"] = "Base aérea: altura de la espiral",
+        ["Plant Saplings in Circle"] = "Plantar retoños en círculo",
+        ["Circle Planting: Radius"] = "Plantado en círculo: radio",
+        ["Circle Planting: Saplings Count"] = "Plantado en círculo: cantidad de retoños",
+        ["Show Hologram Preview"] = "Mostrar vista previa holográfica",
+        ["Auto Plant"] = "Auto plantar",
+        ["Auto Plant Saplings"] = "Auto plantar retoños",
+        ["Auto Fuel Campfire"] = "Auto alimentar hoguera",
+        ["Select Fuel Items"] = "Elegir combustibles",
+        ["⚡ Fuel Campfire Now"] = "⚡ Alimentar hoguera ahora",
+        ["Auto Compress"] = "Auto comprimir",
+        ["Items to Compress"] = "Objetos a comprimir",
+        ["⚡ Compress Items Now"] = "⚡ Comprimir objetos ahora",
+        ["Auto Compress Items"] = "Auto comprimir objetos",
+        ["Auto Consume"] = "Auto consumir",
+        ["Food Items to Consume"] = "Comida a consumir",
+        ["Landmarks"] = "Puntos de interés",
+        ["Reveal Landmarks (Full Map)"] = "Revelar puntos de interés (mapa completo)",
+        ["Send to Volcano"] = "Enviar al volcán",
+        ["Volcano Items"] = "Objetos para el volcán",
+        ["Auto Send to Volcano (Loop)"] = "Auto enviar al volcán (bucle)",
+        ["Auto Tree Chop"] = "Auto talar árboles",
+        ["Tree Aura"] = "Aura de árboles",
+        ["Chop Trees Aura"] = "Aura de tala",
+        ["Max Targets (Simultaneous)"] = "Máx. objetivos (simultáneos)",
+        ["Tree Types"] = "Tipos de árbol",
+        ["Tree Aura Axe"] = "Hacha del aura de árboles",
+        ["Tree Health ESP"] = "ESP de vida de árboles",
+        ["Combat"] = "Combate",
+        ["Godmode"] = "Modo dios",
+        ["GODMODE OP"] = "MODO DIOS OP",
+        ["Kill Aura"] = "Aura de muerte",
+        ["Kill Aura Radius"] = "Radio del aura de muerte",
+        ["Auto Escape"] = "Auto escape",
+        ["Escape Trigger (Enemy Type)"] = "Activador de escape (tipo de enemigo)",
+        ["Auto Escape (Health)"] = "Auto escape (vida)",
+        ["Escape HP Threshold"] = "Umbral de vida para escapar",
+        ["Auto Bandage"] = "Auto vendaje",
+        ["Bandage HP Threshold"] = "Umbral de vida para vendarse",
+        ["Hitbox Settings"] = "Ajustes de hitbox",
+        ["Hitbox Size"] = "Tamaño de hitbox",
+        ["Show Hitbox (Visible)"] = "Mostrar hitbox (visible)",
+        ["Health Colors"] = "Colores de vida",
+        ["Select Mobs"] = "Elegir mobs",
+        ["Select Mobs for Hitbox"] = "Elegir mobs para la hitbox",
+        ["Enable Hitbox"] = "Activar hitbox",
+        ["Silent Aim"] = "Apuntado silencioso",
+        ["Silent Aim FOV"] = "FOV del apuntado silencioso",
+        ["Silent Aim Hit Part"] = "Parte objetivo del apuntado silencioso",
+        ["Revive Players"] = "Revivir jugadores",
+        ["Auto Revive Players"] = "Auto revivir jugadores",
+        ["Auto Revive Yourself"] = "Auto revivirte",
+        ["Auto Stun"] = "Auto aturdir",
+        ["Stun Target"] = "Objetivo a aturdir",
+        ["Stun Cooldown (seconds)"] = "Enfriamiento de aturdimiento (segundos)",
+        ["Teleport"] = "Teletransporte",
+        ["Teleport Locations"] = "Ubicaciones",
+        ["Select Destination"] = "Elegir destino",
+        ["⚡ Teleport Now"] = "⚡ Teletransportar ahora",
+        ["TP to Caves"] = "TP a cuevas",
+        ["Select Cave"] = "Elegir cueva",
+        ["⚡ TP to Cave"] = "⚡ TP a la cueva",
+        ["TP to Lost Children"] = "TP a niños perdidos",
+        ["Select Lost Child"] = "Elegir niño perdido",
+        ["⚡ TP to Lost Child"] = "⚡ TP al niño perdido",
+        ["Teleport to Chest"] = "Teletransporte a cofre",
+        ["Select Chest"] = "Elegir cofre",
+        ["⚡ Teleport to Chest"] = "⚡ TP al cofre",
+        ["Bring Items"] = "Traer objetos",
+        ["Quick Actions"] = "Acciones rápidas",
+        ["Bring Everything"] = "Traer todo",
+        ["Bring All (No Chests)"] = "Traer todo (sin cofres)",
+        ["Open Chests"] = "Abrir cofres",
+        ["Select Items to Bring"] = "Elegir objetos a traer",
+        ["⚡ Bring Selected Now"] = "⚡ Traer seleccionados ahora",
+        ["🔄 Auto Bring Items"] = "🔄 Auto traer objetos",
+        ["Armor"] = "Armaduras",
+        ["Select Armor"] = "Elegir armaduras",
+        ["⚡ Bring Armor"] = "⚡ Traer armaduras",
+        ["Weapons"] = "Armas",
+        ["Select Weapons"] = "Elegir armas",
+        ["⚡ Bring Weapons"] = "⚡ Traer armas",
+        ["Equipment"] = "Equipo",
+        ["Select Equipment"] = "Elegir equipo",
+        ["⚡ Bring Equipment"] = "⚡ Traer equipo",
+        ["Food"] = "Comida",
+        ["Select Food"] = "Elegir comida",
+        ["⚡ Bring Food"] = "⚡ Traer comida",
+        ["Vegetables"] = "Verduras",
+        ["Select Vegetables / Plants"] = "Elegir verduras / plantas",
+        ["⚡ Bring Vegetables"] = "⚡ Traer verduras",
+        ["Mob Drops"] = "Botín de mobs",
+        ["Select Mob Drops"] = "Elegir botín de mobs",
+        ["⚡ Bring Mob Drops"] = "⚡ Traer botín de mobs",
+        ["Others"] = "Otros",
+        ["Select Other Items"] = "Elegir otros objetos",
+        ["⚡ Bring Others"] = "⚡ Traer otros",
+        ["Containers"] = "Contenedores",
+        ["Bring Chests"] = "Traer cofres",
+        ["Select Chests to Bring"] = "Elegir cofres a traer",
+        ["⚡ Bring Chests Now"] = "⚡ Traer cofres ahora",
+        ["🔄 Auto Bring Chests"] = "🔄 Auto traer cofres",
+        ["Auto Farm"] = "Auto Farmeo",
+        ["Day Auto Farm"] = "Auto farmeo de días",
+        ["Activate Auto Days"] = "Activar auto días",
+        ["Auto Cook Food"] = "Auto cocinar comida",
+        ["Food Items to Cook"] = "Comida a cocinar",
+        ["Scanner"] = "Escáner",
+        ["Auto Scanner"] = "Auto escáner",
+        ["Scan Map"] = "Escanear mapa",
+        ["Scan Speed"] = "Velocidad de escaneo",
+        ["Step Radius"] = "Radio de paso",
+        ["Step Angle"] = "Ángulo de paso",
+        ["Misc"] = "Varios",
+        ["Remove Fog"] = "Quitar niebla",
+        ["Anti Void"] = "Anti vacío",
+        ["Fly"] = "Volar",
+        ["Fly Speed"] = "Velocidad de vuelo",
+        ["Movement"] = "Movimiento",
+        ["Speed Hack"] = "Velocidad",
+        ["Speed Value"] = "Valor de velocidad",
+        ["Jump Boost"] = "Impulso de salto",
+        ["Jump Power"] = "Potencia de salto",
+        ["Infinite Jump"] = "Salto infinito",
+        ["Instant Interact"] = "Interacción instantánea",
+        ["Performance Monitor"] = "Monitor de rendimiento",
+        ["Show FPS"] = "Mostrar FPS",
+        ["Show Ping (ms)"] = "Mostrar ping (ms)",
+        ["FPS Boost"] = "Aumentar FPS",
+        ["Visual"] = "Visual",
+        ["Fullbright"] = "Brillo total",
+        ["Noclip"] = "Atravesar paredes (Noclip)",
+        ["Universal Scripts"] = "Scripts universales",
+        ["Infinite Yield"] = "Infinite Yield",
+        ["Dex Explorer"] = "Dex Explorer",
+        ["Remote Spy"] = "Remote Spy",
+        ["Keyboard"] = "Teclado",
+        ["Anim Logger"] = "Registro de animaciones",
+        ["F3X (Building Tools)"] = "F3X (herramientas de construcción)",
+        ["Fly V3"] = "Fly V3",
+        ["VFX Logger"] = "Registro de VFX",
+        ["Tools"] = "Herramientas",
+        ["Teleport Tool"] = "Herramienta de teletransporte",
+        ["Jerk Tool"] = "Herramienta de lanzamiento",
+        ["Anti AFK"] = "Anti AFK",
+        ["Server Hop"] = "Cambiar de servidor",
+        ["ESP"] = "ESP",
+        ["Global ESP Settings"] = "Ajustes globales de ESP",
+        ["Chams (Fill All ESP)"] = "Chams (rellenar todo el ESP)",
+        ["Player ESP"] = "ESP de jugadores",
+        ["Player ESP HP Viewer"] = "Mostrar vida en ESP de jugadores",
+        ["Player ESP Distance Viewer"] = "Mostrar distancia en ESP de jugadores",
+        ["World Item ESP"] = "ESP de objetos del mundo",
+        ["Esp Items"] = "Objetos del ESP",
+        ["Enable Item Esp"] = "Activar ESP de objetos",
+        ["Chest ESP"] = "ESP de cofres",
+        ["Select Chest Types (ESP)"] = "Elegir tipos de cofre (ESP)",
+        ["Enable Chest ESP"] = "Activar ESP de cofres",
+        ["Mob ESP"] = "ESP de mobs",
+        ["Esp Entity"] = "Entidades del ESP",
+        ["Enable Entity Esp"] = "Activar ESP de entidades",
+        ["Stats"] = "Estadísticas",
+        ["Game Stats"] = "Estadísticas del juego",
+        ["☀  Sun Cycle"] = "☀  Ciclo solar",
+        ["⏱  Phase Timer"] = "⏱  Tiempo de fase",
+        ["📅  Day Count"] = "📅  Días",
+        ["🕐  Real Clock"] = "🕐  Hora real",
+        ["Environment"] = "Entorno",
+        ["🌤  Weather"] = "🌤  Clima",
+        ["🌡  Temperature"] = "🌡  Temperatura",
+        ["💡  Light Level"] = "💡  Nivel de luz",
+        ["🌙  Nights Safe"] = "🌙  Noches a salvo",
+        ["Campfire"] = "Hoguera",
+        ["🔥  Fire Level"] = "🔥  Nivel del fuego",
+        ["🪵  Fire Status"] = "🪵  Estado del fuego",
+        ["Player"] = "Jugador",
+        ["❤  Health"] = "❤  Vida",
+        ["🍖  Hunger"] = "🍖  Hambre",
+        ["🛡  Armour"] = "🛡  Armadura",
+        ["⚔  Class"] = "⚔  Clase",
+        ["📈  Class Level"] = "📈  Nivel de clase",
+        ["✨  Talent"] = "✨  Talento",
+        ["⭐  Experience"] = "⭐  Experiencia",
+        ["📍  Position"] = "📍  Posición",
+        ["Session & System"] = "Sesión y sistema",
+        ["📶  Ping"] = "📶  Ping",
+        ["🖥  FPS"] = "🖥  FPS",
+        ["👥  Players"] = "👥  Jugadores",
+        ["🪪  Player ID"] = "🪪  ID de jugador",
+        ["⏳  Session Time"] = "⏳  Tiempo de sesión",
+        ["🎮  Game Version"] = "🎮  Versión del juego",
+        ["Controls"] = "Controles",
+        ["🔄 Refresh Stats"] = "🔄 Actualizar estadísticas",
+        ["Auto Refresh (0.3s)"] = "Auto actualizar (0,3 s)",
+        ["Settings"] = "Ajustes",
+        ["Config"] = "Configuración",
+        ["Save / Load Config"] = "Guardar / cargar configuración",
+        ["💾 Save Config"] = "💾 Guardar configuración",
+        ["📂 Load Config"] = "📂 Cargar configuración",
+        ["🗑️ Reset Config"] = "🗑️ Restablecer configuración",
+        ["Discord Webhook"] = "Webhook de Discord",
+        ["Webhook Notifications"] = "Notificaciones por webhook",
+        ["Webhook URL"] = "URL del webhook",
+        ["📨 Test Webhook"] = "📨 Probar webhook",
+        ["Notify on Config Save"] = "Notificar al guardar configuración",
+        ["PC Keybinds"] = "Atajos de PC",
+        ["PC Keyboard Shortcuts"] = "Atajos de teclado (PC)",
+        ["Credits"] = "Créditos",
+        ["Games"] = "Juegos",
+        ["99 Nights in the Forest"] = "99 Noches en el Bosque",
+        ["MayOs"] = "MayOs",
+        ["Re-fetch live Discord member and online counts"] = "Actualiza la información del servidor de Roblox en el que estás.",
+        ["In order for the feature to work, you must plant first and enable the feature that you want to be enabled (Infinite Saplings Dupe/Circle plant)"] = "Para que funcione, primero debes plantar y activar la función que quieras usar (duplicado infinito / plantado en círculo).",
+        ["Continuously plants saplings at your location at the speed you choose."] = "Planta retoños continuamente en tu posición a la velocidad que elijas.",
+        ["Creates a skybase spiral with saplings using your settings"] = "Crea una espiral de base aérea con retoños según tus ajustes.",
+        ["Plants saplings at all previewed positions."] = "Planta retoños en todas las posiciones de la vista previa.",
+        ["Do NOT use this feature, if your using Infinite Dupe Saplings"] = "NO uses esta función si estás usando la duplicación infinita de retoños.",
+        ["Choose which items to throw into the campfire."] = "Elige qué objetos echar a la hoguera.",
+        ["Instantly drops all selected fuel items into the campfire, one by one, FAST."] = "Echa al instante todos los combustibles elegidos a la hoguera, uno a uno, RÁPIDO.",
+        ["Continuously drops selected fuel items into campfire, one by one, FAST."] = "Echa continuamente los combustibles elegidos a la hoguera, uno a uno, RÁPIDO.",
+        ["Select which items to drop into the compressor."] = "Elige qué objetos meter en el compresor.",
+        ["Instantly sends all selected items to the compressor, one by one, FAST."] = "Envía al instante los objetos elegidos al compresor, uno a uno, RÁPIDO.",
+        ["Continuously compresses selected items from the whole map, one by one, FAST."] = "Comprime continuamente los objetos elegidos de todo el mapa, uno a uno, RÁPIDO.",
+        ["Keeps Health and Hunger maxed out at all times. NOTE: Mob/combat damage is server-sided in this game, so this will NOT protect you from wolf/beast attacks — only from hunger and client-side damage like fall damage."] = "Mantiene la vida y el hambre al máximo. NOTA: el daño de mobs/combate se calcula en el servidor, así que NO te protege de ataques de lobos o bestias; solo del hambre y del daño local como el de caída.",
+        ["MaxHealth + frame-rate HP restore. Cannot die from normal damage."] = "Vida máxima + restauración de vida por fotograma. No mueres por daño normal.",
+        ["Automatically teleports you to the campfire when you take damage. Select which enemies should trigger the escape."] = "Te teletransporta a la hoguera al recibir daño. Elige qué enemigos activan el escape.",
+        ["Teleport to campfire when hit by these enemies."] = "Teletransporte a la hoguera al ser golpeado por estos enemigos.",
+        ["Automatically teleports you to the campfire when your HP drops below the set threshold."] = "Te teletransporta a la hoguera cuando tu vida baja del umbral elegido.",
+        ["Teleport to campfire when HP falls below this value. Range: 30–100."] = "Teletransporte a la hoguera cuando la vida baje de este valor. Rango: 30–100.",
+        ["When your HP drops below the threshold, automatically finds bandages in workspace.Items, brings them to you and uses them."] = "Cuando tu vida baja del umbral, busca vendas en el mapa, te las trae y las usa.",
+        ["Auto-use a bandage when HP falls below this value."] = "Usa un vendaje automáticamente cuando la vida baje de este valor.",
+        ["Automatically brings and uses bandages when HP is low."] = "Trae y usa vendajes automáticamente cuando tienes poca vida.",
+        ["Tries to find landmarks. Re-press to catch any new ones."] = "Intenta encontrar puntos de interés. Vuelve a pulsar para detectar los nuevos.",
+        ["Reveals all landmarks on the full map."] = "Revela todos los puntos de interés en el mapa completo.",
+        ["Choose what to throw into the volcano."] = "Elige qué lanzar al volcán.",
+        ["Drags all selected items into the volcano lava, one by one, FAST."] = "Arrastra los objetos elegidos a la lava del volcán, uno a uno, RÁPIDO.",
+        ["Continuously sends selected items to the volcano, one by one, FAST."] = "Envía continuamente los objetos elegidos al volcán, uno a uno, RÁPIDO.",
+        ["Tree Aura Chop Trees Reach"] = "Alcance del aura de tala de árboles",
+        ["Automatically chops trees within the aura radius."] = "Tala automáticamente los árboles dentro del radio del aura.",
+        ["Number of trees chopped at the same time per cycle."] = "Número de árboles talados a la vez por ciclo.",
+        ["Select which tree type the aura targets."] = "Elige qué tipo de árbol ataca el aura.",
+        ["Choose which axe Tree Aura uses to chop trees."] = "Elige qué hacha usa el aura para talar.",
+        ["Shows a health bar above each tree. Green = healthy, Yellow = damaged, Red = almost chopped."] = "Muestra una barra de vida sobre cada árbol. Verde = sano, amarillo = dañado, rojo = casi talado.",
+        ["Choose a location to teleport to."] = "Elige a qué ubicación teletransportarte.",
+        ["Teleports you to the selected destination."] = "Te teletransporta al destino elegido.",
+        ["Choose a cave level to teleport to."] = "Elige a qué nivel de cueva teletransportarte.",
+        ["Teleports you to the selected cave level."] = "Te teletransporta al nivel de cueva elegido.",
+        ["Choose which lost child to teleport to."] = "Elige a qué niño perdido teletransportarte.",
+        ["Teleports you to the selected lost child."] = "Te teletransporta al niño perdido elegido.",
+        ["Select a chest from the dropdown then press Teleport to go to it."] = "Elige un cofre de la lista y pulsa el botón para ir hasta él.",
+        ["Lists all chests as 'Item Chest 1', 'Item Chest 2', etc. Refreshes automatically when new chests appear."] = "Lista todos los cofres como 'Item Chest 1', 'Item Chest 2', etc. Incluye la opción «Cofre más cercano».",
+        ["Teleports you to the selected chest."] = "Te teletransporta al cofre elegido.",
+        ["Instantly brings every item from the entire map to you. Skips chests."] = "Trae al instante todos los objetos de todo el mapa. Omite los cofres.",
+        ["Continuously fires proximity prompts on all Item Chests in the map."] = "Activa continuamente todos los cofres de objetos del mapa.",
+        ["Choose items. Use 'Bring Selected Now' or enable Auto Bring."] = "Elige objetos. Usa «Traer seleccionados ahora» o activa Auto traer.",
+        ["Instantly brings all selected items to you once."] = "Trae una vez todos los objetos elegidos.",
+        ["Continuously brings all selected items to you every second."] = "Trae todos los objetos elegidos cada segundo.",
+        ["Choose armor pieces to bring."] = "Elige las piezas de armadura a traer.",
+        ["Choose weapons to bring."] = "Elige las armas a traer.",
+        ["Choose equipment / utility items to bring."] = "Elige el equipo / objetos de utilidad a traer.",
+        ["Choose cooked food items to bring."] = "Elige la comida cocinada a traer.",
+        ["Choose plant / raw food items to bring."] = "Elige las plantas / comida cruda a traer.",
+        ["Choose mob drop items to bring."] = "Elige el botín de mobs a traer.",
+        ["Choose fuel / scrap / misc items to bring."] = "Elige combustibles / chatarra / objetos varios a traer.",
+        ["Select chest types to bring to you one by one."] = "Elige los tipos de cofre que se traerán uno a uno.",
+        ["Choose which chest types to bring."] = "Elige qué tipos de cofre traer.",
+        ["Brings selected chest types to you one by one."] = "Trae los tipos de cofre elegidos uno a uno.",
+        ["Continuously brings selected chests to you one by one every cycle."] = "Trae continuamente los cofres elegidos, uno a uno, en cada ciclo.",
+        ["🟢 Green = Full HP (>60%)\n🟡 Yellow = Half HP (30–60%)\n🔴 Red = Critical (<30%)"] = "🟢 Verde = vida alta (>60 %)\n🟡 Amarillo = vida media (30–60 %)\n🔴 Rojo = crítica (<30 %)",
+        ["Choose which mobs get an expanded hitbox."] = "Elige qué mobs tendrán una hitbox ampliada.",
+        ["Sweeps the entire map using smooth movement so other features (Auto Fuel, Auto Compress, etc.) can detect all items. Adjust speed and scan pattern below."] = "Recorre todo el mapa con movimiento suave para que otras funciones (auto hoguera, auto comprimir, etc.) detecten todos los objetos. Ajusta abajo la velocidad y el patrón.",
+        ["How fast the scanner moves between points. Higher = faster sweep."] = "Velocidad del escáner entre puntos. Más alto = barrido más rápido.",
+        ["Distance between each scan ring (in studs). Smaller = more thorough."] = "Distancia entre cada anillo de escaneo (en studs). Menor = más minucioso.",
+        ["Angle between scan points on each ring (degrees). Smaller = more points."] = "Ángulo entre puntos de escaneo de cada anillo (grados). Menor = más puntos.",
+        ["Auto-aim projectiles + instant reload"] = "Apuntado automático de proyectiles + recarga instantánea",
+        ["Auto-aims all projectiles at nearest target in FOV."] = "Apunta todos los proyectiles al objetivo más cercano dentro del FOV.",
+        ["Field of view radius for target detection (screen %)."] = "Radio del campo de visión para detectar objetivos (% de pantalla).",
+        ["Which body part projectiles are aimed at."] = "A qué parte del cuerpo se apuntan los proyectiles.",
+        ["Auto Revive dead players including yourself from far away"] = "Revive jugadores caídos (y a ti mismo) desde lejos",
+        ["Automatically revives dead players (requires bandage/MedKit) in your inventory."] = "Revive automáticamente a jugadores caídos (requiere vendaje/botiquín en tu inventario).",
+        ["Automatically revives yourself when dead (requires Bandage/MedKit on map)."] = "Te revive automáticamente al morir (requiere vendaje/botiquín en el mapa).",
+        ["Automatically equips a flashlight, teleports to the selected entity (Deer, Owl, or Rambo) to stun it, then instantly returns you to your original position.\n\n→ Select a target below\n→ Enable the toggle to start\n→ You will snap back to your position after each stun"] = "Equipa una linterna, se teletransporta a la entidad elegida (ciervo, búho o Rambo) para aturdirla y te devuelve al instante a tu posición original.\n\n→ Elige un objetivo abajo\n→ Activa el interruptor para empezar\n→ Volverás a tu posición tras cada aturdimiento",
+        ["Choose which entity to auto stun (one at a time)"] = "Elige qué entidad aturdir (una a la vez)",
+        ["How long to wait between each auto stun cycle."] = "Tiempo de espera entre cada ciclo de aturdimiento.",
+        ["Enabled — targeting"] = "Activado — objetivo",
+        ["Removes fog by destroying non-Fog children inside workspace.Map.Boundaries."] = "Quita la niebla eliminando los elementos de niebla del mapa.",
+        ["A powerful in-game admin console."] = "Una potente consola de administración.",
+        ["Browse the full game instance tree."] = "Explora el árbol completo de instancias del juego.",
+        ["Monitor all RemoteEvent and RemoteFunction calls."] = "Monitoriza todas las llamadas a RemoteEvent y RemoteFunction.",
+        ["On-screen keyboard tool for mobile / input."] = "Teclado en pantalla para móvil / entrada.",
+        ["Log and view character animations."] = "Registra y muestra las animaciones del personaje.",
+        ["In-game building and editing tools."] = "Herramientas de construcción y edición dentro del juego.",
+        ["Advanced smooth fly script."] = "Script de vuelo suave avanzado.",
+        ["Log all visual effects and particles in game."] = "Registra todos los efectos visuales y partículas del juego.",
+        ["Equip from backpack, then click to TP to your mouse position."] = "Equípala desde la mochila y haz clic para teletransportarte a la posición del ratón.",
+        ["Equip from backpack, then click to fling nearby players and mobs."] = "Equípala desde la mochila y haz clic para lanzar por los aires a jugadores y mobs cercanos.",
+        ["Options for player visibility, including health"] = "Opciones de visibilidad de jugadores, incluida la vida",
+        ["Shows ESP highlights on all other players."] = "Muestra resaltado ESP en todos los demás jugadores.",
+        ["Displays health bar / HP value above players."] = "Muestra la barra / valor de vida sobre los jugadores.",
+        ["Displays the distance (in studs) to each player."] = "Muestra la distancia (en studs) a cada jugador.",
+        ["Select one or more item categories to show ESP for."] = "Elige una o varias categorías de objetos para el ESP.",
+        ["Select chest types to highlight. Scan first to find available chests."] = "Elige los tipos de cofre a resaltar. Escanea antes para encontrar cofres.",
+        ["Multi-select chest types to show ESP highlights for."] = "Selección múltiple de tipos de cofre para el ESP.",
+        ["Shows highlights on all selected chest types."] = "Resalta todos los tipos de cofre elegidos.",
+        ["Select one or more mob types to show ESP for."] = "Elige uno o varios tipos de mob para el ESP.",
+        ["Manually re-fetch all stats right now."] = "Actualiza todas las estadísticas ahora mismo.",
+        ["Continuously updates all stats in real time."] = "Actualiza todas las estadísticas en tiempo real.",
+        ["Saves your current speed, jump, and theme settings to disk and reloads them next time."] = "Guarda tus ajustes de velocidad y salto en disco y los recarga la próxima vez.",
+        ["Writes settings to MayOs/99Noches/config.json"] = "Guarda los ajustes en MayOs/99Noches/config.json",
+        ["Loads settings from disk if a save exists."] = "Carga los ajustes guardados en disco, si existen.",
+        ["Resets all saved settings to defaults."] = "Restablece todos los ajustes guardados a los valores por defecto.",
+        ["Paste your Discord webhook URL below to receive notifications (e.g. when config is saved, or for custom alerts)."] = "Pega abajo la URL de tu webhook de Discord para recibir notificaciones (p. ej., al guardar la configuración).",
+        ["https://discord.com/api/webhooks/..."] = "https://discord.com/api/webhooks/...",
+        ["Sends a test message to your webhook to confirm it works."] = "Envía un mensaje de prueba a tu webhook para confirmar que funciona.",
+        ["Press K to open or close the hub (Luna default key). Use the window controls to minimize or close it."] = "Pulsa K para abrir o cerrar MayOs. Usa los controles de la ventana para minimizarla o cerrarla.",
+        ["What's Included"] = "Qué incluye",
+        ["→ Auto Farm Days\n→ Auto Fuel Campfire\n→ Auto Cook Food\n→ Auto Compress Items\n→ Auto Bring / Collect Items\n→ Tree Aura (Auto Chop)\n→ Landmarks Reveal (Full Map)\n→ Send to Volcano\n→ Godmode (Combat)\n→ Silent Aim + Revive Players\n→ Player & Mob ESP\n→ Detailed Game Stats\n→ And much MORE!!"] = "→ Auto farmeo de días\n→ Auto alimentar hoguera\n→ Auto cocinar comida\n→ Auto comprimir objetos\n→ Auto traer / recoger objetos\n→ Aura de árboles (auto talar)\n→ Revelar puntos de interés (mapa completo)\n→ Enviar al volcán\n→ Modo dios (Combate)\n→ Apuntado silencioso + revivir jugadores\n→ ESP de jugadores y mobs\n→ Estadísticas detalladas del juego\n→ ¡Y mucho MÁS!",
+        ["Failed to refresh Discord info."] = "No se pudo actualizar la información.",
+        ["God Mode ON — see Combat > God Mode for full controls"] = "Modo dios ACTIVADO — más opciones en Combate > Modo dios",
+        ["God Mode OFF"] = "Modo dios DESACTIVADO",
+        ["Auto Escape: Teleported to campfire!"] = "Auto escape: ¡teletransportado a la hoguera!",
+        ["Auto Bandage: used from inventory!"] = "Auto vendaje: ¡usado desde el inventario!",
+        ["📍 Place not found — please load the Map first!"] = "📍 Lugar no encontrado: ¡carga primero el mapa!",
+        ["Select items first!"] = "¡Elige objetos primero!",
+        ["Tree Health ESP: ON"] = "ESP de vida de árboles: ACTIVADO",
+        ["Tree Health ESP: OFF"] = "ESP de vida de árboles: DESACTIVADO",
+        ["📍 No trees found — please load the Map first!"] = "📍 No hay árboles: ¡carga primero el mapa!",
+        ["No character!"] = "¡No hay personaje!",
+        ["No chests found!"] = "¡No se encontraron cofres!",
+        ["📍 Could not get chest position — please load the Map first!"] = "📍 No se pudo obtener la posición del cofre: ¡carga primero el mapa!",
+        ["📍 Chest not found — try scanning again or load the Map first!"] = "📍 Cofre no encontrado: vuelve a escanear o carga primero el mapa.",
+        ["No Lost Children found in Characters folder!"] = "¡No se encontraron niños perdidos!",
+        ["Auto Bring ON — bringing selected items every 1s"] = "Auto traer ACTIVADO — trayendo los objetos elegidos cada 1 s",
+        ["Auto Bring OFF"] = "Auto traer DESACTIVADO",
+        ["Select armor items first!"] = "¡Elige armaduras primero!",
+        ["Select weapon items first!"] = "¡Elige armas primero!",
+        ["Select equipment items first!"] = "¡Elige equipo primero!",
+        ["Select food items first!"] = "¡Elige comida primero!",
+        ["Select mob drop items first!"] = "¡Elige botín de mobs primero!",
+        ["Select chest types first!"] = "¡Elige tipos de cofre primero!",
+        ["Auto Scanner: Done! Returned to campfire."] = "Auto escáner: ¡terminado! De vuelta en la hoguera.",
+        ["Auto Scanner: stopped."] = "Auto escáner: detenido.",
+        ["Auto-revived yourself (inventory bandage)!"] = "¡Te has revivido automáticamente (vendaje del inventario)!",
+        ["Auto-revived yourself with a bandage!"] = "¡Te has revivido automáticamente con un vendaje!",
+        ["Remove Fog: OFF (rejoin or reset to restore fog)"] = "Quitar niebla: DESACTIVADO (reentra para restaurarla)",
+        ["Instant Interact ON — all interactions complete instantly"] = "Interacción instantánea ACTIVADA — todas las interacciones son inmediatas",
+        ["Instant Interact OFF"] = "Interacción instantánea DESACTIVADA",
+        ["FPS Boost Applied"] = "Aumento de FPS aplicado",
+        ["Infinite Yield loaded! Press ; to open the console."] = "¡Infinite Yield cargado! Pulsa ; para abrir la consola.",
+        ["Dex Explorer loaded!"] = "¡Dex Explorer cargado!",
+        ["Remote Spy loaded!"] = "¡Remote Spy cargado!",
+        ["Keyboard loaded!"] = "¡Teclado cargado!",
+        ["Anim Logger loaded!"] = "¡Registro de animaciones cargado!",
+        ["F3X loaded!"] = "¡F3X cargado!",
+        ["Fly V3 loaded!"] = "¡Fly V3 cargado!",
+        ["VFX Logger loaded!"] = "¡Registro de VFX cargado!",
+        ["Teleport Tool in backpack! Equip it, then click to teleport."] = "¡Herramienta de teletransporte en la mochila! Equípala y haz clic para teletransportarte.",
+        ["Jerked nearby entities!"] = "¡Entidades cercanas lanzadas por los aires!",
+        ["Jerk Tool in backpack! Equip it, then click to fling nearby players/mobs."] = "¡Herramienta de lanzamiento en la mochila! Equípala y haz clic para lanzar a jugadores/mobs cercanos.",
+        ["Hopping to a new server..."] = "Cambiando a un servidor nuevo...",
+        ["No available servers found to hop to."] = "No hay servidores disponibles a los que cambiar.",
+        ["Chest ESP: ON"] = "ESP de cofres: ACTIVADO",
+        ["Chest ESP: OFF"] = "ESP de cofres: DESACTIVADO",
+        ["Stats refreshed!"] = "¡Estadísticas actualizadas!",
+        ["Config saved!"] = "¡Configuración guardada!",
+        ["Config loaded!"] = "¡Configuración cargada!",
+        ["No saved config found."] = "No hay configuración guardada.",
+        ["Config reset to defaults."] = "Configuración restablecida.",
+        ["Webhook URL saved!"] = "¡URL del webhook guardada!",
+        ["No webhook URL set!"] = "¡No hay URL de webhook!",
+        ["Test message sent!"] = "¡Mensaje de prueba enviado!",
+        ["Auto Volcano: ON"] = "Auto volcán: ACTIVADO",
+        ["Auto Volcano: OFF"] = "Auto volcán: DESACTIVADO",
+        ["Auto Escape: ON"] = "Auto escape: ACTIVADO",
+        ["Auto Escape: OFF"] = "Auto escape: DESACTIVADO",
+        ["Auto Escape (HP): OFF"] = "Auto escape (vida): DESACTIVADO",
+        ["Anti AFK: ON"] = "Anti AFK: ACTIVADO",
+        ["Anti AFK: OFF"] = "Anti AFK: DESACTIVADO",
+        ["Remove Fog: ON"] = "Quitar niebla: ACTIVADO",
+        ["Auto Stun OFF"] = "Auto aturdir DESACTIVADO",
+        ["☀ Daytime"] = "☀ Día",
+        ["🌙 Nighttime"] = "🌙 Noche",
+        ["Day"] = "Día",
+        ["Night"] = "Noche",
+        ["🌧 Rain"] = "🌧 Lluvia",
+        ["❄ Snow"] = "❄ Nieve",
+        ["🌤 Clear"] = "🌤 Despejado",
+        ["🥶 Cold"] = "🥶 Frío",
+        ["😊 Normal"] = "😊 Normal",
+        ["N/A"] = "N/D",
+        ["No campfire found"] = "No hay hoguera",
+        ["💀 Extinguished"] = "💀 Apagada",
+        ["🪵 Low — needs fuel!"] = "🪵 Baja: ¡necesita combustible!",
+        ["🔥 Burning"] = "🔥 Encendida",
+        ["🔥🔥 Blazing"] = "🔥🔥 Ardiendo",
+        ["No character"] = "Sin personaje",
+        ["Unknown"] = "Desconocido",
+    }
+    local OPT = {
+        ["All"] = "Todos",
+        ["Cat"] = "Gato",
+        ["Deer"] = "Ciervo",
+        ["Rambo"] = "Rambo",
+        ["Owl"] = "Búho",
+        ["All Trees"] = "Todos los árboles",
+        ["Small Tree"] = "Árbol pequeño",
+        ["Large Tree"] = "Árbol grande",
+        ["Pine Tree"] = "Pino",
+        ["Old Axe"] = "Hacha vieja",
+        ["Good Axe"] = "Hacha buena",
+        ["Strong Axe"] = "Hacha fuerte",
+        ["Camp"] = "Campamento",
+        ["Trader"] = "Comerciante",
+        ["Campfire"] = "Hoguera",
+        ["Anvil"] = "Yunque",
+        ["Blacksmith"] = "Herrero",
+        ["Stronghold"] = "Fortaleza",
+        ["Random Tree"] = "Árbol aleatorio",
+        ["Volcano"] = "Volcán",
+        ["CaveLevel1"] = "Cueva nivel 1",
+        ["CaveLevel2"] = "Cueva nivel 2",
+        ["CaveLevel3"] = "Cueva nivel 3",
+        ["CaveLevel4"] = "Cueva nivel 4",
+        ["CaveLevel5"] = "Cueva nivel 5",
+        ["CaveLevel6"] = "Cueva nivel 6",
+        ["CaveLevel7"] = "Cueva nivel 7",
+        ["CaveLevel8"] = "Cueva nivel 8",
+        ["Lost Child #1"] = "Niño perdido #1",
+        ["Lost Child #2"] = "Niño perdido #2",
+        ["Lost Child #3"] = "Niño perdido #3",
+        ["Lost Child #4"] = "Niño perdido #4",
+        ["Item Chest"] = "Cofre de objetos",
+        ["Chest"] = "Cofre",
+        ["Cave Chest"] = "Cofre de cueva",
+        ["Jungle Chest"] = "Cofre de la jungla",
+        ["Fairy Chest"] = "Cofre de hadas",
+        ["Arctic Chest"] = "Cofre ártico",
+        ["Loot Chest"] = "Cofre de botín",
+        ["Wooden Chest"] = "Cofre de madera",
+        ["Wolf / Alpha Wolf"] = "Lobo / Lobo alfa",
+        ["Bunny"] = "Conejo",
+        ["Cultist"] = "Cultista",
+        ["Bear"] = "Oso",
+        ["Polar Bear"] = "Oso polar",
+        ["Arctic Fox"] = "Zorro ártico",
+        ["Mammoth"] = "Mamut",
+        ["Alien"] = "Alienígena",
+        ["Alien Elite"] = "Alienígena élite",
+        ["Nearest Chest"] = "Cofre más cercano",
+    }
+    local OPT_REV = {}
+    for k, v in pairs(OPT) do OPT_REV[v] = k end
+    local STATE = {
+        ["Auto Bandage"] = "Auto vendaje",
+        ["Auto Bring Chests"] = "Auto traer cofres",
+        ["Silent Aim"] = "Apuntado silencioso",
+        ["Auto Revive Players"] = "Auto revivir jugadores",
+        ["Auto Revive Self"] = "Auto revivirse",
+        ["Anti Void"] = "Anti vacío",
+        ["Player HP Viewer"] = "Vida de jugadores",
+        ["Player Distance Viewer"] = "Distancia de jugadores",
+        ["Auto Stats"] = "Auto estadísticas",
+        ["Webhook on save"] = "Webhook al guardar",
+        ["Auto Scanner"] = "Auto escáner",
+        ["Remove Fog"] = "Quitar niebla",
+    }
+    local RULES = {
+        {"^Fueling (%d+) items!$", "Echando %s objetos a la hoguera...", {}},
+        {"^Compressing (%d+) items!$", "Comprimiendo %s objetos...", {}},
+        {"^Auto Escape %(HP%): HP below (.-) — teleported to campfire!$", "Auto escape (vida): vida por debajo de %s — ¡teletransportado a la hoguera!", {}},
+        {"^Auto Escape %(HP%): ON — escaping below (.-) HP$", "Auto escape (vida): ACTIVADO — escapando por debajo de %s de vida", {}},
+        {"^Auto Bandage: used! HP (.-) → healing$", "Auto vendaje: ¡usado! Vida %s → curando", {}},
+        {"^Landmarks revealed! %((.-) prompts fired%)$", "¡Puntos de interés revelados! (%s activados)", {}},
+        {"^Sending (%d+) item%(s%) to the volcano!$", "Enviando %s objeto(s) al volcán...", {}},
+        {"^Tree Aura ON — radius: (.-) studs$", "Aura de árboles ACTIVADA — radio: %s studs", {}},
+        {"^Invalid index: (.*)$", "Índice no válido: %s", {}},
+        {"^TP to (.-) %(fallback%)$", "TP a %s (alternativo)", {}},
+        {"^📍 Lost Child #(.-) not found — they may not have spawned yet, or try loading the Map first%.$", "📍 Niño perdido #%s no encontrado: puede que aún no haya aparecido; prueba a cargar el mapa.", {}},
+        {"^Brought (%d+) x (.+)$", "Traídos %s x %s", {}},
+        {"^No '(.-)' found on the map!$", "¡No se encontró '%s' en el mapa!", {}},
+        {"^Brought (%d+) items to you!$", "¡Se han traído %s objetos!", {}},
+        {"^Brought (%d+) Lost Children to you!$", "¡Se han traído %s niños perdidos!", {}},
+        {"^Brought (%d+) item%(s%) to you!$", "¡Se han traído %s objeto(s)!", {}},
+        {"^Brought (%d+) chest%(s%) to you!$", "¡Se han traído %s cofre(s)!", {}},
+        {"^Bring Everything: (%d+) items brought %(including chests%)!$", "Traer todo: ¡%s objetos traídos (incluidos cofres)!", {}},
+        {"^Bring All: (%d+) items brought to you!$", "Traer todo: ¡%s objetos traídos!", {}},
+        {"^Auto Scanner: sweeping (%d+) points%.%.%.$", "Auto escáner: recorriendo %s puntos...", {}},
+        {"^Scanning%.%.%. (%d+)/(%d+)$", "Escaneando... %s/%s", {}},
+        {"^Attempted revive on (.-)!$", "Intento de revivir a %s", {}},
+        {"^Auto Stun target set to: (.*)$", "Objetivo de auto aturdir: %s", {1}},
+        {"^Auto Stun ON — targeting: (.*)$", "Auto aturdir ACTIVADO — objetivo: %s", {1}},
+        {"^Failed to load (.-): (.*)$", "No se pudo cargar %s: %s", {}},
+        {"^Server Hop failed: (.*)$", "Error al cambiar de servidor: %s", {}},
+        {"^Save failed: (.*)$", "Error al guardar: %s", {}},
+        {"^Enabled — targeting (.-)%. Will teleport back after each stun%.$", "Activado — objetivo: %s. Volverás a tu posición tras cada aturdimiento.", {1}},
+        {"^Teleported to (.-)!$", "¡Teletransportado a %s!", {1}},
+        {"^Teleported to (.*)$", "Teletransportado a %s", {1}},
+        {"^(.-)m (.-)s left$", "quedan %sm %ss", {}},
+        {"^(.-) night%(s%)$", "%s noche(s)", {}},
+        {"^(.-)%% %(raw: (.-)%)$", "%s%% (bruto: %s)", {}},
+    }
+    -- Traduce un texto: exacto -> reglas dinámicas -> "Etiqueta: ON/OFF" -> sin cambios
+    local function tr(s)
+        if type(s) ~= "string" or s == "" then
+            return s
+        end
+        local hit = ES[s]
+        if hit then
+            return hit
+        end
+        local trimmed = s:match("^%s*(.-)%s*$")
+        if trimmed ~= s and ES[trimmed] then
+            return ES[trimmed]
+        end
+        for _, rule in ipairs(RULES) do
+            local caps = {s:match(rule[1])}
+            if #caps > 0 then
+                for _, idx in ipairs(rule[3]) do
+                    caps[idx] = OPT[caps[idx]] or ES[caps[idx]] or caps[idx]
+                end
+                local ok, out = pcall(string.format, rule[2], table.unpack(caps))
+                if ok then
+                    return out
+                end
+            end
+        end
+        local label, state = s:match("^(.-): (O[NF]+)$")
+        if label and (state == "ON" or state == "OFF") then
+            return (STATE[label] or ES[label] or label) .. ": " .. (state == "ON" and "ACTIVADO" or "DESACTIVADO")
+        end
+        return s
+    end
+
+
 
     local function norm(s)
         s = tostring(s or "")
@@ -407,7 +964,7 @@ do
     local HandleMethods = {}
 
     function HandleMethods.SetDesc(self, text)
-        text = tostring(text)
+        text = tr(tostring(text))
         if self.Text == text then
             return
         end
@@ -433,7 +990,16 @@ do
     end
 
     function HandleMethods.SetValues(self, values)
-        self.Values = values -- Luna no permite cambiar las opciones de un dropdown ya creado
+        self.Values = values
+        if self.Real and type(values) == "table" then
+            pcall(function()
+                local shown = {}
+                for i, v in ipairs(values) do
+                    shown[i] = OPT[v] or v
+                end
+                self.Real:Set({Options = shown})
+            end)
+        end
     end
 
     -- Métodos de elementos WindUI que el script original podría llamar: los desconocidos no hacen nada.
@@ -522,10 +1088,10 @@ do
         o = type(o) == "table" and o or {}
         pcall(function()
             Luna:Notification({
-                Title = tostring(o.Title or "NC HUB"),
+                Title = tr(tostring(o.Title or "MayOs")),
                 Icon = "notifications_active",
                 ImageSource = "Material",
-                Content = tostring(o.Content or ""),
+                Content = tr(tostring(o.Content or "")),
                 Duration = tonumber(o.Duration),
             })
         end)
@@ -534,17 +1100,17 @@ do
     function UI:CreateWindow()
         local ok, w = pcall(function()
             return Luna:CreateWindow({
-                Name = "NC HUB - 99 Nights",
-                Subtitle = "Estructura Luna",
+                Name = "MayOs",
+                Subtitle = "99 Noches en el Bosque",
                 LogoID = "6031097225",
                 LoadingEnabled = true,
-                LoadingTitle = "NC HUB - 99 Nights",
-                LoadingSubtitle = "Cargando estructura",
-                ConfigSettings = {ConfigFolder = "NC_HUB_99_Nights"},
+                LoadingTitle = "MayOs",
+                LoadingSubtitle = "Cargando 99 Noches en el Bosque...",
+                ConfigSettings = {ConfigFolder = "MayOs_99Noches"},
             })
         end)
         if not ok or not w then
-            warn("[NC HUB] No se pudo crear la ventana Luna: " .. tostring(w))
+            warn("[MayOs] No se pudo crear la ventana Luna: " .. tostring(w))
             return nil
         end
         Window = w
@@ -568,7 +1134,7 @@ do
                 ok, err = pcall(cb, ...)
             end
             if not ok then
-                warn("[NC HUB] Error en '" .. tostring(h.Spec.Title) .. "': " .. tostring(err))
+                warn("[MayOs] Error en '" .. tostring(h.Spec.Title) .. "': " .. tostring(err))
             end
         end
     end
@@ -590,23 +1156,34 @@ do
         if desc == "" then
             desc = nil
         end
+        if desc then
+            desc = tr(desc)
+        end
+        local shownTitle = tr(ctrl.Title)
         local real
 
         if ctrl.Type == "Paragraph" then
             local text = h and h.Text or ""
+            if text == "" or text == "..." then
+                text = (not h or text == "") and ctrl.Text or text
+            end
+            text = tr(text or "")
             if text == "" then
                 text = " "
             end
-            real = host:CreateParagraph({Title = ctrl.Title, Text = text})
+            real = host:CreateParagraph({Title = shownTitle, Text = text})
+            if h then
+                h.Text = text
+            end
         elseif ctrl.Type == "Button" then
             real = host:CreateButton({
-                Name = ctrl.Title,
+                Name = shownTitle,
                 Description = desc,
                 Callback = protect(h),
             })
         elseif ctrl.Type == "Toggle" then
             real = host:CreateToggle({
-                Name = ctrl.Title,
+                Name = shownTitle,
                 Description = desc,
                 CurrentValue = firstDefined(spec.Default, spec.Value) == true,
                 Callback = protect(h),
@@ -616,7 +1193,7 @@ do
             local min = range.Min or 0
             local max = range.Max or 100
             real = host:CreateSlider({
-                Name = ctrl.Title,
+                Name = shownTitle,
                 Description = desc,
                 Range = {min, max},
                 Increment = spec.Step or 1,
@@ -626,32 +1203,44 @@ do
         elseif ctrl.Type == "Dropdown" then
             local values = (h and h.Values) or spec.Values or {}
             local multi = spec.Multi == true
+            local shown = {}
+            for i, v in ipairs(values) do
+                shown[i] = OPT[v] or v
+            end
             local current
             if multi then
-                current = toList(firstDefined(spec.Default, spec.Value))
+                current = {}
+                for _, v in ipairs(toList(firstDefined(spec.Default, spec.Value))) do
+                    current[#current + 1] = OPT[v] or v
+                end
             else
                 local single = toSingle(firstDefined(spec.Default, spec.Value))
                 if single == nil then
                     single = values[1] or "None"
                 end
-                current = {single}
+                current = {OPT[single] or single}
             end
             real = host:CreateDropdown({
-                Name = ctrl.Title,
+                Name = shownTitle,
                 Description = desc,
-                Options = values,
+                Options = shown,
                 CurrentOption = current,
                 MultipleOptions = multi,
                 Callback = protect(h, function(v)
                     if multi then
-                        return toList(v)
+                        local list = toList(v)
+                        for i, x in ipairs(list) do
+                            list[i] = OPT_REV[x] or x
+                        end
+                        return list
                     end
-                    return toSingle(v)
+                    local single = toSingle(v)
+                    return OPT_REV[single] or single
                 end),
             })
         elseif ctrl.Type == "Input" then
             real = host:CreateInput({
-                Name = ctrl.Title,
+                Name = shownTitle,
                 Description = desc,
                 PlaceholderText = spec.Placeholder or "",
                 CurrentValue = "",
@@ -662,7 +1251,7 @@ do
 
         if h then
             h.Real = real
-            h.Title = ctrl.Title
+            h.Title = shownTitle
         end
         return h
     end
@@ -679,7 +1268,7 @@ do
         for _, tabDef in ipairs(Layout) do
             local okTab, tab = pcall(function()
                 return Window:CreateTab({
-                    Name = tabDef.Name,
+                    Name = tr(tabDef.Name),
                     Icon = tabDef.Icon,
                     ImageSource = "Material",
                     ShowTitle = true,
@@ -692,10 +1281,10 @@ do
 
                 for _, secDef in ipairs(tabDef.Sections) do
                     local okSec, section = pcall(function()
-                        return tab:CreateSection(secDef.Name)
+                        return tab:CreateSection(tr(secDef.Name))
                     end)
                     if not okSec then
-                        warn("[NC HUB] Sección '" .. secDef.Name .. "': " .. tostring(section))
+                        warn("[MayOs] Sección '" .. secDef.Name .. "': " .. tostring(section))
                         section = nil
                     end
                     Sections[tabDef.Name][secDef.Name] = section
@@ -708,12 +1297,12 @@ do
                     for _, ctrl in ipairs(secDef.Controls) do
                         local okCtl, err = pcall(createControl, host, tabDef.Name, ctrl)
                         if not okCtl then
-                            warn("[NC HUB] Control '" .. tostring(ctrl.Title) .. "': " .. tostring(err))
+                            warn("[MayOs] Control '" .. tostring(ctrl.Title) .. "': " .. tostring(err))
                         end
                     end
                 end
             else
-                warn("[NC HUB] Tab '" .. tabDef.Name .. "': " .. tostring(tab))
+                warn("[MayOs] Tab '" .. tabDef.Name .. "': " .. tostring(tab))
             end
         end
 
@@ -727,7 +1316,7 @@ do
             end
         end
         if #dropped > 0 then
-            print("[NC HUB] Funciones fuera de la estructura (descartadas): " .. table.concat(dropped, " | "))
+            print("[MayOs] Funciones fuera de la estructura (descartadas): " .. table.concat(dropped, " | "))
         end
 
         return {Window = Window, Tabs = Tabs, Sections = Sections, Layout = Layout}
@@ -736,7 +1325,7 @@ do
     NC_UI = UI
 end
 
--- ===================== LÓGICA ORIGINAL (conectada a la estructura) =====================
+-- ===================== LÓGICA DE MayOs (conectada a la interfaz) =====================
 local result, Players, HttpService, UserInputService, RunService, Workspace, CollectionService, localPlayer, currentCamera, Lighting, Stats, genv, fn, fn2, v, fn3, fn4, tbl, credits, remoteEvents
 local items, fn5
 
@@ -800,12 +1389,12 @@ do
 
     v = result:CreateWindow({})
     if not v then
-        warn("[NC HUB] Window failed to create - aborting.")
+        warn("[MayOs] Window failed to create - aborting.")
         return
     end
 
     fn3 = function(arg)
-        result:Notify({Title = "Synvextia Hub", Content = arg, Duration = 3})
+        result:Notify({Title = "MayOs", Content = arg, Duration = 3})
     end
 
     fn4 = function(arg)
@@ -857,7 +1446,7 @@ do
     })
 
     v4:Section({
-        Title = "— Welcome to Synvextia Hub —",
+        Title = "— Welcome to MayOs —",
         Icon = "sparkles",
         Opened = false,
         Desc = "",
@@ -884,8 +1473,8 @@ do
     })
 
     v4:Paragraph({
-        Title = "About Synvextia Hub",
-        Desc = "→ Synvextia Hub is a Keyless scripting assistant hub.\n→ Designed to help people with Grinding and more!\n→ Free to use and constantly updated.\n→ Version: 1.0.0",
+        Title = "About MayOs",
+        Desc = "→ MayOs es un script sin clave (keyless) para ayudarte a farmear y mucho más.\n→ Gratis y en constante actualización.\n→ Versión: 1.0.0\n→ Juego: 99 Noches en el Bosque",
     })
 
     v4:Divider()
@@ -915,27 +1504,15 @@ do
         Title = "Refresh Server Info",
         Description = "Re-fetch live Discord member and online counts",
         Callback = function()
-            local ok2, result2 = pcall(function()
-                return HttpService:JSONDecode(fn7({
-                    Url = "https://discord.com/api/v10/invites/synvextia?with_counts=true&with_expiration=true",
-                    Method = "GET",
-                }).Body)
+            local okPing, ping = pcall(function()
+                return math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
             end)
-
-            if ok2 and result2 and result2.guild then
-                tbl2.memberCount = tostring(result2.approximate_member_count)
-                tbl2.onlineCount = tostring(result2.approximate_presence_count)
-
-                if tbl2.serverParagraph then
-                    pcall(function()
-                        tbl2.serverParagraph:SetDesc(fn8())
-                    end)
-                end
-
-                fn3("Discord info updated!")
-            else
-                fn3("Failed to refresh Discord info.")
-            end
+            fn3(string.format(
+                "Servidor: %d jugadores | Ping: %s ms | ID: %s",
+                #Players:GetPlayers(),
+                okPing and tostring(ping) or "?",
+                string.sub(game.JobId, 1, 8)
+            ))
         end,
     })
 
@@ -3850,6 +4427,7 @@ do
             genv._chestTPMap[str4] = v8
         end
 
+        table.insert(tbl20, 1, "Nearest Chest")
         return tbl20
     end
 
@@ -3898,15 +4476,30 @@ do
                 return
             end
 
-            if not v7 then
-                v7 = fn41()[1]
+            local v12
+            if not v7 or v7 == "Nearest Chest" then
+                local bestDist = math.huge
+                for _, chest in ipairs(fn40()) do
+                    local part = chest
+                    if chest:IsA("Model") then
+                        part = chest.PrimaryPart or chest:FindFirstChildWhichIsA("BasePart")
+                    end
+                    if part and part:IsA("BasePart") then
+                        local dist = (part.Position - humanoidRootPart.Position).Magnitude
+                        if dist < bestDist then
+                            bestDist = dist
+                            v12 = chest
+                        end
+                    end
+                end
+                if not v12 then
+                    fn3("No chests found!")
+                    return
+                end
+            else
+                local chestTPMap = genv._chestTPMap
+                v12 = chestTPMap and chestTPMap[v7]
             end
-            if not v7 then
-                fn3("No chests found!")
-                return
-            end
-            local chestTPMap = genv._chestTPMap
-            local v12 = chestTPMap and genv._chestTPMap[v7]
 
             if v12 and v12.Parent then
                 local isModel = v12:IsA("Model")
@@ -7963,12 +8556,12 @@ tbl.Misc:Button({
     Title = "Jerk Tool",
     Desc = "Equip from backpack, then click to fling nearby players and mobs.",
     Callback = function()
-        local jerkTool = localPlayer.Backpack:FindFirstChild("Jerk Tool")
+        local jerkTool = localPlayer.Backpack:FindFirstChild("Fling Tool")
         local jerkTool2 = jerkTool
 
         if not jerkTool then
             local character = localPlayer.Character
-            jerkTool2 = character and localPlayer.Character:FindFirstChild("Jerk Tool")
+            jerkTool2 = character and localPlayer.Character:FindFirstChild("Fling Tool")
         end
 
         if jerkTool2 then
@@ -7976,9 +8569,9 @@ tbl.Misc:Button({
         end
 
         local tool = Instance.new("Tool")
-        tool.Name = "Jerk Tool"
+        tool.Name = "Fling Tool"
         tool.RequiresHandle = true
-        tool.ToolTip = "Click to fling nearby players/mobs"
+        tool.ToolTip = "Clic para lanzar a jugadores/mobs cercanos"
         local part = Instance.new("Part")
         part.Name = "Handle"
         part.Size = Vector3.new(0.5, 2, 0.5)
@@ -8357,11 +8950,11 @@ local function fn16(parent, arg)
 end
 
 local function fn17(parent)
-    if parent:FindFirstChild("SynvextiaHighlight") then
+    if parent:FindFirstChild("MayOsHighlight") then
         return
     end
     local highlight = Instance.new("Highlight")
-    highlight.Name = "SynvextiaHighlight"
+    highlight.Name = "MayOsHighlight"
     highlight.FillColor = fn14(parent.Name)
     local v3 = flag5
     local fillTransparency = v3 and 0.4 or 1
@@ -8433,7 +9026,7 @@ task.spawn(function()
         elseif n == 7 then
             v18 = v19
 
-            if fn5(v12, v20.Name) and not v20:FindFirstChild("SynvextiaHighlight") then
+            if fn5(v12, v20.Name) and not v20:FindFirstChild("MayOsHighlight") then
                 n = 8
             else
                 n = 6
@@ -8467,7 +9060,7 @@ task.spawn(function()
         elseif n == 12 then
             v24 = v25
 
-            if fn5(v12, v26.Name) and not v26:FindFirstChild("SynvextiaHighlight") then
+            if fn5(v12, v26.Name) and not v26:FindFirstChild("MayOsHighlight") then
                 n = 13
             else
                 n = 11
@@ -8486,10 +9079,10 @@ task.spawn(function()
 end)
 
 local function fn19(arg)
-    local synvextiaHighlight = arg:FindFirstChild("SynvextiaHighlight")
+    local mayosHighlight = arg:FindFirstChild("MayOsHighlight")
 
-    if synvextiaHighlight then
-        synvextiaHighlight:Destroy()
+    if mayosHighlight then
+        mayosHighlight:Destroy()
     end
 
     local espLabel = arg:FindFirstChild("ESP_Label")
@@ -8593,10 +9186,10 @@ local function removePlayerESP(arg)
     if not character then
         return
     end
-    local synvextiaPlayerHighlight = character:FindFirstChild("SynvextiaPlayerHighlight")
+    local mayosPlayerHighlight = character:FindFirstChild("MayOsPlayerHighlight")
 
-    if synvextiaPlayerHighlight then
-        synvextiaPlayerHighlight:Destroy()
+    if mayosPlayerHighlight then
+        mayosPlayerHighlight:Destroy()
     end
 
     local playerESPLabel = character:FindFirstChild("PlayerESP_Label")
@@ -8621,14 +9214,14 @@ local function fn24(arg)
         return
     end
 
-    if character:FindFirstChild("SynvextiaPlayerHighlight") then
-        local synvextiaPlayerHighlight = character:FindFirstChild("SynvextiaPlayerHighlight")
+    if character:FindFirstChild("MayOsPlayerHighlight") then
+        local mayosPlayerHighlight = character:FindFirstChild("MayOsPlayerHighlight")
         local v3 = flag5
         local fillTransparency = v3 and 0.4 or 1
-        synvextiaPlayerHighlight.FillTransparency = fillTransparency
+        mayosPlayerHighlight.FillTransparency = fillTransparency
     else
         local highlight = Instance.new("Highlight")
-        highlight.Name = "SynvextiaPlayerHighlight"
+        highlight.Name = "MayOsPlayerHighlight"
         highlight.FillColor = color
         local v3 = flag5
         local fillTransparency = v3 and 0.4 or 1
@@ -8726,12 +9319,12 @@ genv._clearPlayerESPListeners = clearPlayerESPListeners
 
 local function origRefresh()
     for k, child in pairs(items:GetChildren()) do
-        local synvextiaHighlight = child:FindFirstChild("SynvextiaHighlight")
+        local mayosHighlight = child:FindFirstChild("MayOsHighlight")
 
-        if synvextiaHighlight then
+        if mayosHighlight then
             local v3 = flag5
             local fillTransparency = v3 and 0.4 or 1
-            synvextiaHighlight.FillTransparency = fillTransparency
+            mayosHighlight.FillTransparency = fillTransparency
         end
     end
 
@@ -8739,24 +9332,24 @@ local function origRefresh()
 
     if v3 then
         for k, child in pairs(v3:GetChildren()) do
-            local synvextiaHighlight = child:FindFirstChild("SynvextiaHighlight")
+            local mayosHighlight = child:FindFirstChild("MayOsHighlight")
 
-            if synvextiaHighlight then
+            if mayosHighlight then
                 local v4 = flag5
                 local fillTransparency = v4 and 0.4 or 1
-                synvextiaHighlight.FillTransparency = fillTransparency
+                mayosHighlight.FillTransparency = fillTransparency
             end
         end
     end
 
     for i, player in ipairs(Players:GetPlayers()) do
         if player ~= localPlayer and player.Character then
-            local synvextiaPlayerHighlight = player.Character:FindFirstChild("SynvextiaPlayerHighlight")
+            local mayosPlayerHighlight = player.Character:FindFirstChild("MayOsPlayerHighlight")
 
-            if synvextiaPlayerHighlight then
+            if mayosPlayerHighlight then
                 local v4 = flag5
                 local fillTransparency = v4 and 0.4 or 1
-                synvextiaPlayerHighlight.FillTransparency = fillTransparency
+                mayosPlayerHighlight.FillTransparency = fillTransparency
             end
         end
     end
@@ -8943,7 +9536,7 @@ local function fn26(parent)
         return
     end
     local highlight = Instance.new("Highlight")
-    highlight.Name = "SynvextiaChestESP"
+    highlight.Name = "MayOsChestESP"
     highlight.FillColor = color2
     local v3 = flag5
     local fillTransparency = v3 and 0.4 or 1
@@ -9971,7 +10564,7 @@ local function fn41(arg, arg2, arg3)
                     title = arg,
                     description = arg2,
                     color = v4,
-                    footer = {text = "Synvextia Hub v1.0.0 | " .. localPlayer.Name},
+                    footer = {text = "MayOs v1.0.0 | " .. localPlayer.Name},
                 },
             },
         })
@@ -9985,23 +10578,23 @@ local function fn41(arg, arg2, arg3)
     end)
 end
 
-local synvextiaConfig = {}
-synvextiaConfig.theme = "Synvextia Purple"
-synvextiaConfig.speedEnabled = false
-synvextiaConfig.speedValue = 28
-synvextiaConfig.jpEnabled = false
-synvextiaConfig.jpValue = 60
-_G._synvextiaConfig = synvextiaConfig
+local mayosConfig = {}
+mayosConfig.theme = "MayOs Purple"
+mayosConfig.speedEnabled = false
+mayosConfig.speedValue = 28
+mayosConfig.jpEnabled = false
+mayosConfig.jpValue = 60
+_G._mayosConfig = mayosConfig
 
-if _G._savedThemeForIntro and _G._savedThemeForIntro ~= "Synvextia Purple" then
-    synvextiaConfig.theme = _G._savedThemeForIntro
+if _G._savedThemeForIntro and _G._savedThemeForIntro ~= "MayOs Purple" then
+    mayosConfig.theme = _G._savedThemeForIntro
 
     pcall(function()
-        result:SetTheme(synvextiaConfig.theme)
+        result:SetTheme(mayosConfig.theme)
     end)
 
     local v4 = _themeBackgrounds
-    local v5 = v4 and _themeBackgrounds[synvextiaConfig.theme]
+    local v5 = v4 and _themeBackgrounds[mayosConfig.theme]
 
     if v5 then
         pcall(function()
@@ -10012,29 +10605,29 @@ end
 
 local function fn42()
     pcall(function()
-        if not isfolder("Synvextia") then
-            makefolder("Synvextia")
+        if not isfolder("MayOs") then
+            makefolder("MayOs")
         end
 
-        if not isfolder("Synvextia/bbn") then
-            makefolder("Synvextia/bbn")
+        if not isfolder("MayOs/99Noches") then
+            makefolder("MayOs/99Noches")
         end
 
-        synvextiaConfig.theme = synvextiaConfig.theme
-        synvextiaConfig.speedEnabled = genv.speedEnabled
-        synvextiaConfig.speedValue = genv.speedValue
-        synvextiaConfig.jpEnabled = genv.jpEnabled
-        synvextiaConfig.jpValue = genv.jpValue
-        writefile("Synvextia/bbn/config.json", HttpService:JSONEncode(synvextiaConfig))
+        mayosConfig.theme = mayosConfig.theme
+        mayosConfig.speedEnabled = genv.speedEnabled
+        mayosConfig.speedValue = genv.speedValue
+        mayosConfig.jpEnabled = genv.jpEnabled
+        mayosConfig.jpValue = genv.jpValue
+        writefile("MayOs/99Noches/config.json", HttpService:JSONEncode(mayosConfig))
     end)
 end
 
 local function fn43()
     local ok, result2 = pcall(function()
-        if not isfile("Synvextia/bbn/config.json") then
+        if not isfile("MayOs/99Noches/config.json") then
             return
         end
-        return HttpService:JSONDecode(readfile("Synvextia/bbn/config.json"))
+        return HttpService:JSONDecode(readfile("MayOs/99Noches/config.json"))
     end)
 
     if not ok or not result2 then
@@ -10042,8 +10635,8 @@ local function fn43()
     end
 
     for k, v4 in pairs(result2) do
-        if synvextiaConfig[k] ~= nil then
-            synvextiaConfig[k] = v4
+        if mayosConfig[k] ~= nil then
+            mayosConfig[k] = v4
         end
     end
 
@@ -10059,7 +10652,7 @@ tbl.Settings:Paragraph({
 
 tbl.Settings:Button({
     Title = "💾 Save Config",
-    Description = "Writes settings to Synvextia/bbn/config.json",
+    Description = "Writes settings to MayOs/99Noches/config.json",
     Callback = function()
         local ok, result2 = pcall(fn42)
 
@@ -10088,8 +10681,8 @@ tbl.Settings:Button({
     Title = "🗑️ Reset Config",
     Description = "Resets all saved settings to defaults.",
     Callback = function()
-        synvextiaConfig = {
-            theme = "Synvextia Purple",
+        mayosConfig = {
+            theme = "MayOs Purple",
             speedEnabled = false,
             speedValue = 28,
             jpEnabled = false,
@@ -10097,15 +10690,15 @@ tbl.Settings:Button({
         }
 
         pcall(function()
-            result:SetTheme("Synvextia Purple")
+            result:SetTheme("MayOs Purple")
         end)
 
         local v4 = _themeBackgrounds
-        local synvextiaPurple = v4 and _themeBackgrounds["Synvextia Purple"]
+        local mayosPurple = v4 and _themeBackgrounds["MayOs Purple"]
 
-        if synvextiaPurple then
+        if mayosPurple then
             pcall(function()
-                v:SetBackground(synvextiaPurple)
+                v:SetBackground(mayosPurple)
             end)
         end
 
@@ -10130,7 +10723,7 @@ tbl.Settings:Input({
 
         if str ~= "" then
             fn3("Webhook URL saved!")
-            fn41("Webhook Connected", "Synvextia Hub connected to this channel.\nPlayer: **" .. localPlayer.Name .. "**", 3447003)
+            fn41("Webhook conectado", "MayOs conectado a este canal.\nJugador: **" .. localPlayer.Name .. "**", 3447003)
         end
     end,
 })
@@ -10143,7 +10736,7 @@ tbl.Settings:Button({
             fn3("No webhook URL set!")
             return
         end
-        fn41("Test Message ✅", "Your webhook is working correctly!\nSent from Synvextia Hub v1.0.0", 3066993)
+        fn41("Mensaje de prueba ✅", "¡Tu webhook funciona correctamente!\nEnviado desde MayOs v1.0.0", 3066993)
         fn3("Test message sent!")
     end,
 })
