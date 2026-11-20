@@ -10,7 +10,8 @@ local BaseURL = "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/
 local Games = {
     [15197136141] = "FactoryTycoon.lua",
     [126509999114328] = "99Nights.lua",
-    [13772394625] = "BladeBall.lua"
+    [13772394625] = "BladeBall.lua",
+    [15234596844] = "BladeBall.lua",
 }
 
 
