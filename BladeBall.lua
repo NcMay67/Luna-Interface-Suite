@@ -7,7 +7,7 @@ local CONFIG = {
     Game = 'Blade Ball',
 
     -- Interfaz: Luna Interface Suite
-    UI_URL = 'https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/refs/heads/master/source.lua',
+    UI_URL = 'https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/refs/heads/master/MayOsLuna.lua',
 
 }
 
