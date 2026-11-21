@@ -39,15 +39,16 @@ iPigTw | Typo Fixer, Fixed Key System!!
 pushByAccident | Fixing Executor Lists
 ImFloriz | Method Fixing
 
-MayOs Luna 2.0 (mejorada sobre Luna de NcMay67)
+MayOs Luna 2.1 (mejorada sobre Luna de NcMay67)
 Correcciones de dropdown/slider, API ampliada (Get/SetOptions/Build/Notify) e idioma (es/en)
 
 ]]
 
-local Release = "MayOs Luna 2.0"
+local Release = "MayOs Luna 2.1"
 
 local Luna = { 
-    Folder = "NCHUB_Luna", 
+    Folder = "MayOs_Luna",
+    Brand = "MayOs", 
     Options = {}, 
     ThemeGradient = ColorSequence.new{
         ColorSequenceKeypoint.new(0.00, Color3.fromRGB(67, 47, 88)),
@@ -57,7 +58,7 @@ local Luna = {
 }
 
 Luna.Release = Release
-Luna.Version = "2.0"
+Luna.Version = "2.1"
 
 -- ===================== IDIOMA (es por defecto) =====================
 Luna.Language = "es"
@@ -115,6 +116,56 @@ local function ClampSlider(settings)
 	local v = tonumber(settings.CurrentValue) or r[1]
 	if v < r[1] then v = r[1] elseif v > r[2] then v = r[2] end
 	return v
+end
+
+-- Métodos comunes de todos los controles: GetInstance, SetVisible, SetTitle, SetDescription, Lock/Unlock
+local function MayOsElement(V, inst)
+	if type(V) ~= "table" or inst == nil then return V end
+	V.Instance = inst
+	if V.GetInstance == nil then
+		function V:GetInstance() return inst end
+	end
+	if V.SetVisible == nil then
+		function V:SetVisible(state) inst.Visible = state ~= false end
+	end
+	if V.SetTitle == nil then
+		function V:SetTitle(text)
+			local t = inst:FindFirstChild("Title")
+			if t then t.Text = tostring(text) end
+		end
+	end
+	if V.SetDescription == nil then
+		function V:SetDescription(text)
+			local d = inst:FindFirstChild("Desc") or inst:FindFirstChild("Text")
+			if d then d.Text = tostring(text) end
+		end
+	end
+	if V.Lock == nil then
+		function V:Lock()
+			if inst:FindFirstChild("MayOsLock") then return end
+			local o = Instance.new("TextButton")
+			o.Name = "MayOsLock"
+			o.Text = ""
+			o.AutoButtonColor = false
+			o.BackgroundColor3 = Color3.new(0, 0, 0)
+			o.BackgroundTransparency = 0.55
+			o.BorderSizePixel = 0
+			o.Size = UDim2.new(1, 0, 1, 0)
+			o.ZIndex = 50
+			local c = Instance.new("UICorner")
+			c.CornerRadius = UDim.new(0, 6)
+			c.Parent = o
+			o.Parent = inst
+		end
+		function V:Unlock()
+			local o = inst:FindFirstChild("MayOsLock")
+			if o then o:Destroy() end
+		end
+		function V:IsLocked()
+			return inst:FindFirstChild("MayOsLock") ~= nil
+		end
+	end
+	return V
 end
 
 -- Anima una opción del dropdown solo si existe (evita errores con CurrentOption fuera de Options)
@@ -1950,11 +2001,11 @@ local function Hide(Window, bind, notif)
 	bind = bind[2]
 	if notif then
 		Luna:Notification({
-    Title = "NC HUB oculto",
-    Content = "Toca la barra ABRIR NC HUB de arriba para volver a abrir la interfaz.",
-    Icon = "visibility_off",
-    ImageSource = "Material"
-})
+		Title = string.format(L("HiddenTitle"), Luna.Brand),
+		Content = (UserInputService.KeyboardEnabled and bind) and string.format(L("HiddenKey"), bind) or L("HiddenTouch"),
+		Icon = "visibility_off",
+		ImageSource = "Material"
+	})
 	end
 	tween(Window, {BackgroundTransparency = 1})
 	tween(Window.Elements, {BackgroundTransparency = 1})
@@ -2336,7 +2387,7 @@ function Luna:CreateWindow(WindowSettings)
 		LogoID = "6031097225",
 		LoadingEnabled = true,
 		LoadingTitle = "Luna Interface Suite",
-		LoadingSubtitle = "by Nebula Softworks",
+		LoadingSubtitle = "by " .. Luna.Brand,
 
 		ConfigSettings = {},
 
@@ -2367,7 +2418,7 @@ function Luna:CreateWindow(WindowSettings)
 
 	local Passthrough = false
 
-	local Window = { Bind = Enum.KeyCode.K, CurrentTab = nil, State = true, Size = false, Settings = nil }
+	local Window = { Bind = Enum.KeyCode.K, CurrentTab = nil, State = true, Size = false, Settings = nil, ToggleWithBind = WindowSettings.ToggleWithBind ~= false }
 
 	Main.Title.Title.Text = WindowSettings.Name
 	Main.Title.subtitle.Text = WindowSettings.Subtitle
@@ -3053,6 +3104,7 @@ end
 					Button:Destroy()
 				end
 
+				MayOsElement(ButtonV, Button)
 				return ButtonV
 			end
 
@@ -3105,6 +3157,7 @@ end
 					Label:Destroy()
 				end
 
+				MayOsElement(LabelV, Label)
 				return LabelV
 			end
 
@@ -3166,6 +3219,7 @@ end
 
 				ParagraphV:Update()
 
+				MayOsElement(ParagraphV, Paragraph)
 				return ParagraphV
 			end
 
@@ -3205,7 +3259,7 @@ end
 				Slider.Value.Text = tostring(SliderSettings.CurrentValue)
 				SliderV.CurrentValue = Slider.Value.Text
 
-				SliderSettings.Callback(SliderSettings.CurrentValue)
+				pcall(SliderSettings.Callback, SliderSettings.CurrentValue)
 
 				Slider["MouseEnter"]:Connect(function()
 					tween(Slider.UIStroke, {Color = Color3.fromRGB(87, 84, 104)})
@@ -3365,6 +3419,7 @@ end
 					Slider.Main.UIStroke.color.Color = Luna.ThemeGradient
 				end)
 
+				MayOsElement(SliderV, Slider)
 				return SliderV
 
 			end
@@ -3542,6 +3597,7 @@ end
 					Luna.Options[Flag] = ToggleV
 				end
 
+				MayOsElement(ToggleV, Toggle)
 				return ToggleV
 
 			end
@@ -3762,6 +3818,7 @@ end
 
 				-- Luna.Flags[BindSettings.Flag] = BindSettings
 
+				MayOsElement(BindV, Bind)
 				return BindV
 
 			end
@@ -3929,6 +3986,7 @@ end
 				end
 
 
+				MayOsElement(InputV, Input)
 				return InputV
 
 			end
@@ -4312,6 +4370,7 @@ end
 
 				-- Luna.Flags[DropdownSettings.Flag] = DropdownSettings
 
+				MayOsElement(DropdownV, Dropdown)
 				return DropdownV
 
 			end
@@ -4561,6 +4620,7 @@ end
 
 				SafeCallback(ColorPickerSettings.Color)
 
+				MayOsElement(ColorPickerV, ColorPicker)
 				return ColorPickerV
 			end
 
@@ -4677,6 +4737,7 @@ end
 				Button:Destroy()
 			end
 
+			MayOsElement(ButtonV, Button)
 			return ButtonV
 		end
 
@@ -4728,6 +4789,7 @@ end
 				Label:Destroy()
 			end
 
+			MayOsElement(LabelV, Label)
 			return LabelV
 		end
 
@@ -4788,6 +4850,7 @@ end
 
 			ParagraphV:Update()
 
+			MayOsElement(ParagraphV, Paragraph)
 			return ParagraphV
 		end
 
@@ -4826,7 +4889,7 @@ end
 			Slider.Value.Text = tostring(SliderSettings.CurrentValue)
 			SliderV.CurrentValue = Slider.Value.Text
 
-			SliderSettings.Callback(SliderSettings.CurrentValue)
+			pcall(SliderSettings.Callback, SliderSettings.CurrentValue)
 
 			Slider["MouseEnter"]:Connect(function()
 				tween(Slider.UIStroke, {Color = Color3.fromRGB(87, 84, 104)})
@@ -4986,6 +5049,7 @@ end
 				Slider.Main.UIStroke.color.Color = Luna.ThemeGradient
 			end)
 
+			MayOsElement(SliderV, Slider)
 			return SliderV
 
 		end
@@ -5162,6 +5226,7 @@ end
 				Luna.Options[Flag] = ToggleV
 			end
 
+			MayOsElement(ToggleV, Toggle)
 			return ToggleV
 
 		end
@@ -5381,6 +5446,7 @@ end
 
 			-- Luna.Flags[BindSettings.Flag] = BindSettings
 
+			MayOsElement(BindV, Bind)
 			return BindV
 
 		end
@@ -5575,6 +5641,7 @@ end
 
 			-- Luna.Flags[BindSettings.Flag] = BindSettings
 
+			MayOsElement(BindV, Bind)
 			return BindV
 
 		end
@@ -5741,6 +5808,7 @@ end
 			end
 
 
+			MayOsElement(InputV, Input)
 			return InputV
 
 		end
@@ -6123,6 +6191,7 @@ end
 
 			-- Luna.Flags[DropdownSettings.Flag] = DropdownSettings
 
+			MayOsElement(DropdownV, Dropdown)
 			return DropdownV
 
 		end
@@ -6371,6 +6440,7 @@ end
 
 			SafeCallback(ColorPickerSettings.Color)
 
+			MayOsElement(ColorPickerV, ColorPicker)
 			return ColorPickerV
 		end
 
@@ -6391,12 +6461,12 @@ end
 			Title.TextTransparency = 1
 			TweenService:Create(Title, TweenInfo.new(0.4, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 
-			Tab:CreateSection("Config Creator")
+			Tab:CreateSection(L("CfgCreator"))
 
 			Tab:CreateInput({
-				Name = "Config Name",
-				Description = "Insert a name for your to be created config.",
-				PlaceholderText = "Name",
+				Name = L("CfgName"),
+				Description = L("CfgNameDesc"),
+				PlaceholderText = L("Name"),
 				CurrentValue = "",
 				Numeric = false,
 				MaxCharacters = nil,
@@ -6409,15 +6479,15 @@ end
 			local configSelection
 
 			Tab:CreateButton({
-				Name = "Create Config",
-				Description = "Create a config with all of your current settings.",
+				Name = L("CfgCreate"),
+				Description = L("CfgCreateDesc"),
 				Callback = function()
 					if not inputPath or string.gsub(inputPath, " ", "") == "" then
 						Luna:Notification({
-							Title = "Interface",
+							Title = L("Interface"),
 							Icon = "warning",
 							ImageSource = "Material",
-							Content = "Config name cannot be empty."
+							Content = L("CfgEmpty")
 						})
 						return
 					end
@@ -6425,30 +6495,30 @@ end
 					local success, returned = Luna:SaveConfig(inputPath)
 					if not success then
 						Luna:Notification({
-							Title = "Interface",
+							Title = L("Interface"),
 							Icon = "error",
 							ImageSource = "Material",
-							Content = "Unable to save config, return error: " .. returned
+							Content = L("CfgSaveErr") .. returned
 						})
 					end
 
 					Luna:Notification({
-						Title = "Interface",
+						Title = L("Interface"),
 						Icon = "info",
 						ImageSource = "Material",
-						Content = string.format("Created config %q", inputPath),
+						Content = string.format(L("CfgCreated"), inputPath),
 					})
 
 					configSelection:Set({ Options = Luna:RefreshConfigList() })
 				end
 			})
 
-			Tab:CreateSection("Config Load/Settings")
+			Tab:CreateSection(L("CfgLoadSection"))
 
 
 			configSelection = Tab:CreateDropdown({
-				Name = "Select Config",
-				Description = "Select a config to load your settings on.",
+				Name = L("CfgSelect"),
+				Description = L("CfgSelectDesc"),
 				Options = Luna:RefreshConfigList(),
 				CurrentOption = {},
 				MultipleOptions = false,
@@ -6459,56 +6529,56 @@ end
 			})
 
 			Tab:CreateButton({
-				Name = "Load Config",
-				Description = "Load your saved config settings.",
+				Name = L("CfgLoad"),
+				Description = L("CfgLoadDesc"),
 				Callback = function()
 					local success, returned = Luna:LoadConfig(selectedConfig)
 					if not success then
 						Luna:Notification({
-							Title = "Interface",
+							Title = L("Interface"),
 							Icon = "error",
 							ImageSource = "Material",
-							Content = "Unable to load config, return error: " .. returned
+							Content = L("CfgLoadErr") .. returned
 						})
 						return
 					end
 
 					Luna:Notification({
-						Title = "Interface",
+						Title = L("Interface"),
 						Icon = "info",
 						ImageSource = "Material",
-						Content = string.format("Loaded config %q", selectedConfig),
+						Content = string.format(L("CfgLoaded"), selectedConfig),
 					})
 				end
 			})
 
 			Tab:CreateButton({
-				Name = "Overwrite Config",
-				Description = "Overwrite your current config settings.",
+				Name = L("CfgOverwrite"),
+				Description = L("CfgOverwriteDesc"),
 				Callback = function()
 					local success, returned = Luna:SaveConfig(selectedConfig)
 					if not success then
 						Luna:Notification({
-							Title = "Interface",
+							Title = L("Interface"),
 							Icon = "error",
 							ImageSource = "Material",
-							Content = "Unable to overwrite config, return error: " .. returned
+							Content = L("CfgOverwriteErr") .. returned
 						})
 						return
 					end
 
 					Luna:Notification({
-						Title = "Interface",
+						Title = L("Interface"),
 						Icon = "info",
 						ImageSource = "Material",
-						Content = string.format("Overwrote config %q", selectedConfig),
+						Content = string.format(L("CfgOverwrote"), selectedConfig),
 					})
 				end
 			})
 
 			Tab:CreateButton({
-				Name = "Refresh Config List",
-				Description = "Refresh the current config list.",
+				Name = L("CfgRefresh"),
+				Description = L("CfgRefreshDesc"),
 				Callback = function()
 					configSelection:Set({ Options = Luna:RefreshConfigList() })
 				end,
@@ -6516,40 +6586,40 @@ end
 
 			local loadlabel
 			Tab:CreateButton({
-				Name = "Set as autoload",
-				Description = "Set a config to auto load setting in your next session.",
+				Name = L("CfgSetAuto"),
+				Description = L("CfgSetAutoDesc"),
 				Callback = function()
 					local name = selectedConfig
 					writefile(Luna.Folder .. "/settings/autoload.txt", name)
 					loadlabel:Set({ Text = L("AutoloadCurrent") .. name })
 
 					Luna:Notification({
-						Title = "Interface",
+						Title = L("Interface"),
 						Icon = "info",
 						ImageSource = "Material",
-						Content = string.format("Set %q to auto load", name),
+						Content = string.format(L("CfgSetAutoDone"), name),
 					})
 				end,
 			})
 
 			loadlabel = Tab:CreateParagraph({
-				Title = "Current Auto Load",
-				Text = "None"
+				Title = L("CfgCurrentAuto"),
+				Text = L("None")
 			})
 
 			Tab:CreateButton({
-				Name = "Delete Autoload",
-				Description = "Delete The Autoload File",
+				Name = L("CfgDelAuto"),
+				Description = L("CfgDelAutoDesc"),
 				Callback = function()
 					local name = selectedConfig
 					delfile(Luna.Folder .. "/settings/autoload.txt")
-					loadlabel:Set({ Text = "None" })
+					loadlabel:Set({ Text = L("None") })
 
 					Luna:Notification({
-						Title = "Interface",
+						Title = L("Interface"),
 						Icon = "info",
 						ImageSource = "Material",
-						Content = "Deleted Autoload",
+						Content = L("CfgDeletedAuto"),
 					})
 				end,
 			})
@@ -6647,6 +6717,17 @@ end
 		}
 
 
+-- Convierte lo que guarde un ColorPicker (Color3 o "#RRGGBB") en Color3
+local function ThemeColorOf(cp)
+	local c = cp and cp.Color
+	if typeof(c) == "Color3" then return c end
+	if type(c) == "string" then
+		local r, g, b = string.match(c, "^#?(%x%x)(%x%x)(%x%x)$")
+		if r then return Color3.fromRGB(tonumber(r, 16), tonumber(g, 16), tonumber(b, 16)) end
+	end
+	return nil
+end
+
 		function Tab:BuildThemeSection()
 
 			local Title = Elements.Template.Title:Clone()
@@ -6656,29 +6737,31 @@ end
 			Title.TextTransparency = 1
 			TweenService:Create(Title, TweenInfo.new(0.4, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 
-			Tab:CreateSection("Custom Editor")
+			Tab:CreateSection(L("CustomEditor"))
 
 			local c1cp = Tab:CreateColorPicker({
-				Name = "Color 1",
+				Name = L("Color") .. " 1",
 				Color = Color3.fromRGB(117, 164, 206),
 			}, "LunaInterfaceSuitePrebuiltCPC1") -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 
 			local c2cp = Tab:CreateColorPicker({
-				Name = "Color 2",
+				Name = L("Color") .. " 2",
 				Color = Color3.fromRGB(123, 201, 201),
 			}, "LunaInterfaceSuitePrebuiltCPC2")
 
 			local c3cp = Tab:CreateColorPicker({
-				Name = "Color 3",
+				Name = L("Color") .. " 3",
 				Color = Color3.fromRGB(224, 138, 184),
 			}, "LunaInterfaceSuitePrebuiltCPC3") 
 
-			task.wait(1)
+			Luna._ThemePickers = {c1cp, c2cp, c3cp}
+
+			task.wait(0.15)
 
 			c1cp:Set({
 				Callback = function(Value)
 					if c2cp and c3cp then
-						Luna.ThemeGradient = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Value or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(0.50, c2cp.Color or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(1.00, c3cp.Color or Color3.fromRGB(255,255,255))}
+						Luna.ThemeGradient = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Value or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(0.50, ThemeColorOf(c2cp) or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(1.00, ThemeColorOf(c3cp) or Color3.fromRGB(255,255,255))}
 						LunaUI.ThemeRemote.Value = not LunaUI.ThemeRemote.Value
 					end
 				end
@@ -6687,7 +6770,7 @@ end
 			c2cp:Set({
 				Callback = function(Value)
 					if c1cp and c3cp then
-						Luna.ThemeGradient = ColorSequence.new{ColorSequenceKeypoint.new(0.00, c1cp.Color or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(0.50, Value or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(1.00, c3cp.Color or Color3.fromRGB(255,255,255))}
+						Luna.ThemeGradient = ColorSequence.new{ColorSequenceKeypoint.new(0.00, ThemeColorOf(c1cp) or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(0.50, Value or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(1.00, ThemeColorOf(c3cp) or Color3.fromRGB(255,255,255))}
 						LunaUI.ThemeRemote.Value = not LunaUI.ThemeRemote.Value
 					end
 				end
@@ -6696,13 +6779,13 @@ end
 			c3cp:Set({
 				Callback = function(Valuex)
 					if c2cp and c1cp then
-						Luna.ThemeGradient = ColorSequence.new{ColorSequenceKeypoint.new(0.00, c1cp.Color or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(0.50, c2cp.Color or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(1.00, Valuex or Color3.fromRGB(255,255,255))}
+						Luna.ThemeGradient = ColorSequence.new{ColorSequenceKeypoint.new(0.00, ThemeColorOf(c1cp) or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(0.50, ThemeColorOf(c2cp) or Color3.fromRGB(255,255,255)), ColorSequenceKeypoint.new(1.00, Valuex or Color3.fromRGB(255,255,255))}
 						LunaUI.ThemeRemote.Value = not LunaUI.ThemeRemote.Value
 					end
 				end
 			})
 
-			Tab:CreateSection("Preset Gradients")
+			Tab:CreateSection(L("PresetGradients"))
 
 			for i,v in pairs(PresetGradients) do
 				Tab:CreateButton({
@@ -6795,6 +6878,7 @@ end
 			local success, decoded = pcall(HttpService.JSONDecode, HttpService, readfile(file))
 			if not success then return false, "Unable to decode JSON data." end
 
+			if type(decoded) ~= "table" or type(decoded.objects) ~= "table" then return false, "Invalid config" end
 			for _, option in next, decoded.objects do
 				if ClassParser[option.type] then
 					task.spawn(function() 
@@ -6807,27 +6891,26 @@ end
 		end
 
 		function Luna:LoadAutoloadConfig()
+			if isStudio or type(isfile) ~= "function" then return L("ConfigUnavailable") end
 			if isfile(Luna.Folder .. "/settings/autoload.txt") then
-
-				if isStudio then return L("ConfigUnavailable") end
 
 				local name = readfile(Luna.Folder .. "/settings/autoload.txt")
 
 				local success, err = Luna:LoadConfig(name)
 				if not success then
 					return Luna:Notification({
-						Title = "Interface",
+						Title = L("Interface"),
 						Icon = "sparkle",
 						ImageSource = "Material",
-						Content = "Failed to load autoload config: " .. err,
+						Content = L("CfgAutoFail") .. tostring(err),
 					})
 				end
 
 				Luna:Notification({
-					Title = "Interface",
+					Title = L("Interface"),
 					Icon = "sparkle",
 					ImageSource = "Material",
-					Content = string.format("Auto loaded config %q", name),
+					Content = string.format(L("CfgAutoLoaded"), name),
 				})
 
 			end 
@@ -6862,6 +6945,46 @@ end
 
 			return out
 		end
+		-- ===== MayOs: configuración extra =====
+		function Luna:DeleteConfig(Path)
+			if isStudio or type(delfile) ~= "function" then return false, L("ConfigUnavailable") end
+			if not Path then return false, "Please select a config file." end
+			local file = Luna.Folder .. "/settings/" .. tostring(Path) .. ".luna"
+			if not isfile(file) then return false, "Invalid file" end
+			delfile(file)
+			return true
+		end
+
+		-- Devuelve la configuración actual como texto JSON (para copiar/compartir)
+		function Luna:ExportConfig()
+			local data = {objects = {}}
+			for flag, option in next, Luna.Options do
+				local Parser = ClassParser[option.Class]
+				if Parser and not option.IgnoreConfig then
+					table.insert(data.objects, Parser.Save(flag, option))
+				end
+			end
+			local ok, encoded = pcall(HttpService.JSONEncode, HttpService, data)
+			if ok then return encoded end
+			return nil
+		end
+
+		-- Aplica una configuración exportada con Luna:ExportConfig()
+		function Luna:ImportConfig(json)
+			local ok, decoded = pcall(HttpService.JSONDecode, HttpService, tostring(json))
+			if not ok or type(decoded) ~= "table" or type(decoded.objects) ~= "table" then
+				return false, "Invalid config"
+			end
+			for _, option in next, decoded.objects do
+				if ClassParser[option.type] then
+					task.spawn(function()
+						ClassParser[option.type].Load(option.flag, option)
+					end)
+				end
+			end
+			return true
+		end
+
 		return Tab
 	end
 
@@ -6897,12 +7020,13 @@ end
 
 	UserInputService.InputBegan:Connect(function(input, gpe)
 		if gpe then return end
-		if Window.State then return end
-		if input.KeyCode == Window.Bind then
-			Unhide(Main, Window.CurrentTab)
-			LunaUI.MobileSupport.Visible = false
-			dragBar.Visible = true
-			Window.State = true
+		if not Main or not Main.Parent then return end
+		if input.KeyCode == Window.Bind and Window.Bind ~= Enum.KeyCode.Unknown then
+			if Window.State then
+				if Window.ToggleWithBind then Window:Hide() end
+			else
+				Window:Show()
+			end
 		end
 	end)
 
@@ -6954,10 +7078,54 @@ end
 		LunaUI.MobileSupport.Visible = false
 	end)
 
+	-- ===== MayOs: métodos de ventana =====
+	Window.Tabs = {}
+	function Window:Show()
+		if Window.State then return end
+		Unhide(Main, Window.CurrentTab)
+		LunaUI.MobileSupport.Visible = false
+		dragBar.Visible = true
+		Window.State = true
+	end
+	function Window:Hide()
+		if not Window.State then return end
+		Hide(Main, Window.Bind, true)
+		dragBar.Visible = false
+		Window.State = false
+		if UserInputService.KeyboardEnabled == false then
+			LunaUI.MobileSupport.Visible = true
+		end
+	end
+	function Window:Toggle()
+		if Window.State then Window:Hide() else Window:Show() end
+	end
+	function Window:SetBind(key)
+		if type(key) == "string" then
+			local ok, k = pcall(function() return Enum.KeyCode[key] end)
+			key = ok and k or nil
+		end
+		if typeof(key) == "EnumItem" then
+			Window.Bind = key
+			return true
+		end
+		return false
+	end
+	function Window:SetTitle(text) Main.Title.Title.Text = tostring(text) end
+	function Window:SetSubtitle(text) Main.Title.subtitle.Text = tostring(text) end
+	function Window:SetLogo(id) Main.Logo.Image = "rbxassetid://" .. tostring(id) end
+	function Window:SelectTab(name)
+		local t = Window.Tabs[name]
+		if t and t.Activate then t:Activate() return true end
+		return false
+	end
+	function Window:GetTab(name) return Window.Tabs[name] end
+
 	return Window
 end
 
 function Luna:Destroy()
+	Luna.Options = {}
+	Luna._ThemePickers = nil
 	Main.Visible = false
 	for _, Notification in ipairs(Notifications:GetChildren()) do
 		if Notification.ClassName == "Frame" then
@@ -7230,6 +7398,158 @@ end]]--
 --  MAYOS LUNA 2.0 | CAPA DE MEJORAS (API ampliada)
 --  Se aplica sobre Window / Tab / Section sin tocar el núcleo de Luna.
 -- =====================================================================
+
+do
+-- ===== Textos adicionales (es / en) =====
+Luna:AddStrings("es", {
+	Interface = "Interfaz", Name = "Nombre", Color = "Color",
+	HiddenTitle = "%s oculto", HiddenKey = "Pulsa %s para volver a abrir la interfaz.",
+	HiddenTouch = "Toca el botón de abrir de la parte superior para volver a abrir la interfaz.",
+	CustomEditor = "Editor personalizado", PresetGradients = "Degradados predefinidos",
+	CfgCreator = "Crear configuración", CfgName = "Nombre de la configuración",
+	CfgNameDesc = "Escribe un nombre para la configuración que vas a crear.",
+	CfgCreate = "Crear configuración", CfgCreateDesc = "Crea una configuración con todos tus ajustes actuales.",
+	CfgEmpty = "El nombre de la configuración no puede estar vacío.",
+	CfgSaveErr = "No se pudo guardar la configuración, error: ", CfgCreated = "Configuración %q creada",
+	CfgLoadSection = "Cargar / Ajustes", CfgSelect = "Elegir configuración", CfgSelectDesc = "Elige una configuración para cargar tus ajustes.",
+	CfgLoad = "Cargar configuración", CfgLoadDesc = "Carga los ajustes de la configuración guardada.",
+	CfgLoadErr = "No se pudo cargar la configuración, error: ", CfgLoaded = "Configuración %q cargada",
+	CfgOverwrite = "Sobrescribir configuración", CfgOverwriteDesc = "Sobrescribe la configuración elegida con tus ajustes actuales.",
+	CfgOverwriteErr = "No se pudo sobrescribir la configuración, error: ", CfgOverwrote = "Configuración %q sobrescrita",
+	CfgRefresh = "Actualizar lista", CfgRefreshDesc = "Actualiza la lista de configuraciones.",
+	CfgSetAuto = "Establecer como autocarga", CfgSetAutoDesc = "Carga esta configuración automáticamente en tu próxima sesión.",
+	CfgSetAutoDone = "%q se cargará automáticamente", CfgCurrentAuto = "Autocarga actual",
+	CfgDelAuto = "Quitar autocarga", CfgDelAutoDesc = "Elimina el archivo de autocarga.", CfgDeletedAuto = "Autocarga eliminada",
+	CfgAutoFail = "No se pudo cargar la configuración automática: ", CfgAutoLoaded = "Configuración %q cargada automáticamente",
+})
+Luna:AddStrings("en", {
+	Interface = "Interface", Name = "Name", Color = "Color",
+	HiddenTitle = "%s hidden", HiddenKey = "Press %s to open the interface again.",
+	HiddenTouch = "Tap the open button at the top to open the interface again.",
+	CustomEditor = "Custom Editor", PresetGradients = "Preset Gradients",
+	CfgCreator = "Config Creator", CfgName = "Config Name", CfgNameDesc = "Insert a name for your to be created config.",
+	CfgCreate = "Create Config", CfgCreateDesc = "Create a config with all of your current settings.",
+	CfgEmpty = "Config name cannot be empty.",
+	CfgSaveErr = "Unable to save config, return error: ", CfgCreated = "Created config %q",
+	CfgLoadSection = "Config Load/Settings", CfgSelect = "Select Config", CfgSelectDesc = "Select a config to load your settings on.",
+	CfgLoad = "Load Config", CfgLoadDesc = "Load your saved config settings.",
+	CfgLoadErr = "Unable to load config, return error: ", CfgLoaded = "Loaded config %q",
+	CfgOverwrite = "Overwrite Config", CfgOverwriteDesc = "Overwrite your current config settings.",
+	CfgOverwriteErr = "Unable to overwrite config, return error: ", CfgOverwrote = "Overwrote config %q",
+	CfgRefresh = "Refresh Config List", CfgRefreshDesc = "Refresh the current config list.",
+	CfgSetAuto = "Set as autoload", CfgSetAutoDesc = "Set a config to auto load setting in your next session.",
+	CfgSetAutoDone = "Set %q to auto load", CfgCurrentAuto = "Current Auto Load",
+	CfgDelAuto = "Delete Autoload", CfgDelAutoDesc = "Delete The Autoload File", CfgDeletedAuto = "Deleted Autoload",
+	CfgAutoFail = "Failed to load autoload config: ", CfgAutoLoaded = "Auto loaded config %q",
+})
+
+-- ===== Presets de tema extra =====
+local function RGB(r, g, b) return Color3.fromRGB(r, g, b) end
+local ExtraPresets = {
+	MayOs = {RGB(255, 214, 102), RGB(255, 170, 77), RGB(255, 120, 90)},
+	Oceano = {RGB(0, 198, 255), RGB(0, 144, 224), RGB(0, 90, 190)},
+	Atardecer = {RGB(255, 94, 98), RGB(255, 153, 102), RGB(255, 195, 113)},
+	Aurora = {RGB(0, 255, 170), RGB(80, 160, 255), RGB(180, 100, 255)},
+	Carmesi = {RGB(255, 60, 90), RGB(200, 30, 70), RGB(120, 10, 50)},
+	Neon = {RGB(57, 255, 20), RGB(0, 255, 200), RGB(0, 180, 255)},
+	Monocromo = {RGB(235, 235, 235), RGB(160, 160, 160), RGB(90, 90, 90)},
+	Galaxia = {RGB(120, 80, 255), RGB(180, 70, 220), RGB(255, 80, 170)},
+}
+for name, cols in pairs(ExtraPresets) do
+	if PresetGradients[name] == nil then PresetGradients[name] = cols end
+end
+
+-- ===== API de tema =====
+local function ToColor3(c)
+	if typeof(c) == "Color3" then return c end
+	if type(c) == "string" then
+		local r, g, b = string.match(c, "^#?(%x%x)(%x%x)(%x%x)$")
+		if r then return Color3.fromRGB(tonumber(r, 16), tonumber(g, 16), tonumber(b, 16)) end
+	end
+	if type(c) == "table" and #c >= 3 then return Color3.fromRGB(c[1], c[2], c[3]) end
+	return nil
+end
+
+-- Luna:SetTheme("Oceano") | Luna:SetTheme(Color3) | Luna:SetTheme({c1, c2, c3}) (Color3 o "#RRGGBB")
+function Luna:SetTheme(theme)
+	local cols
+	if type(theme) == "string" and ToColor3(theme) == nil then
+		cols = PresetGradients[theme]
+	elseif type(theme) == "table" and #theme >= 1 and ToColor3(theme[1]) and not (type(theme[1]) == "number") then
+		local a = ToColor3(theme[1])
+		local b = ToColor3(theme[2]) or a
+		local c = ToColor3(theme[3]) or b
+		cols = {a, b, c}
+	else
+		local base = ToColor3(theme)
+		if base then
+			cols = {base:Lerp(Color3.new(0, 0, 0), 0.35), base, base:Lerp(Color3.new(1, 1, 1), 0.35)}
+		end
+	end
+	if not cols then return false end
+
+	Luna.ThemeColors = cols
+	Luna.ThemeGradient = ColorSequence.new{
+		ColorSequenceKeypoint.new(0.00, cols[1]),
+		ColorSequenceKeypoint.new(0.50, cols[2]),
+		ColorSequenceKeypoint.new(1.00, cols[3]),
+	}
+	LunaUI.ThemeRemote.Value = not LunaUI.ThemeRemote.Value
+	if Luna._ThemePickers then
+		for i, picker in ipairs(Luna._ThemePickers) do
+			pcall(function() picker:Set({Color = cols[i]}) end)
+		end
+	end
+	return true
+end
+
+function Luna:GetTheme()
+	return Luna.ThemeColors or {
+		Luna.ThemeGradient.Keypoints[1].Value, Luna.ThemeGradient.Keypoints[2].Value, Luna.ThemeGradient.Keypoints[3].Value,
+	}
+end
+
+function Luna:AddPreset(name, cols)
+	local a, b, c = ToColor3(cols and cols[1]), ToColor3(cols and cols[2]), ToColor3(cols and cols[3])
+	if type(name) ~= "string" or not a then return false end
+	PresetGradients[name] = {a, b or a, c or b or a}
+	return true
+end
+
+function Luna:GetPresets()
+	local out = {}
+	for name in pairs(PresetGradients) do out[#out + 1] = name end
+	table.sort(out)
+	return out
+end
+
+-- ===== Acceso por Flag =====
+function Luna:GetOption(flag)
+	local o = Luna.Options[flag]
+	if o and type(o.Get) == "function" then return o:Get() end
+	return nil
+end
+
+function Luna:SetOption(flag, value)
+	local o = Luna.Options[flag]
+	if not o then return false end
+	local class = o.Class
+	local ok = pcall(function()
+		if class == "Toggle" then o:Set({CurrentValue = value == true})
+		elseif class == "Slider" then o:Set({CurrentValue = tonumber(value)})
+		elseif class == "Input" then o:Set({CurrentValue = tostring(value)})
+		elseif class == "Dropdown" then o:Set({CurrentOption = type(value) == "table" and value or {value}})
+		elseif class == "Colorpicker" then o:Set({Color = ToColor3(value)})
+		elseif class == "Keybind" then o:Set({CurrentBind = value})
+		else error("clase no soportada") end
+	end)
+	return ok
+end
+
+Luna.Unload = Luna.Destroy
+
+end
+
 do
 	local ELEMENT_METHODS = {
 		"CreateButton", "CreateToggle", "CreateSlider", "CreateDropdown", "CreateInput",
@@ -7286,11 +7606,22 @@ do
 		local Window = OrigCreateWindow(self, settings)
 		if type(Window) == "table" and not Window.__MayOsWrapped then
 			Window.__MayOsWrapped = true
+			Window.Tabs = Window.Tabs or {}
 			local OrigCreateTab = Window.CreateTab
 			if type(OrigCreateTab) == "function" then
 				function Window:CreateTab(...)
-					return WrapContainer(OrigCreateTab(self, ...))
+					local Tab = WrapContainer(OrigCreateTab(self, ...))
+					local ts = ...
+					if type(Tab) == "table" and type(ts) == "table" and ts.Name then
+						Window.Tabs[ts.Name] = Tab
+					end
+					return Tab
 				end
+			end
+			-- Opciones extra de CreateWindow: Theme, Bind, ToggleWithBind
+			if type(settings) == "table" then
+				if settings.Bind then pcall(function() Window:SetBind(settings.Bind) end) end
+				if settings.Theme ~= nil then pcall(function() Luna:SetTheme(settings.Theme) end) end
 			end
 		end
 		return Window
