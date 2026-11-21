@@ -1,7 +1,7 @@
 -- MayOs | Universal
 
 local Luna = loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua"
+    "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/MayOsLuna..lua"
 ))()
 
 local Players = game:GetService("Players")
