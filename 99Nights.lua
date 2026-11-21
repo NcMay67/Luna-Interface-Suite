@@ -7,7 +7,7 @@ local NC_UI, NC_BUILD
 do
     local okLuna, Luna = pcall(function()
         return loadstring(game:HttpGet(
-            "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/source.lua"
+            "https://raw.githubusercontent.com/NcMay67/Luna-Interface-Suite/master/MayOsLuna.lua"
         ))()
     end)
 
